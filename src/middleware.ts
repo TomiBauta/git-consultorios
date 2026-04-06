@@ -34,8 +34,12 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse
   }
 
-  // Webhooks y API pública (no requieren auth de usuario)
-  if (pathname.startsWith('/api/whatsapp/webhook')) {
+  // Rutas públicas: reserva online de turnos y webhooks
+  if (
+    pathname.startsWith('/reservar') ||
+    pathname.startsWith('/api/booking') ||
+    pathname.startsWith('/api/whatsapp/webhook')
+  ) {
     return supabaseResponse
   }
 

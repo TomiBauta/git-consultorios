@@ -1,22 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-
-const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-  pendiente:   { label: 'Pendiente',   color: 'bg-yellow-100 text-yellow-800' },
-  confirmado:  { label: 'Confirmado',  color: 'bg-green-100 text-green-800' },
-  cancelado:   { label: 'Cancelado',   color: 'bg-red-100 text-red-800' },
-  ausente:     { label: 'Ausente',     color: 'bg-gray-100 text-gray-600' },
-  atendido:    { label: 'Atendido',    color: 'bg-blue-100 text-blue-800' },
-}
-
-const SPECIALTY_LABELS: Record<string, string> = {
-  oftalmologia:      'Oftalmología',
-  gastroenterologia: 'Gastroenterología',
-  diabetologia:      'Diabetología',
-  clinica_medica:    'Clínica Médica',
-}
+import { AppointmentsTable, AppointmentRow } from '@/components/ui/appointments-table'
+import { Calendar, Users, TrendingUp } from 'lucide-react'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -24,18 +9,15 @@ export default async function DashboardPage() {
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', user!.id).single()
 
   const today = new Date()
-  const startOfDay = new Date(today)
-  startOfDay.setHours(0, 0, 0, 0)
-  const endOfDay = new Date(today)
-  endOfDay.setHours(23, 59, 59, 999)
+  const startOfDay = new Date(today); startOfDay.setHours(0, 0, 0, 0)
+  const endOfDay   = new Date(today); endOfDay.setHours(23, 59, 59, 999)
 
-  // Turnos de hoy
   let apptQuery = supabase
     .from('appointments')
     .select(`
       id, scheduled_at, status, reason, specialty,
-      patients (first_name, last_name, obra_social_id),
-      profiles!appointments_doctor_id_fkey (full_name, specialty)
+      patients (first_name, last_name),
+      profiles!appointments_doctor_id_fkey (full_name)
     `)
     .gte('scheduled_at', startOfDay.toISOString())
     .lte('scheduled_at', endOfDay.toISOString())
@@ -48,7 +30,6 @@ export default async function DashboardPage() {
 
   const { data: todayAppointments } = await apptQuery
 
-  // Stats
   const { count: totalPatients } = await supabase
     .from('patients')
     .select('*', { count: 'exact', head: true })
@@ -74,96 +55,91 @@ export default async function DashboardPage() {
     return 'Buenas noches'
   }
 
+  const appointments: AppointmentRow[] = (todayAppointments ?? []).map((appt: any) => ({
+    id: appt.id,
+    scheduled_at: appt.scheduled_at,
+    status: appt.status,
+    reason: appt.reason,
+    specialty: appt.specialty,
+    patient_name: appt.patients
+      ? `${appt.patients.first_name} ${appt.patients.last_name}`
+      : 'Paciente',
+    doctor_name: appt.profiles?.full_name ?? undefined,
+  }))
+
+  const showDoctor = profile?.role !== 'doctor'
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold text-[#0F172A]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <h1 className="text-2xl font-semibold text-[#0F172A] dark:text-slate-100" style={{ fontFamily: 'Poppins, sans-serif' }}>
           {greeting()}, {profile?.full_name.split(' ')[profile.role === 'doctor' ? 1 : 0]}
         </h1>
-        <p className="text-[#64748B] text-sm mt-1">
+        <p className="text-[#64748B] dark:text-slate-400 text-sm mt-1">
           {today.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
         </p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
-        <Card className="border-[#E2E8F0]">
-          <CardContent className="pt-6">
-            <p className="text-sm text-[#64748B]">Turnos hoy</p>
-            <p className="text-3xl font-bold text-[#1B3A6B] mt-1">{todayAppointments?.length ?? 0}</p>
-            {(pendingAppointments ?? 0) > 0 && (
-              <p className="text-xs text-yellow-600 mt-1">{pendingAppointments} pendiente{pendingAppointments !== 1 ? 's' : ''}</p>
-            )}
-          </CardContent>
-        </Card>
-        <Card className="border-[#E2E8F0]">
-          <CardContent className="pt-6">
-            <p className="text-sm text-[#64748B]">Turnos este mes</p>
-            <p className="text-3xl font-bold text-[#1B3A6B] mt-1">{monthAppointments ?? 0}</p>
-          </CardContent>
-        </Card>
-        <Card className="border-[#E2E8F0]">
-          <CardContent className="pt-6">
-            <p className="text-sm text-[#64748B]">Pacientes totales</p>
-            <p className="text-3xl font-bold text-[#1B3A6B] mt-1">{totalPatients ?? 0}</p>
-          </CardContent>
-        </Card>
+        {/* Turnos hoy */}
+        <div className="bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] rounded-2xl p-5 hover:shadow-sm transition-all">
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-sm text-[#64748B] dark:text-slate-400">Turnos hoy</p>
+              <p className="text-3xl font-bold text-[#1B3A6B] dark:text-sky-400 mt-1">{todayAppointments?.length ?? 0}</p>
+              {(pendingAppointments ?? 0) > 0 && (
+                <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
+                  {pendingAppointments} pendiente{pendingAppointments !== 1 ? 's' : ''}
+                </p>
+              )}
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-[#EFF6FF] dark:bg-sky-900/30 flex items-center justify-center">
+              <Calendar className="w-5 h-5 text-[#1B3A6B] dark:text-sky-400" />
+            </div>
+          </div>
+        </div>
+
+        {/* Turnos mes */}
+        <div className="bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] rounded-2xl p-5 hover:shadow-sm transition-all">
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-sm text-[#64748B] dark:text-slate-400">Turnos este mes</p>
+              <p className="text-3xl font-bold text-[#1B3A6B] dark:text-sky-400 mt-1">{monthAppointments ?? 0}</p>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-[#EFF6FF] dark:bg-sky-900/30 flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-[#0891B2] dark:text-sky-400" />
+            </div>
+          </div>
+        </div>
+
+        {/* Pacientes */}
+        <div className="bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] rounded-2xl p-5 hover:shadow-sm transition-all">
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-sm text-[#64748B] dark:text-slate-400">Pacientes totales</p>
+              <p className="text-3xl font-bold text-[#1B3A6B] dark:text-sky-400 mt-1">{totalPatients ?? 0}</p>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-[#EFF6FF] dark:bg-sky-900/30 flex items-center justify-center">
+              <Users className="w-5 h-5 text-[#1B3A6B] dark:text-sky-400" />
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Turnos de hoy */}
-      <Card className="border-[#E2E8F0]">
-        <CardHeader className="flex flex-row items-center justify-between pb-4">
-          <CardTitle className="text-base font-semibold text-[#0F172A]">
-            Turnos de hoy
-          </CardTitle>
+      {/* Tabla de turnos */}
+      <div className="bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] rounded-2xl transition-colors">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#F1F5F9] dark:border-[#334155]">
+          <h2 className="text-base font-semibold text-[#0F172A] dark:text-slate-100">Turnos de hoy</h2>
           <Link href="/agenda" className="text-sm text-[#0891B2] hover:underline">
             Ver agenda →
           </Link>
-        </CardHeader>
-        <CardContent>
-          {!todayAppointments || todayAppointments.length === 0 ? (
-            <div className="text-center py-10 text-[#94A3B8]">
-              <p className="text-4xl mb-3">📅</p>
-              <p className="text-sm">No hay turnos para hoy</p>
-              <Link href="/agenda/nuevo" className="text-sm text-[#0891B2] hover:underline mt-2 inline-block">
-                Agregar turno
-              </Link>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {todayAppointments.map((appt: any) => {
-                const time = new Date(appt.scheduled_at).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
-                const status = STATUS_LABELS[appt.status] ?? { label: appt.status, color: 'bg-gray-100 text-gray-600' }
-                const patient = appt.patients as any
-                const doctor = appt.profiles as any
-                return (
-                  <Link key={appt.id} href={`/agenda/${appt.id}`}>
-                    <div className="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-[#F8FAFC] transition-colors border border-transparent hover:border-[#E2E8F0]">
-                      <div className="w-14 text-center shrink-0">
-                        <p className="text-sm font-semibold text-[#1B3A6B]">{time}</p>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm text-[#0F172A] truncate">
-                          {patient?.first_name} {patient?.last_name}
-                        </p>
-                        <p className="text-xs text-[#64748B] truncate">
-                          {profile?.role !== 'doctor' ? `${doctor?.full_name} · ` : ''}
-                          {SPECIALTY_LABELS[appt.specialty] ?? appt.specialty}
-                          {appt.reason ? ` · ${appt.reason}` : ''}
-                        </p>
-                      </div>
-                      <span className={`text-xs px-2.5 py-1 rounded-full font-medium shrink-0 ${status.color}`}>
-                        {status.label}
-                      </span>
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+        </div>
+        <div className="p-4">
+          <AppointmentsTable appointments={appointments} showDoctor={showDoctor} />
+        </div>
+      </div>
     </div>
   )
 }
