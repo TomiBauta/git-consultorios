@@ -72,19 +72,7 @@ export default async function PacientesPage({
             name="q"
             defaultValue={q}
             placeholder="Buscar por nombre, apellido o DNI..."
-            className="w-full text-sm pl-10 pr-4 py-3 rounded-xl outline-none transition-all"
-            style={{
-              background: 'var(--surface-container-high, #e6e4ef)',
-              color: 'var(--on-surface, #1a1b1f)',
-              border: 'none',
-              borderBottom: '2px solid transparent',
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.borderBottom = '2px solid var(--primary-val, #002453)'
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderBottom = '2px solid transparent'
-            }}
+            className="search-tray w-full text-sm pl-10 pr-4 py-3 rounded-xl outline-none transition-all"
           />
         </div>
       </form>
