@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { PatientsTable, PatientRow } from '@/components/ui/patients-table'
 
 export default async function PacientesPage({
@@ -37,25 +36,33 @@ export default async function PacientesPage({
 
   return (
     <div className="space-y-5">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#0F172A]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <h1
+            className="text-xl font-semibold tracking-tight"
+            style={{ color: 'var(--on-surface, #1a1b1f)', letterSpacing: '-0.02em' }}
+          >
             Pacientes
           </h1>
-          <p className="text-sm text-[#64748B] mt-0.5">{rows.length} resultado{rows.length !== 1 ? 's' : ''}</p>
+          <p className="text-sm mt-0.5" style={{ color: 'var(--on-surface-variant, #44474f)' }}>
+            {rows.length} resultado{rows.length !== 1 ? 's' : ''}
+          </p>
         </div>
         <Link href="/pacientes/nuevo">
-          <Button className="bg-[#1B3A6B] hover:bg-[#2D5AA0] text-white text-sm">
+          {/* Primary CTA — gradient per spec */}
+          <button className="btn-primary-gradient text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-all">
             + Nuevo paciente
-          </Button>
+          </button>
         </Link>
       </div>
 
-      {/* Búsqueda */}
+      {/* Búsqueda — Soft Tray: surface-container-high bg + bottom-only focus stroke */}
       <form method="get">
         <div className="relative">
           <svg
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8]"
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4"
+            style={{ color: 'var(--on-surface-variant, #44474f)' }}
             fill="none" viewBox="0 0 24 24" stroke="currentColor"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -65,12 +72,27 @@ export default async function PacientesPage({
             name="q"
             defaultValue={q}
             placeholder="Buscar por nombre, apellido o DNI..."
-            className="w-full text-sm border border-[#E2E8F0] rounded-xl pl-10 pr-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-[#0891B2] focus:border-transparent"
+            className="w-full text-sm pl-10 pr-4 py-3 rounded-xl outline-none transition-all"
+            style={{
+              background: 'var(--surface-container-high, #e6e4ef)',
+              color: 'var(--on-surface, #1a1b1f)',
+              border: 'none',
+              borderBottom: '2px solid transparent',
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderBottom = '2px solid var(--primary-val, #002453)'
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderBottom = '2px solid transparent'
+            }}
           />
         </div>
       </form>
 
-      <PatientsTable patients={rows} searchQuery={q} />
+      {/* Tabla — tonal surface */}
+      <div className="card-ambient rounded-2xl overflow-hidden">
+        <PatientsTable patients={rows} searchQuery={q} />
+      </div>
     </div>
   )
 }

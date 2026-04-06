@@ -9,7 +9,7 @@ import { FullScreenCalendar, CalendarDay } from '@/components/ui/fullscreen-cale
 type Profile = { id: string; full_name: string; role: string; specialty: string | null }
 type Doctor  = { id: string; full_name: string; specialty: string | null }
 
-const DOCTOR_COLORS = ['#1B3A6B', '#0891B2', '#059669', '#7C3AED', '#DC2626']
+const DOCTOR_COLORS = ['#002453', '#1e3a6a', '#0891B2', '#059669', '#7C3AED']
 
 export default function AgendaClient({ profile, doctors }: { profile: Profile | null; doctors: Doctor[] }) {
   const supabase = createClient()
@@ -65,7 +65,7 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
       const key = format(day, 'yyyy-MM-dd')
       if (!map[key]) map[key] = { day: new Date(key), events: [] }
       const patient = appt.patients
-      const color   = doctorColorMap[appt.doctor_id] ?? '#1B3A6B'
+      const color   = doctorColorMap[appt.doctor_id] ?? '#002453'
       map[key].events.push({
         id:       appt.id,
         name:     patient ? `${patient.last_name}, ${patient.first_name}` : 'Paciente',

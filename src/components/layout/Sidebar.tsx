@@ -35,28 +35,29 @@ export default function Sidebar({ profile }: { profile: Profile }) {
   return (
     <aside
       className={cn(
-        'bg-[#1B3A6B] dark:bg-[#0D1E3A] flex flex-col shrink-0 transition-all duration-300 ease-in-out',
+        'flex flex-col shrink-0 transition-all duration-300 ease-in-out',
+        'bg-[#002453] dark:bg-[#080f1e]',
         collapsed ? 'w-[68px]' : 'w-56'
       )}
     >
-      {/* Logo */}
+      {/* Logo — no border, tonal depth via opacity */}
       <div className={cn(
-        'h-16 border-b border-white/10 flex items-center gap-3 shrink-0 overflow-hidden',
-        collapsed ? 'justify-center px-0' : 'px-4'
+        'h-16 flex items-center gap-3 shrink-0 overflow-hidden',
+        collapsed ? 'justify-center px-0' : 'px-5'
       )}>
-        <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white font-bold text-sm shrink-0">
+        <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white font-bold text-xs tracking-wider shrink-0">
           DIT
         </div>
         <div className={cn('min-w-0 transition-all duration-200', collapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto')}>
-          <p className="text-white font-semibold text-sm leading-tight whitespace-nowrap" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <p className="text-white font-semibold text-sm leading-tight whitespace-nowrap tracking-tight">
             DIT Consultorios
           </p>
-          <p className="text-white/50 text-xs whitespace-nowrap">Sistema médico</p>
+          <p className="text-white/40 text-[11px] whitespace-nowrap mt-0.5">Sistema médico</p>
         </div>
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 py-4 px-3 space-y-1 overflow-hidden">
+      {/* Nav — sparse, editorial */}
+      <nav className="flex-1 py-6 px-3 space-y-0.5 overflow-hidden">
         {visibleItems.map(item => {
           const active = pathname === item.href || pathname.startsWith(item.href + '/')
           const { Icon } = item
@@ -66,18 +67,23 @@ export default function Sidebar({ profile }: { profile: Profile }) {
               href={item.href}
               title={collapsed ? item.label : undefined}
               className={cn(
-                'flex items-center gap-3 rounded-xl text-sm font-medium transition-all duration-200 group relative',
+                'flex items-center gap-3 rounded-xl font-medium transition-all duration-150 group relative',
+                'text-[13px]',  /* title-sm per spec */
                 collapsed ? 'justify-center w-10 h-10 mx-auto' : 'px-3 py-2.5',
                 active
-                  ? 'bg-white/15 text-white'
-                  : 'text-white/60 hover:bg-white/10 hover:text-white'
+                  ? 'bg-white/12 text-white'
+                  : 'text-white/50 hover:bg-white/8 hover:text-white/80'
               )}
             >
-              {/* Circular active indicator in collapsed mode */}
-              {collapsed && active && (
-                <span className="absolute inset-0 rounded-xl bg-white/15" />
+              {/* Green active indicator bar */}
+              {active && !collapsed && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-full bg-[#a3f69c]" />
               )}
-              <Icon className={cn('shrink-0 transition-all duration-200', collapsed ? 'w-5 h-5' : 'w-4 h-4')} />
+              <Icon className={cn(
+                'shrink-0 transition-all duration-150',
+                collapsed ? 'w-5 h-5' : 'w-4 h-4',
+                active ? 'text-white' : ''
+              )} />
               <span className={cn(
                 'whitespace-nowrap transition-all duration-200 overflow-hidden',
                 collapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
@@ -87,7 +93,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
 
               {/* Tooltip when collapsed */}
               {collapsed && (
-                <span className="pointer-events-none absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-[#0D1E3A] text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-50">
+                <span className="pointer-events-none absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-[#080f1e] text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-50">
                   {item.label}
                 </span>
               )}
@@ -98,8 +104,8 @@ export default function Sidebar({ profile }: { profile: Profile }) {
 
       {/* Specialty badge */}
       {!collapsed && profile.role === 'doctor' && profile.specialty && (
-        <div className="px-4 pb-2">
-          <div className="px-3 py-2 rounded-xl bg-white/8 text-white/70 text-xs capitalize">
+        <div className="px-4 pb-3">
+          <div className="px-3 py-1.5 rounded-xl bg-[#a3f69c]/10 text-[#a3f69c] text-[11px] font-medium capitalize tracking-wide">
             {profile.specialty.replace('_', ' ')}
           </div>
         </div>
@@ -107,18 +113,19 @@ export default function Sidebar({ profile }: { profile: Profile }) {
 
       {/* User info */}
       <div className={cn(
-        'border-t border-white/10 flex items-center gap-3 overflow-hidden transition-all duration-200',
-        collapsed ? 'justify-center p-3' : 'px-4 py-3'
+        'flex items-center gap-3 overflow-hidden transition-all duration-200 mx-3 mb-3 rounded-xl p-2.5',
+        'bg-white/6',
+        collapsed ? 'justify-center' : ''
       )}>
-        <div className="w-8 h-8 rounded-full bg-[#0891B2] flex items-center justify-center text-white text-xs font-bold shrink-0">
+        <div className="w-7 h-7 rounded-full bg-[#1e3a6a] border border-[#a3f69c]/30 flex items-center justify-center text-[#a3f69c] text-[10px] font-bold shrink-0">
           {initials}
         </div>
         <div className={cn(
           'min-w-0 flex-1 transition-all duration-200',
           collapsed ? 'opacity-0 w-0' : 'opacity-100'
         )}>
-          <p className="text-white text-xs font-medium truncate">{profile.full_name}</p>
-          <p className="text-white/50 text-xs capitalize">{profile.role}</p>
+          <p className="text-white text-[12px] font-medium truncate leading-tight">{profile.full_name}</p>
+          <p className="text-white/40 text-[11px] capitalize mt-0.5">{profile.role}</p>
         </div>
       </div>
 
@@ -126,13 +133,14 @@ export default function Sidebar({ profile }: { profile: Profile }) {
       <button
         onClick={() => setCollapsed(c => !c)}
         className={cn(
-          'mx-3 mb-3 flex items-center justify-center rounded-xl py-2 text-white/40 hover:text-white/80 hover:bg-white/8 transition-all duration-200 text-xs gap-1.5',
+          'mx-3 mb-3 flex items-center justify-center rounded-xl py-2 text-white/30 hover:text-white/60 hover:bg-white/6 transition-all duration-200 gap-1.5',
+          'text-[11px]'
         )}
         aria-label={collapsed ? 'Expandir menú' : 'Contraer menú'}
       >
         {collapsed
           ? <ChevronRight className="w-4 h-4" />
-          : <><ChevronLeft className="w-4 h-4" /><span className="overflow-hidden whitespace-nowrap" style={{ fontSize: '11px' }}>Contraer</span></>
+          : <><ChevronLeft className="w-4 h-4" /><span className="whitespace-nowrap overflow-hidden">Contraer</span></>
         }
       </button>
     </aside>
