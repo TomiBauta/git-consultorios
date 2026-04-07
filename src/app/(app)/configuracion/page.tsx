@@ -1,26 +1,388 @@
+import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { CalendarDays, ChevronRight, Settings, Stethoscope, User, Users, Zap } from 'lucide-react'
 
-const sections = [
-  { href: '/configuracion/medicos',        icon: '👨‍⚕️', title: 'Médicos',        desc: 'Gestionar médicos y horarios de atención' },
-  { href: '/configuracion/usuarios',       icon: '👥', title: 'Usuarios',        desc: 'Administrar usuarios y roles del sistema' },
-  { href: '/configuracion/obras-sociales', icon: '🏥', title: 'Obras sociales',  desc: 'Gestionar obras sociales disponibles' },
-]
+const SPECIALTY_LABELS: Record<string, string> = {
+  oftalmologia:      'Oftalmología',
+  gastroenterologia: 'Gastroenterología',
+  diabetologia:      'Diabetología',
+  clinica_medica:    'Clínica Médica',
+}
 
-export default function ConfiguracionPage() {
+const DOW_LABELS: Record<number, string> = {
+  1: 'Lun', 2: 'Mar', 3: 'Mié', 4: 'Jue', 5: 'Vie', 6: 'Sáb', 0: 'Dom',
+}
+
+const AVATAR_COLORS = ['#002453', '#1e3a6a', '#0891B2', '#059669']
+
+function initials(name: string) {
+  return name
+    .split(' ')
+    .filter(w => !['Dr.', 'Dra.'].includes(w))
+    .slice(0, 2)
+    .map(w => w[0])
+    .join('')
+    .toUpperCase()
+}
+
+function avatarColor(name: string) {
+  return AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length]
+}
+
+export default async function ConfiguracionPage() {
+  const supabase = await createClient()
+
+  const { data: doctors } = await supabase
+    .from('profiles')
+    .select('id, full_name, specialty, is_active')
+    .eq('role', 'doctor')
+    .order('full_name')
+
+  const { data: availability } = await supabase
+    .from('doctor_availability')
+    .select('doctor_id, day_of_week')
+    .eq('is_active', true)
+
   return (
-    <div className="space-y-5">
-      <h1 className="text-xl font-semibold text-[#0F172A]" style={{ fontFamily: 'Poppins, sans-serif' }}>Configuración</h1>
-      <div className="grid grid-cols-3 gap-4">
-        {sections.map(s => (
-          <Link key={s.href} href={s.href}>
-            <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6 hover:border-[#BFDBFE] hover:shadow-sm transition-all cursor-pointer">
-              <p className="text-3xl mb-3">{s.icon}</p>
-              <p className="font-semibold text-[#0F172A]">{s.title}</p>
-              <p className="text-sm text-[#64748B] mt-1">{s.desc}</p>
+    <div className="grid grid-cols-12 gap-6 -m-8 h-[calc(100vh-0px)] overflow-hidden">
+
+      {/* ── Left nav ── */}
+      <aside
+        className="col-span-3 flex flex-col p-6 overflow-y-auto"
+        style={{ background: '#ffffff', borderRight: '1px solid rgba(196,198,208,0.08)' }}
+      >
+        <div className="mb-8">
+          <p
+            className="text-[10px] font-bold uppercase tracking-widest mb-1"
+            style={{ color: '#44474f' }}
+          >
+            Configuración
+          </p>
+          <h2
+            className="text-xl font-extrabold"
+            style={{ color: '#002453', letterSpacing: '-0.02em' }}
+          >
+            Ajustes del sistema
+          </h2>
+        </div>
+
+        <nav className="space-y-1 flex-1">
+          {[
+            { href: '/configuracion',         icon: Stethoscope, label: 'Gestión de Médicos',       active: true  },
+            { href: '/configuracion/medicos',  icon: CalendarDays, label: 'Horarios y Disponibilidad', active: false },
+            { href: '#',                       icon: Settings,     label: 'Ajustes de la Clínica',    active: false },
+            { href: '#',                       icon: User,         label: 'Perfil de Usuario',         active: false },
+            { href: '#',                       icon: Users,        label: 'Obras Sociales',            active: false },
+          ].map(item => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
+              style={item.active
+                ? { background: '#002453', color: '#a3f69c' }
+                : { color: '#44474f' }
+              }
+            >
+              <item.icon className="w-4 h-4 shrink-0" />
+              <span className="text-sm font-semibold">{item.label}</span>
+              {item.active && <ChevronRight className="w-3.5 h-3.5 ml-auto" />}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Plan card */}
+        <div
+          className="mt-6 p-4 rounded-2xl"
+          style={{ background: 'linear-gradient(135deg, #002453 0%, #1e3a6a 100%)' }}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <Zap className="w-4 h-4" style={{ color: '#a3f69c' }} />
+            <span className="text-xs font-bold" style={{ color: '#a3f69c' }}>Plan Activo</span>
+          </div>
+          <p className="text-sm font-extrabold text-white mb-0.5">Clínica Pro</p>
+          <p className="text-[11px]" style={{ color: 'rgba(255,255,255,0.6)' }}>
+            {doctors?.length ?? 0} médico{doctors?.length !== 1 ? 's' : ''} · Turnos ilimitados
+          </p>
+        </div>
+      </aside>
+
+      {/* ── Right content ── */}
+      <main className="col-span-9 overflow-y-auto p-8 space-y-8">
+
+        {/* ── Doctors section ── */}
+        <section>
+          <div className="flex items-end justify-between mb-5">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#44474f' }}>
+                Cuerpo Médico
+              </p>
+              <h3 className="text-xl font-extrabold" style={{ color: '#002453', letterSpacing: '-0.02em' }}>
+                Médicos Activos
+              </h3>
             </div>
-          </Link>
-        ))}
-      </div>
+            <Link
+              href="/configuracion/medicos"
+              className="text-xs font-bold px-4 py-2 rounded-xl transition-all hover:opacity-80"
+              style={{ background: '#002453', color: '#a3f69c' }}
+            >
+              Gestionar horarios →
+            </Link>
+          </div>
+
+          {(!doctors || doctors.length === 0) ? (
+            <div
+              className="p-12 rounded-2xl text-center"
+              style={{ background: '#f4f3f8' }}
+            >
+              <p className="text-sm font-medium" style={{ color: '#44474f' }}>
+                No hay médicos registrados aún.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-4">
+              {doctors.map((doctor, i) => {
+                const doctorDays = (availability ?? [])
+                  .filter(a => a.doctor_id === doctor.id)
+                  .map(a => DOW_LABELS[a.day_of_week])
+                  .filter(Boolean)
+                const bg = avatarColor(doctor.full_name)
+                const spec = SPECIALTY_LABELS[doctor.specialty ?? ''] ?? doctor.specialty ?? 'Especialidad'
+
+                return (
+                  <div
+                    key={doctor.id}
+                    className="p-5 rounded-2xl transition-all hover:shadow-md"
+                    style={{
+                      background: '#ffffff',
+                      boxShadow: '0px 4px 16px rgba(0,26,65,0.06)',
+                    }}
+                  >
+                    <div className="flex items-start gap-4">
+                      {/* Avatar */}
+                      <div
+                        className="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-extrabold text-lg shrink-0"
+                        style={{ background: bg }}
+                      >
+                        {initials(doctor.full_name)}
+                      </div>
+
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <p className="font-extrabold truncate" style={{ color: '#1a1b1f' }}>
+                            {doctor.full_name}
+                          </p>
+                          <span
+                            className="shrink-0 w-2 h-2 rounded-full"
+                            style={{ background: doctor.is_active ? '#a3f69c' : '#c4c6d0' }}
+                            title={doctor.is_active ? 'Disponible' : 'Inactivo'}
+                          />
+                        </div>
+                        <p className="text-xs mb-2" style={{ color: '#44474f' }}>{spec}</p>
+                        {doctorDays.length > 0 ? (
+                          <div className="flex flex-wrap gap-1">
+                            {doctorDays.map(d => (
+                              <span
+                                key={d}
+                                className="text-[10px] font-bold px-2 py-0.5 rounded"
+                                style={{ background: `${bg}18`, color: bg }}
+                              >
+                                {d}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-[10px]" style={{ color: '#747780' }}>Sin horarios configurados</span>
+                        )}
+                      </div>
+
+                      {/* Edit button */}
+                      <Link
+                        href="/configuracion/medicos"
+                        className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-all hover:opacity-80"
+                        style={{ background: '#f4f3f8', color: '#44474f' }}
+                        title="Editar horarios"
+                      >
+                        <CalendarDays className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </section>
+
+        {/* ── Clinic settings form ── */}
+        <section>
+          <div className="mb-5">
+            <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#44474f' }}>
+              Clínica
+            </p>
+            <h3 className="text-xl font-extrabold" style={{ color: '#002453', letterSpacing: '-0.02em' }}>
+              Ajustes de la Clínica
+            </h3>
+          </div>
+
+          <div
+            className="p-6 rounded-2xl space-y-5"
+            style={{
+              background: '#ffffff',
+              boxShadow: '0px 4px 16px rgba(0,26,65,0.06)',
+            }}
+          >
+            <div className="grid grid-cols-2 gap-5">
+              {/* Clinic name */}
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: '#44474f' }}>
+                  Nombre de la clínica
+                </label>
+                <input
+                  type="text"
+                  defaultValue="DIT Consultorios"
+                  className="settings-input"
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: '#44474f' }}>
+                  Email de contacto
+                </label>
+                <input
+                  type="email"
+                  defaultValue="contacto@ditconsultorios.com"
+                  className="settings-input"
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: '#44474f' }}>
+                  Teléfono
+                </label>
+                <input
+                  type="tel"
+                  defaultValue="+54 11 0000-0000"
+                  className="settings-input"
+                />
+              </div>
+
+              {/* Address */}
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: '#44474f' }}>
+                  Dirección
+                </label>
+                <input
+                  type="text"
+                  defaultValue="Buenos Aires, Argentina"
+                  className="settings-input"
+                />
+              </div>
+            </div>
+
+            {/* Online booking toggle */}
+            <div
+              className="flex items-center justify-between p-4 rounded-xl"
+              style={{ background: '#f4f3f8' }}
+            >
+              <div>
+                <p className="text-sm font-bold" style={{ color: '#1a1b1f' }}>
+                  Reservas online
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: '#44474f' }}>
+                  Habilitar el portal público de turnos para pacientes
+                </p>
+              </div>
+              <div
+                className="w-11 h-6 rounded-full relative cursor-pointer"
+                style={{ background: '#002453' }}
+              >
+                <span
+                  className="absolute top-1 left-5 w-4 h-4 rounded-full bg-white shadow transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-3 pt-1">
+              <button
+                className="px-6 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-80"
+                style={{ background: '#002453', color: '#a3f69c' }}
+              >
+                Guardar cambios
+              </button>
+              <button
+                className="px-6 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-80"
+                style={{ background: '#f4f3f8', color: '#44474f' }}
+              >
+                Descartar
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Bottom bento row ── */}
+        <section className="grid grid-cols-2 gap-6 pb-8">
+          {/* Servicios y Costos */}
+          <div
+            className="p-6 rounded-2xl flex flex-col justify-between"
+            style={{
+              background: '#ffffff',
+              boxShadow: '0px 4px 16px rgba(0,26,65,0.06)',
+              minHeight: '160px',
+            }}
+          >
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#44474f' }}>
+                Catálogo
+              </p>
+              <h4 className="text-base font-extrabold mb-1" style={{ color: '#1a1b1f' }}>
+                Servicios y Costos
+              </h4>
+              <p className="text-xs" style={{ color: '#44474f' }}>
+                Gestioná los servicios ofrecidos, aranceles y coberturas por obra social.
+              </p>
+            </div>
+            <Link
+              href="/configuracion/obras-sociales"
+              className="mt-4 text-xs font-bold flex items-center gap-1 transition-all hover:opacity-70"
+              style={{ color: '#002453' }}
+            >
+              Configurar servicios <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {/* Horarios Globales */}
+          <div
+            className="p-6 rounded-2xl flex flex-col justify-between"
+            style={{
+              background: 'linear-gradient(135deg, #002453 0%, #1e3a6a 100%)',
+              minHeight: '160px',
+            }}
+          >
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#a3f69c' }}>
+                Disponibilidad
+              </p>
+              <h4 className="text-base font-extrabold mb-1 text-white">
+                Horarios Globales
+              </h4>
+              <p className="text-xs" style={{ color: 'rgba(255,255,255,0.65)' }}>
+                Definí los horarios de apertura de la clínica y franjas disponibles para turnos.
+              </p>
+            </div>
+            <Link
+              href="/configuracion/medicos"
+              className="mt-4 text-xs font-bold flex items-center gap-1 transition-all hover:opacity-70"
+              style={{ color: '#a3f69c' }}
+            >
+              Ver disponibilidad <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </section>
+
+      </main>
     </div>
   )
 }

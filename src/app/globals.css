@@ -209,6 +209,27 @@
   filter: brightness(1.08);
 }
 
+/* ─── Utility: Settings form input ─────────────────────────────────────────── */
+.settings-input {
+  background: var(--surface-container-low, #f4f3f8);
+  color: var(--on-surface, #1a1b1f);
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  width: 100%;
+  transition: border-color 0.15s;
+  outline: none;
+}
+.settings-input:focus {
+  border-color: var(--primary-val, #002453);
+}
+.settings-input::placeholder {
+  color: var(--on-surface-variant, #44474f);
+  opacity: 0.6;
+}
+
 /* ─── Utility: Ambient card ─────────────────────────────────────────────────── */
 .card-ambient {
   background: var(--surface-container-lowest);
