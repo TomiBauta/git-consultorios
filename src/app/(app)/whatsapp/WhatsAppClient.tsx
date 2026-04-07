@@ -119,21 +119,21 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
   const st = selected ? (STATUS_MAP[selected.status] ?? STATUS_MAP.pending) : null
 
   return (
-    <div className="flex h-full -m-8 overflow-hidden">
+    <div className="flex flex-col sm:flex-row h-full -m-4 sm:-m-6 lg:-m-8 overflow-hidden">
 
       {/* ── Left: Conversation list ── */}
       <section
-        className="w-80 flex flex-col shrink-0 overflow-hidden"
-        style={{ background: '#f2f4f6', borderRight: '1px solid rgba(196,198,208,0.08)' }}
+        className="w-full sm:w-72 lg:w-80 flex flex-col shrink-0 overflow-hidden"
+        style={{ background: 'var(--surface-container-low)', borderRight: '1px solid rgba(196,198,208,0.08)' }}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-6 pb-3">
-          <h2 className="text-lg font-extrabold" style={{ color: '#00113a', letterSpacing: '-0.02em' }}>
+          <h2 className="text-lg font-extrabold" style={{ color: 'var(--on-surface)', letterSpacing: '-0.02em' }}>
             Mensajes
           </h2>
           <button
             className="p-2 rounded transition-all hover:opacity-70"
-            style={{ background: '#ffffff', color: '#3d4a5c' }}
+            style={{ background: 'var(--surface-container-lowest)', color: 'var(--on-surface-variant)' }}
           >
             <Filter className="w-4 h-4" />
           </button>
@@ -148,7 +148,7 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
               className="px-3 py-1.5 rounded-full text-[11px] font-bold whitespace-nowrap transition-all"
               style={activeFilter === tab
                 ? { background: '#00113a', color: '#ffffff' }
-                : { background: '#e2e5e9', color: '#3d4a5c' }
+                : { background: 'var(--surface-container-high)', color: 'var(--on-surface-variant)' }
               }
             >
               {tab}
@@ -161,7 +161,7 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
           {filteredConvs.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <MessageCircle className="w-10 h-10 mb-3" style={{ color: '#c4c6d0' }} />
-              <p className="text-xs font-medium" style={{ color: '#3d4a5c' }}>Sin conversaciones</p>
+              <p className="text-xs font-medium" style={{ color: 'var(--on-surface-variant)' }}>Sin conversaciones</p>
             </div>
           ) : filteredConvs.map(conv => {
             const isActive = selected?.id === conv.id
@@ -172,19 +172,19 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
                 onClick={() => setSelected(conv)}
                 className="w-full text-left p-4 rounded transition-all"
                 style={isActive
-                  ? { background: '#ffffff', borderLeft: '4px solid #00113a' }
+                  ? { background: 'var(--surface-container-lowest)', borderLeft: '4px solid #00113a' }
                   : { background: 'transparent', borderLeft: '4px solid transparent' }
                 }
               >
                 <div className="flex justify-between items-start mb-1">
-                  <span className="font-bold text-sm truncate pr-2" style={{ color: '#1a1b1f' }}>
+                  <span className="font-bold text-sm truncate pr-2" style={{ color: 'var(--on-surface)' }}>
                     {displayName(conv)}
                   </span>
-                  <span className="text-[10px] shrink-0" style={{ color: '#747780' }}>
+                  <span className="text-[10px] shrink-0" style={{ color: 'var(--outline)' }}>
                     {fmtTime(conv.updated_at)}
                   </span>
                 </div>
-                <p className="text-[11px] mb-2.5 truncate" style={{ color: '#3d4a5c' }}>
+                <p className="text-[11px] mb-2.5 truncate" style={{ color: 'var(--on-surface-variant)' }}>
                   {conv.phone_number}
                 </p>
                 <span
@@ -200,7 +200,7 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
       </section>
 
       {/* ── Center: Chat window ── */}
-      <section className="flex-1 flex flex-col min-w-0" style={{ background: '#f7f9fb' }}>
+      <section className="flex-1 flex flex-col min-w-0" style={{ background: 'var(--surface)' }}>
         {selected ? (
           <>
             {/* Chat header */}
@@ -220,10 +220,10 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
                   {initials(selected)}
                 </div>
                 <div>
-                  <p className="text-sm font-bold" style={{ color: '#1a1b1f' }}>{displayName(selected)}</p>
+                  <p className="text-sm font-bold" style={{ color: 'var(--on-surface)' }}>{displayName(selected)}</p>
                   <div className="flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full" style={{ background: '#0c6780' }} />
-                    <span className="text-[10px] uppercase tracking-wider" style={{ color: '#3d4a5c' }}>
+                    <span className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--on-surface-variant)' }}>
                       {st?.label}
                     </span>
                   </div>
@@ -234,7 +234,7 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
                   <button
                     key={i}
                     className="p-2 rounded-full transition-all hover:opacity-70"
-                    style={{ color: '#3d4a5c', background: 'transparent' }}
+                    style={{ color: 'var(--on-surface-variant)', background: 'transparent' }}
                   >
                     <Icon className="w-5 h-5" />
                   </button>
@@ -248,7 +248,7 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
               <div className="flex justify-center">
                 <span
                   className="px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest"
-                  style={{ background: '#e2e5e9', color: '#3d4a5c' }}
+                  style={{ background: 'var(--surface-container-high)', color: 'var(--on-surface-variant)' }}
                 >
                   Hoy
                 </span>
@@ -261,8 +261,8 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
               ) : messages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
                   <MessageCircle className="w-12 h-12 mb-3" style={{ color: '#c4c6d0' }} />
-                  <p className="text-sm font-medium" style={{ color: '#3d4a5c' }}>Sin mensajes aún</p>
-                  <p className="text-xs mt-1" style={{ color: '#747780' }}>
+                  <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant)' }}>Sin mensajes aún</p>
+                  <p className="text-xs mt-1" style={{ color: 'var(--outline)' }}>
                     Los mensajes de WhatsApp aparecerán aquí
                   </p>
                 </div>
@@ -278,7 +278,7 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
                       className="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
                       style={isOut
                         ? { background: '#002366', color: '#ffffff' }
-                        : { background: '#d8e2ff', color: '#00113a' }
+                        : { background: '#d8e2ff', color: 'var(--on-surface)' }
                       }
                     >
                       {isOut ? 'DR' : initials(selected)}
@@ -287,7 +287,7 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
                       className={`p-4 shadow-sm ${isOut ? 'rounded rounded-br-none' : 'rounded rounded-bl-none'}`}
                       style={isOut
                         ? { background: '#002366', color: '#ffffff' }
-                        : { background: '#ffffff', color: '#1a1b1f' }
+                        : { background: 'var(--surface-container-lowest)', color: 'var(--on-surface)' }
                       }
                     >
                       <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
@@ -308,20 +308,20 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
             <div
               className="p-5 shrink-0"
               style={{
-                background: '#ffffff',
+                background: 'var(--surface-container-lowest)',
                 borderTop: '1px solid rgba(196,198,208,0.08)',
               }}
             >
               {/* Templates */}
               <div className="flex items-center gap-2 mb-4 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-                <span className="text-[11px] font-bold shrink-0" style={{ color: '#3d4a5c' }}>Plantillas:</span>
+                <span className="text-[11px] font-bold shrink-0" style={{ color: 'var(--on-surface-variant)' }}>Plantillas:</span>
                 {TEMPLATES.map(t => (
                   <button
                     key={t.label}
                     className="px-3 py-1.5 rounded text-[11px] font-semibold whitespace-nowrap transition-all hover:opacity-80"
                     style={{
                       border: '1px solid rgba(196,198,208,0.3)',
-                      color: '#00113a',
+                      color: 'var(--on-surface)',
                       background: 'rgba(216,226,255,0.2)',
                     }}
                     onClick={() => setDraft(prev => prev + (prev ? ' ' : '') + t.label)}
@@ -335,7 +335,7 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1">
                   {[Paperclip, Smile].map((Icon, i) => (
-                    <button key={i} className="p-2 rounded-full transition-all hover:opacity-60" style={{ color: '#3d4a5c' }}>
+                    <button key={i} className="p-2 rounded-full transition-all hover:opacity-60" style={{ color: 'var(--on-surface-variant)' }}>
                       <Icon className="w-5 h-5" />
                     </button>
                   ))}
@@ -348,8 +348,8 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
                   onKeyDown={e => { if (e.key === 'Enter' && draft.trim()) setDraft('') }}
                   className="flex-1 px-4 py-3 rounded text-sm focus:outline-none transition-all"
                   style={{
-                    background: '#f2f4f6',
-                    color: '#1a1b1f',
+                    background: 'var(--surface-container-low)',
+                    color: 'var(--on-surface)',
                     border: '2px solid transparent',
                   }}
                   onFocus={e => { e.currentTarget.style.borderColor = '#00113a'; e.currentTarget.style.background = '#fff' }}
@@ -370,14 +370,14 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
           <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
             <div
               className="w-16 h-16 rounded flex items-center justify-center mb-4"
-              style={{ background: '#f2f4f6' }}
+              style={{ background: 'var(--surface-container-low)' }}
             >
               <MessageCircle className="w-8 h-8" style={{ color: '#c4c6d0' }} />
             </div>
-            <p className="text-base font-bold mb-1" style={{ color: '#1a1b1f' }}>
+            <p className="text-base font-bold mb-1" style={{ color: 'var(--on-surface)' }}>
               Seleccioná una conversación
             </p>
-            <p className="text-sm" style={{ color: '#3d4a5c' }}>
+            <p className="text-sm" style={{ color: 'var(--on-surface-variant)' }}>
               Las conversaciones de WhatsApp de tus pacientes aparecerán aquí.
             </p>
           </div>
@@ -389,7 +389,7 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
         <aside
           className="w-64 shrink-0 hidden xl:flex flex-col p-5 overflow-y-auto"
           style={{
-            background: '#ffffff',
+            background: 'var(--surface-container-lowest)',
             borderLeft: '1px solid rgba(196,198,208,0.08)',
           }}
         >
@@ -401,10 +401,10 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
             >
               {initials(selected)}
             </div>
-            <h3 className="text-sm font-extrabold" style={{ color: '#1a1b1f' }}>
+            <h3 className="text-sm font-extrabold" style={{ color: 'var(--on-surface)' }}>
               {displayName(selected)}
             </h3>
-            <p className="text-[11px] mt-0.5" style={{ color: '#3d4a5c' }}>
+            <p className="text-[11px] mt-0.5" style={{ color: 'var(--on-surface-variant)' }}>
               {selected.phone_number}
             </p>
           </div>
@@ -412,7 +412,7 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
           <div className="space-y-5">
             {/* Medical info */}
             <div>
-              <p className="text-[9px] font-bold uppercase tracking-widest mb-3" style={{ color: '#00113a' }}>
+              <p className="text-[9px] font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--on-surface)' }}>
                 Información Médica
               </p>
               <div className="space-y-3">
@@ -423,12 +423,12 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
                   <div key={item.label} className="flex items-center gap-3">
                     <div
                       className="p-2 rounded-lg shrink-0"
-                      style={{ background: '#f2f4f6', color: item.color }}
+                      style={{ background: 'var(--surface-container-low)', color: item.color }}
                     >
                       <item.icon className="w-3.5 h-3.5" />
                     </div>
                     <div>
-                      <p className="text-[9px]" style={{ color: '#3d4a5c' }}>{item.label}</p>
+                      <p className="text-[9px]" style={{ color: 'var(--on-surface-variant)' }}>{item.label}</p>
                       <p className="text-xs font-bold" style={{ color: item.color }}>{item.value}</p>
                     </div>
                   </div>
@@ -440,7 +440,7 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
 
             {/* Next appointment */}
             <div>
-              <p className="text-[9px] font-bold uppercase tracking-widest mb-3" style={{ color: '#00113a' }}>
+              <p className="text-[9px] font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--on-surface)' }}>
                 Próxima Cita
               </p>
               <div
@@ -448,13 +448,13 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
                 style={{ background: 'rgba(216,226,255,0.25)', border: '1px solid rgba(216,226,255,0.4)' }}
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <Calendar className="w-3.5 h-3.5" style={{ color: '#00113a' }} />
-                  <p className="text-[11px] font-bold" style={{ color: '#00113a' }}>Sin turno registrado</p>
+                  <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--on-surface)' }} />
+                  <p className="text-[11px] font-bold" style={{ color: 'var(--on-surface)' }}>Sin turno registrado</p>
                 </div>
-                <p className="text-[10px]" style={{ color: '#3d4a5c' }}>Revisar agenda del paciente</p>
+                <p className="text-[10px]" style={{ color: 'var(--on-surface-variant)' }}>Revisar agenda del paciente</p>
                 <button
                   className="mt-3 w-full py-1.5 rounded-lg text-[10px] font-bold transition-all hover:opacity-80"
-                  style={{ background: '#ffffff', color: '#00113a', border: '1px solid rgba(216,226,255,0.6)' }}
+                  style={{ background: 'var(--surface-container-lowest)', color: 'var(--on-surface)', border: '1px solid rgba(216,226,255,0.6)' }}
                 >
                   Ver en agenda
                 </button>
@@ -465,7 +465,7 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
 
             {/* Recent docs */}
             <div>
-              <p className="text-[9px] font-bold uppercase tracking-widest mb-3" style={{ color: '#00113a' }}>
+              <p className="text-[9px] font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--on-surface)' }}>
                 Documentos
               </p>
               <div className="space-y-1">
@@ -476,13 +476,13 @@ export default function WhatsAppClient({ conversations: initial }: { conversatio
                   <div
                     key={doc.name}
                     className="flex items-center justify-between p-2 rounded-lg transition-all hover:opacity-80 cursor-pointer"
-                    style={{ background: '#f2f4f6' }}
+                    style={{ background: 'var(--surface-container-low)' }}
                   >
                     <div className="flex items-center gap-2">
-                      <doc.icon className="w-3.5 h-3.5" style={{ color: '#3d4a5c' }} />
-                      <span className="text-[10px] font-medium" style={{ color: '#3d4a5c' }}>{doc.name}</span>
+                      <doc.icon className="w-3.5 h-3.5" style={{ color: 'var(--on-surface-variant)' }} />
+                      <span className="text-[10px] font-medium" style={{ color: 'var(--on-surface-variant)' }}>{doc.name}</span>
                     </div>
-                    <Download className="w-3 h-3" style={{ color: '#747780' }} />
+                    <Download className="w-3 h-3" style={{ color: 'var(--outline)' }} />
                   </div>
                 ))}
               </div>

@@ -161,7 +161,7 @@ export default function DoctorAvailabilityManager({
                   ].join(' ')}
                 >
                   <span className={[
-                    'absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all',
+                    'absolute top-1 w-4 h-4 rounded-full bg-white dark:bg-[#1a2235] shadow transition-all',
                     row.enabled ? 'left-5' : 'left-1',
                   ].join(' ')} />
                 </button>
@@ -193,7 +193,7 @@ export default function DoctorAvailabilityManager({
                     <select
                       value={row.slot_duration}
                       onChange={e => update(dow, 'slot_duration', parseInt(e.target.value))}
-                      className="h-8 text-sm border border-[#E2E8F0] rounded-lg px-2 bg-white text-[#334155]"
+                      className="h-8 text-sm border border-[#E2E8F0] rounded-lg px-2 bg-white dark:bg-[#1a2235] text-[#334155]"
                     >
                       <option value={15}>15 min</option>
                       <option value={20}>20 min</option>

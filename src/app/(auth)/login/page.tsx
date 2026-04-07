@@ -36,21 +36,21 @@ export default function LoginPage() {
   return (
     <div
       className="flex flex-col min-h-screen"
-      style={{ background: '#f7f9fb', color: '#1a1b1f', fontFamily: 'Inter, sans-serif' }}
+      style={{ background: 'var(--surface)', color: 'var(--on-surface)', fontFamily: 'Inter, sans-serif' }}
     >
 
       {/* ── Fixed header ── */}
       <header className="fixed top-0 left-0 w-full z-50 px-8 py-5 flex justify-between items-center">
         <div className="flex items-center gap-2.5">
-          <Stethoscope className="w-7 h-7" style={{ color: '#00113a' }} />
-          <span className="text-lg font-bold tracking-tight" style={{ color: '#00113a' }}>
+          <Stethoscope className="w-7 h-7" style={{ color: 'var(--on-surface)' }} />
+          <span className="text-lg font-bold tracking-tight" style={{ color: 'var(--on-surface)' }}>
             DIT Consultorios Médicos
           </span>
         </div>
         <a
           href="#"
           className="text-sm font-medium transition-colors hover:opacity-70"
-          style={{ color: '#3d4a5c' }}
+          style={{ color: 'var(--on-surface-variant)' }}
         >
           Ayuda
         </a>
@@ -86,11 +86,11 @@ export default function LoginPage() {
             <div className="mb-10">
               <h1
                 className="text-3xl font-extrabold tracking-tight mb-2"
-                style={{ color: '#00113a', letterSpacing: '-0.02em' }}
+                style={{ color: 'var(--on-surface)', letterSpacing: '-0.02em' }}
               >
                 Bienvenido
               </h1>
-              <p className="text-sm" style={{ color: '#3d4a5c' }}>
+              <p className="text-sm" style={{ color: 'var(--on-surface-variant)' }}>
                 Inicie sesión para acceder a su portal médico profesional.
               </p>
             </div>
@@ -101,13 +101,13 @@ export default function LoginPage() {
               <div className="space-y-1">
                 <label
                   className="block text-xs font-semibold ml-1"
-                  style={{ color: '#3d4a5c' }}
+                  style={{ color: 'var(--on-surface-variant)' }}
                   htmlFor="email"
                 >
                   Correo Electrónico
                 </label>
                 <div className="login-tray rounded px-4 py-3 flex items-center gap-3">
-                  <Mail className="w-5 h-5 shrink-0" style={{ color: '#747780' }} />
+                  <Mail className="w-5 h-5 shrink-0" style={{ color: 'var(--outline)' }} />
                   <input
                     id="email"
                     type="email"
@@ -117,7 +117,7 @@ export default function LoginPage() {
                     required
                     autoComplete="email"
                     className="bg-transparent border-none focus:outline-none focus:ring-0 w-full text-sm"
-                    style={{ color: '#1a1b1f' }}
+                    style={{ color: 'var(--on-surface)' }}
                   />
                 </div>
               </div>
@@ -127,7 +127,7 @@ export default function LoginPage() {
                 <div className="flex justify-between items-center ml-1">
                   <label
                     className="text-xs font-semibold"
-                    style={{ color: '#3d4a5c' }}
+                    style={{ color: 'var(--on-surface-variant)' }}
                     htmlFor="password"
                   >
                     Contraseña
@@ -141,7 +141,7 @@ export default function LoginPage() {
                   </a>
                 </div>
                 <div className="login-tray rounded px-4 py-3 flex items-center gap-3">
-                  <Lock className="w-5 h-5 shrink-0" style={{ color: '#747780' }} />
+                  <Lock className="w-5 h-5 shrink-0" style={{ color: 'var(--outline)' }} />
                   <input
                     id="password"
                     type={showPass ? 'text' : 'password'}
@@ -151,13 +151,13 @@ export default function LoginPage() {
                     required
                     autoComplete="current-password"
                     className="bg-transparent border-none focus:outline-none focus:ring-0 w-full text-sm"
-                    style={{ color: '#1a1b1f' }}
+                    style={{ color: 'var(--on-surface)' }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPass(v => !v)}
                     className="shrink-0 transition-opacity hover:opacity-60"
-                    style={{ color: '#747780' }}
+                    style={{ color: 'var(--outline)' }}
                     aria-label={showPass ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                   >
                     {showPass
@@ -181,7 +181,7 @@ export default function LoginPage() {
                 <label
                   htmlFor="remember"
                   className="text-xs"
-                  style={{ color: '#3d4a5c' }}
+                  style={{ color: 'var(--on-surface-variant)' }}
                 >
                   Recordar sesión
                 </label>
@@ -220,12 +220,12 @@ export default function LoginPage() {
               className="mt-10 pt-8 flex flex-col items-center gap-3"
               style={{ borderTop: '1px solid rgba(196,198,208,0.25)' }}
             >
-              <p className="text-xs" style={{ color: '#3d4a5c' }}>
+              <p className="text-xs" style={{ color: 'var(--on-surface-variant)' }}>
                 ¿No tiene una cuenta todavía?
               </p>
               <button
                 className="text-sm font-bold tracking-tight transition-colors hover:opacity-70"
-                style={{ color: '#00113a' }}
+                style={{ color: 'var(--on-surface)' }}
               >
                 Solicitar acceso institucional
               </button>
@@ -240,7 +240,7 @@ export default function LoginPage() {
         style={{ borderTop: '1px solid rgba(244,243,248,0.8)', background: 'rgba(244,243,248,0.4)' }}
       >
         <div className="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto gap-4">
-          <p className="text-xs" style={{ color: '#3d4a5c' }}>
+          <p className="text-xs" style={{ color: 'var(--on-surface-variant)' }}>
             © {new Date().getFullYear()} DIT Consultorios Médicos. Todos los derechos reservados.
           </p>
           <div className="flex gap-8">
@@ -249,7 +249,7 @@ export default function LoginPage() {
                 key={link}
                 href="#"
                 className="text-xs transition-colors hover:opacity-70"
-                style={{ color: '#3d4a5c' }}
+                style={{ color: 'var(--on-surface-variant)' }}
               >
                 {link}
               </a>

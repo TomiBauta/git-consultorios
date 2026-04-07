@@ -36,7 +36,7 @@ export default async function PatientLayout({
       </div>
 
       {/* Header del paciente */}
-      <div className="bg-white border border-[#E2E8F0] rounded p-5">
+      <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-[#1B3A6B] flex items-center justify-center text-white font-bold text-lg shrink-0">

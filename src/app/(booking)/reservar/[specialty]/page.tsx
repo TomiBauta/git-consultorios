@@ -40,7 +40,7 @@ export default async function SelectDoctorPage({ params }: { params: Promise<{ s
       </div>
 
       {!doctors || doctors.length === 0 ? (
-        <div className="bg-white border border-[#E2E8F0] rounded text-center py-12">
+        <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded text-center py-12">
           <p className="text-4xl mb-3">😔</p>
           <p className="text-[#64748B]">No hay médicos disponibles en esta especialidad por el momento.</p>
           <Link href="/reservar" className="text-sm text-[#0891B2] hover:underline mt-3 inline-block">
@@ -51,7 +51,7 @@ export default async function SelectDoctorPage({ params }: { params: Promise<{ s
         <div className="space-y-3">
           {doctors.map(doctor => (
             <Link key={doctor.id} href={`/reservar/${specialty}/${doctor.id}`}>
-              <div className="flex items-center gap-4 p-5 bg-white border-2 border-[#E2E8F0] rounded hover:border-[#0891B2] hover:shadow-sm transition-all cursor-pointer">
+              <div className="flex items-center gap-4 p-5 bg-white dark:bg-[#1a2235] border-2 border-[#E2E8F0] rounded hover:border-[#0891B2] hover:shadow-sm transition-all cursor-pointer">
                 <div className="w-14 h-14 rounded-full bg-[#1B3A6B] flex items-center justify-center text-white font-bold text-lg shrink-0">
                   {doctor.full_name.split(' ').filter((w: string) => !['Dr.','Dra.'].includes(w)).slice(0,2).map((w: string) => w[0]).join('')}
                 </div>

@@ -46,7 +46,7 @@ export default async function ConfirmadoPage({
   return (
     <div className="space-y-6">
       {/* Success card */}
-      <div className="bg-white border border-[#E2E8F0] rounded p-8 text-center space-y-4">
+      <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded p-8 text-center space-y-4">
         {/* Check icon */}
         <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto">
           <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -64,7 +64,7 @@ export default async function ConfirmadoPage({
 
       {/* Appointment details */}
       {appointment ? (
-        <div className="bg-white border border-[#E2E8F0] rounded p-6 space-y-4">
+        <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded p-6 space-y-4">
           <h2 className="font-semibold text-[#0F172A]">Detalle del turno</h2>
 
           <div className="space-y-3">
@@ -115,7 +115,7 @@ export default async function ConfirmadoPage({
           </div>
         </div>
       ) : (
-        <div className="bg-white border border-[#E2E8F0] rounded p-6 text-center">
+        <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded p-6 text-center">
           <p className="text-sm text-[#64748B]">Tu turno fue registrado correctamente.</p>
         </div>
       )}

@@ -28,7 +28,7 @@ export default async function ConversationPage({ params }: { params: Promise<{ c
         <Link href="/whatsapp" className="hover:text-[#1B3A6B]">← WhatsApp</Link>
       </div>
 
-      <div className="bg-white border border-[#E2E8F0] rounded p-4">
+      <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded p-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-[#E0F7FB] flex items-center justify-center text-[#0891B2] font-semibold">
             {patient ? `${patient.first_name[0]}${patient.last_name[0]}` : '?'}
@@ -54,7 +54,7 @@ export default async function ConversationPage({ params }: { params: Promise<{ c
             <div className={`max-w-[80%] px-4 py-2.5 rounded text-sm ${
               msg.direction === 'outbound'
                 ? 'bg-[#1B3A6B] text-white rounded-br-sm'
-                : 'bg-white border border-[#E2E8F0] text-[#334155] rounded-bl-sm'
+                : 'bg-white dark:bg-[#1a2235] border border-[#E2E8F0] text-[#334155] rounded-bl-sm'
             }`}>
               <p className="whitespace-pre-wrap">{msg.content}</p>
               <p className={`text-xs mt-1 ${msg.direction === 'outbound' ? 'text-white/60' : 'text-[#94A3B8]'}`}>

@@ -49,7 +49,7 @@ export default async function HistoriaPage({ params }: { params: Promise<{ patie
 
       {/* Timeline */}
       {!consultations || consultations.length === 0 ? (
-        <div className="bg-white border border-[#E2E8F0] rounded text-center py-14 text-[#94A3B8]">
+        <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded text-center py-14 text-[#94A3B8]">
           <p className="text-4xl mb-3">📋</p>
           <p className="text-sm">No hay consultas registradas</p>
           <Link href={`/pacientes/${patientId}/consultas/nueva`} className="text-sm text-[#0891B2] hover:underline mt-2 inline-block">
@@ -65,7 +65,7 @@ export default async function HistoriaPage({ params }: { params: Promise<{ patie
 
             return (
               <Link key={c.id} href={`/pacientes/${patientId}/consultas/${c.id}`}>
-                <div className="bg-white border border-[#E2E8F0] rounded p-5 hover:border-[#BFDBFE] hover:shadow-sm transition-all cursor-pointer">
+                <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded p-5 hover:border-[#BFDBFE] hover:shadow-sm transition-all cursor-pointer">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">

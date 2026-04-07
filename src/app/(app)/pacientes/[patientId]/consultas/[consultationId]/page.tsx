@@ -71,7 +71,7 @@ export default async function ConsultaPage({ params }: { params: Promise<{ patie
         { label: 'Evaluación', value: c.assessment },
         { label: 'Plan terapéutico', value: c.plan },
       ].filter(s => s.value).map(s => (
-        <div key={s.label} className="bg-white border border-[#E2E8F0] rounded p-4">
+        <div key={s.label} className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded p-4">
           <p className="text-xs font-medium text-[#94A3B8] uppercase tracking-wide mb-2">{s.label}</p>
           <p className="text-sm text-[#334155] whitespace-pre-wrap">{s.value}</p>
         </div>
@@ -79,7 +79,7 @@ export default async function ConsultaPage({ params }: { params: Promise<{ patie
 
       {/* Diagnósticos */}
       {diagnoses.length > 0 && (
-        <div className="bg-white border border-[#E2E8F0] rounded p-4">
+        <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded p-4">
           <p className="text-xs font-medium text-[#94A3B8] uppercase tracking-wide mb-3">Diagnósticos CIE-10</p>
           <div className="space-y-2">
             {diagnoses.map((d: any) => (
@@ -96,7 +96,7 @@ export default async function ConsultaPage({ params }: { params: Promise<{ patie
 
       {/* Tratamientos */}
       {treatments.length > 0 && (
-        <div className="bg-white border border-[#E2E8F0] rounded p-4">
+        <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded p-4">
           <p className="text-xs font-medium text-[#94A3B8] uppercase tracking-wide mb-3">Tratamientos</p>
           <div className="space-y-2">
             {treatments.map((t: any) => (

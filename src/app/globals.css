@@ -69,7 +69,8 @@
   --secondary-val:            #0c6780;
   --secondary-container-val:  #cce8f0;
 
-  /* Ghost border — 15% opacity only, never solid lines */
+  /* Outline tokens */
+  --outline:                  #747780;
   --outline-variant:          rgba(61, 74, 92, 0.15);
 
   /* Ambient shadow — primary-tinted, 4% opacity, 32px blur */
@@ -112,40 +113,112 @@
   --sidebar-ring:           var(--secondary-val);
 }
 
-/* ─── Dark Mode ────────────────────────────────────────────────────────────── */
+/* ─── Dark Mode CSS Variables ─────────────────────────────────────────────── */
 .dark {
-  --background: oklch(0.10 0.025 240);
-  --foreground: oklch(0.94 0.01 240);
-  --card: oklch(0.15 0.025 240);
-  --card-foreground: oklch(0.94 0.01 240);
-  --popover: oklch(0.15 0.025 240);
-  --popover-foreground: oklch(0.94 0.01 240);
-  --primary: oklch(0.60 0.18 230);
-  --primary-foreground: oklch(0.10 0.025 240);
-  --secondary: oklch(0.55 0.12 215);
-  --secondary-foreground: #ffffff;
-  --muted: oklch(0.20 0.03 240);
-  --muted-foreground: oklch(0.60 0.02 240);
-  --accent: oklch(0.70 0.10 215);
-  --accent-foreground: oklch(0.10 0.025 240);
-  --destructive: oklch(0.65 0.20 22);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 10%);
-  --ring: oklch(0.60 0.18 230);
-  --chart-1: oklch(0.60 0.18 230);
-  --chart-2: oklch(0.65 0.14 215);
-  --chart-3: oklch(0.70 0.12 200);
-  --chart-4: oklch(0.60 0.02 240);
-  --chart-5: oklch(0.20 0.03 240);
-  --sidebar: oklch(0.07 0.025 240);
-  --sidebar-foreground: oklch(0.94 0.01 240);
-  --sidebar-primary: oklch(0.65 0.12 215);
-  --sidebar-primary-foreground: oklch(0.10 0.025 240);
-  --sidebar-accent: oklch(0.18 0.03 240);
-  --sidebar-accent-foreground: oklch(0.94 0.01 240);
-  --sidebar-border: oklch(1 0 0 / 6%);
-  --sidebar-ring: oklch(0.65 0.12 215);
-  --ambient-shadow: 0px 8px 32px rgba(0, 0, 0, 0.20);
+  /* Surfaces — dark tonal layers */
+  --surface:                  #0e1420;
+  --surface-container-low:    #131b2a;
+  --surface-container:        #1a2235;
+  --surface-container-high:   #1f2840;
+  --surface-container-lowest: #0a0f1c;
+
+  /* On-Surface — light text for dark backgrounds */
+  --on-surface:               #e8eaf0;
+  --on-surface-variant:       #9aa5b8;
+
+  /* Primary — lighter navy for dark mode */
+  --primary-val:              #7eb8e8;
+  --primary-container-val:    #3a6ab5;
+
+  /* Secondary — sky blue, brighter for dark */
+  --secondary-val:            #4db8d0;
+  --secondary-container-val:  #0c3d4a;
+
+  /* Outlines */
+  --outline:                  #5a6470;
+  --outline-variant:          rgba(255, 255, 255, 0.08);
+
+  /* Ambient shadow — darker */
+  --ambient-shadow:           0px 8px 32px rgba(0, 0, 0, 0.30);
+
+  /* Shadcn tokens */
+  --background:             var(--surface);
+  --foreground:             var(--on-surface);
+  --card:                   var(--surface-container);
+  --card-foreground:        var(--on-surface);
+  --popover:                var(--surface-container);
+  --popover-foreground:     var(--on-surface);
+  --primary:                var(--primary-val);
+  --primary-foreground:     #0a0f1c;
+  --secondary:              var(--secondary-val);
+  --secondary-foreground:   #0a0f1c;
+  --muted:                  var(--surface-container-high);
+  --muted-foreground:       var(--on-surface-variant);
+  --accent:                 var(--secondary-container-val);
+  --accent-foreground:      var(--secondary-val);
+  --destructive:            oklch(0.65 0.20 22);
+  --border:                 var(--outline-variant);
+  --input:                  var(--surface-container-high);
+  --ring:                   var(--primary-val);
+  --chart-1:                #7eb8e8;
+  --chart-2:                #3a6ab5;
+  --chart-3:                #4db8d0;
+  --chart-4:                #9aa5b8;
+  --chart-5:                #1a2235;
+  --sidebar:                #070c18;
+  --sidebar-foreground:     #e8eaf0;
+  --sidebar-primary:        #4db8d0;
+  --sidebar-primary-foreground: #070c18;
+  --sidebar-accent:         rgba(255, 255, 255, 0.06);
+  --sidebar-accent-foreground: #e8eaf0;
+  --sidebar-border:         rgba(255, 255, 255, 0.05);
+  --sidebar-ring:           #4db8d0;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface-container-high); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--outline); }
+
+/* ─── Dark Mode: component-level overrides ─────────────────────────────────── */
+
+/* Card / surface containers */
+.dark .card-ambient {
+  background: var(--surface-container);
+  box-shadow: var(--ambient-shadow);
+}
+
+/* TopBar glassmorphism */
+.dark header.sticky {
+  background: rgba(14, 20, 32, 0.88) !important;
+  box-shadow: 0px 1px 0px rgba(255,255,255,0.06);
+}
+
+/* White cards → dark surface */
+.dark [class*="bg-white"] {
+  background: var(--surface-container) !important;
+}
+.dark .bg-white\/50 {
+  background: rgba(26, 34, 53, 0.5) !important;
+}
+
+/* Settings form input in dark */
+.dark .settings-input {
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+}
+.dark .settings-input:focus {
+  background: var(--surface-container);
+  border-color: var(--primary-val);
+}
+
+/* Login tray dark */
+.dark .login-tray {
+  background: var(--surface-container-high);
+}
+.dark .login-tray:focus-within {
+  border-bottom-color: var(--primary-val);
 }
 
 /* ─── Base Layer ───────────────────────────────────────────────────────────── */
