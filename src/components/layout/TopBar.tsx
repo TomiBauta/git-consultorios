@@ -1,21 +1,27 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Sun, Moon, Bell, HelpCircle, Search } from 'lucide-react'
+import { Sun, Moon, Bell, HelpCircle, Search, ChevronLeft } from 'lucide-react'
 import type { Database } from '@/types/database'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
 
+// Top-level routes — no back button on these
+const ROOT_PATHS = ['/dashboard', '/agenda', '/pacientes', '/whatsapp', '/configuracion']
+
 export default function TopBar({ profile }: { profile: Profile }) {
   const router = useRouter()
+  const pathname = usePathname()
   const supabase = createClient()
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => { setMounted(true) }, [])
+
+  const isSubRoute = !ROOT_PATHS.includes(pathname)
 
   async function handleSignOut() {
     await supabase.auth.signOut()
@@ -45,6 +51,19 @@ export default function TopBar({ profile }: { profile: Profile }) {
         boxShadow: '0px 1px 0px rgba(68,71,79,0.08)',
       }}
     >
+      {/* Back button — only on sub-routes */}
+      {isSubRoute && (
+        <button
+          onClick={() => router.back()}
+          className="flex items-center gap-1.5 mr-4 px-3 py-2 rounded-xl transition-all hover:opacity-70 shrink-0"
+          style={{ background: '#f4f3f8', color: '#002453' }}
+          aria-label="Volver"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          <span className="text-xs font-bold">Volver</span>
+        </button>
+      )}
+
       {/* Search */}
       <form onSubmit={handleSearch} className="relative w-96">
         <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--on-surface-variant, #44474f)' }} />

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
 import {
   LayoutDashboard,
   Calendar,
@@ -14,6 +15,7 @@ import {
   ChevronRight,
   Stethoscope,
   PlusCircle,
+  LogOut,
 } from 'lucide-react'
 import type { Database } from '@/types/database'
 
@@ -31,6 +33,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
   const pathname = usePathname()
   const router = useRouter()
   const [collapsed, setCollapsed] = useState(false)
+  const supabase = createClient()
 
   const visibleItems = navItems.filter(item => item.roles.includes(profile.role))
   const initials = profile.full_name.split(' ').map(n => n[0]).slice(0, 2).join('')
@@ -99,7 +102,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
         })}
       </nav>
 
-      {/* Nueva Cita CTA */}
+      {/* Nuevo Turno CTA */}
       {!collapsed && (
         <div className="px-3 mt-6">
           <button
@@ -108,7 +111,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
             style={{ background: 'linear-gradient(135deg, #002453 0%, #1e3a6a 100%)', border: '1px solid rgba(163,246,156,0.2)' }}
           >
             <PlusCircle className="w-4 h-4" />
-            <span className="text-sm">Nueva Cita</span>
+            <span className="text-sm">Nuevo Turno</span>
           </button>
         </div>
       )}
@@ -138,6 +141,29 @@ export default function Sidebar({ profile }: { profile: Profile }) {
           <p className="text-white/40 text-[11px] capitalize mt-0.5">{profile.role}</p>
         </div>
       </div>
+
+      {/* Logout */}
+      <button
+        onClick={async () => {
+          await supabase.auth.signOut()
+          router.push('/login')
+          router.refresh()
+        }}
+        title="Cerrar sesión"
+        className={cn(
+          'flex items-center gap-3 mx-3 mb-1 rounded-xl py-2.5 px-3 transition-all duration-200',
+          'text-white/50 hover:text-white hover:bg-white/10',
+          collapsed ? 'justify-center' : ''
+        )}
+      >
+        <LogOut className="w-4 h-4 shrink-0" />
+        <span className={cn(
+          'text-[12px] font-medium whitespace-nowrap transition-all duration-200 overflow-hidden',
+          collapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
+        )}>
+          Cerrar sesión
+        </span>
+      </button>
 
       {/* Collapse toggle */}
       <button
