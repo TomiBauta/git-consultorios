@@ -17,13 +17,9 @@ import {
   startOfWeek,
 } from "date-fns"
 import { es } from "date-fns/locale"
-import { ChevronLeftIcon, ChevronRightIcon, PlusCircleIcon } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
-
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { useMediaQuery } from "@/hooks/use-media-query"
 
 export interface CalendarEvent {
   id: string | number
@@ -44,304 +40,276 @@ interface FullScreenCalendarProps {
   onNewEvent?: () => void
   onMonthChange?: (firstDay: Date) => void
   extraControls?: React.ReactNode
+  selectedDay?: Date
+  onDaySelect?: (day: Date) => void
 }
 
-const colStartClasses = [
-  "",
+// Monday-first col-start mapping (getDay: 0=Sun,1=Mon,...,6=Sat)
+const colStartClassesMon = [
+  "col-start-7", // Sunday  → last col
+  "",            // Monday  → first col
   "col-start-2",
   "col-start-3",
   "col-start-4",
   "col-start-5",
   "col-start-6",
-  "col-start-7",
 ]
 
-const WEEK_DAYS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
+const WEEK_DAYS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]
 
 export function FullScreenCalendar({
   data,
   onNewEvent,
   onMonthChange,
   extraControls,
+  selectedDay: externalSelected,
+  onDaySelect,
 }: FullScreenCalendarProps) {
   const today = startOfToday()
-  const [selectedDay, setSelectedDay] = React.useState(today)
+  const [internalSelected, setInternalSelected] = React.useState(today)
+  const selectedDay = externalSelected ?? internalSelected
+
   const [currentMonth, setCurrentMonth] = React.useState(
     format(today, "MMM-yyyy", { locale: es }),
   )
   const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date(), { locale: es })
-  const isDesktop = useMediaQuery("(min-width: 768px)")
 
+  // Monday-first week interval
   const days = eachDayOfInterval({
-    start: startOfWeek(firstDayCurrentMonth),
-    end: endOfWeek(endOfMonth(firstDayCurrentMonth)),
+    start: startOfWeek(firstDayCurrentMonth, { weekStartsOn: 1 }),
+    end: endOfWeek(endOfMonth(firstDayCurrentMonth), { weekStartsOn: 1 }),
   })
+
+  const totalEvents = data.reduce((sum, d) => sum + d.events.length, 0)
 
   function previousMonth() {
     const first = add(firstDayCurrentMonth, { months: -1 })
-    const next = format(first, "MMM-yyyy", { locale: es })
-    setCurrentMonth(next)
+    setCurrentMonth(format(first, "MMM-yyyy", { locale: es }))
     onMonthChange?.(first)
   }
 
   function nextMonth() {
     const first = add(firstDayCurrentMonth, { months: 1 })
-    const next = format(first, "MMM-yyyy", { locale: es })
-    setCurrentMonth(next)
+    setCurrentMonth(format(first, "MMM-yyyy", { locale: es }))
     onMonthChange?.(first)
   }
 
-  function goToToday() {
-    const first = parse(format(today, "MMM-yyyy", { locale: es }), "MMM-yyyy", new Date(), { locale: es })
-    setCurrentMonth(format(today, "MMM-yyyy", { locale: es }))
-    onMonthChange?.(first)
+  function handleSelectDay(day: Date) {
+    setInternalSelected(day)
+    onDaySelect?.(day)
   }
 
   return (
-    <div className="flex flex-1 flex-col">
-      {/* Header */}
-      <div className="flex flex-col space-y-4 p-4 md:flex-row md:items-center md:justify-between md:space-y-0 lg:flex-none">
-        <div className="flex flex-auto">
-          <div className="flex items-center gap-4">
-            {/* Today badge */}
-            <div className="hidden w-20 flex-col items-center justify-center rounded-lg border bg-muted p-0.5 md:flex">
-              <h1 className="p-1 text-xs uppercase text-muted-foreground">
-                {format(today, "MMM", { locale: es })}
-              </h1>
-              <div className="flex w-full items-center justify-center rounded-lg border bg-background p-0.5 text-lg font-bold">
-                <span>{format(today, "d")}</span>
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <h2 className="text-lg font-semibold capitalize text-foreground">
-                {format(firstDayCurrentMonth, "MMMM yyyy", { locale: es })}
-              </h2>
-              <p className="text-sm text-muted-foreground capitalize">
-                {format(firstDayCurrentMonth, "d MMM", { locale: es })} –{" "}
-                {format(endOfMonth(firstDayCurrentMonth), "d MMM yyyy", { locale: es })}
-              </p>
-            </div>
+    <div className="flex flex-col h-full">
+
+      {/* ── Header ── */}
+      <div className="flex items-end justify-between mb-6">
+        <div>
+          <h2
+            className="text-3xl font-extrabold tracking-tight capitalize"
+            style={{ color: '#002453', letterSpacing: '-0.02em' }}
+          >
+            {format(firstDayCurrentMonth, "MMMM yyyy", { locale: es })}
+          </h2>
+          <div className="flex items-center gap-4 text-sm font-medium mt-1" style={{ color: '#44474f' }}>
+            <span className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#002453]" />
+              {totalEvents} Turnos
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#a3f69c]" />
+              {totalEvents > 0 ? `${Math.min(99, Math.round((totalEvents / 200) * 100))}% Capacidad` : 'Sin turnos'}
+            </span>
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-4 md:flex-row md:gap-6">
-          {/* Doctor filter slot */}
-          {extraControls && (
-            <>
-              {extraControls}
-              <Separator orientation="vertical" className="hidden h-6 md:block" />
-            </>
-          )}
-
-          {/* Month nav */}
-          <div className="inline-flex w-full -space-x-px rounded-lg shadow-sm shadow-black/5 md:w-auto rtl:space-x-reverse">
-            <Button
-              onClick={previousMonth}
-              className="rounded-none shadow-none first:rounded-s-lg last:rounded-e-lg focus-visible:z-10"
-              variant="outline"
-              size="icon"
-              aria-label="Mes anterior"
-            >
-              <ChevronLeftIcon size={16} strokeWidth={2} aria-hidden="true" />
-            </Button>
-            <Button
-              onClick={goToToday}
-              className="w-full rounded-none shadow-none first:rounded-s-lg last:rounded-e-lg focus-visible:z-10 md:w-auto"
-              variant="outline"
-            >
-              Hoy
-            </Button>
-            <Button
-              onClick={nextMonth}
-              className="rounded-none shadow-none first:rounded-s-lg last:rounded-e-lg focus-visible:z-10"
-              variant="outline"
-              size="icon"
-              aria-label="Mes siguiente"
-            >
-              <ChevronRightIcon size={16} strokeWidth={2} aria-hidden="true" />
-            </Button>
+        <div className="flex items-center gap-3">
+          {/* View toggle — visual only */}
+          <div className="flex rounded-xl p-1" style={{ background: '#eeedf2' }}>
+            {['Mes', 'Semana', 'Día'].map((v, i) => (
+              <button
+                key={v}
+                className="px-4 py-2 text-xs font-bold rounded-lg transition-all"
+                style={i === 0
+                  ? { background: '#fff', color: '#002453', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }
+                  : { color: '#44474f' }
+                }
+              >
+                {v}
+              </button>
+            ))}
           </div>
 
-          <Separator orientation="vertical" className="hidden h-6 md:block" />
-          <Separator orientation="horizontal" className="block w-full md:hidden" />
-
-          <Button onClick={onNewEvent} className="w-full gap-2 md:w-auto">
-            <PlusCircleIcon size={16} strokeWidth={2} aria-hidden="true" />
-            <span>Nuevo turno</span>
-          </Button>
+          {/* Nav */}
+          <button
+            onClick={previousMonth}
+            className="p-2 rounded-xl transition-all hover:text-white"
+            style={{ background: '#eeedf2', color: '#002453' }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#002453'; e.currentTarget.style.color = '#fff' }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#eeedf2'; e.currentTarget.style.color = '#002453' }}
+            aria-label="Mes anterior"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={nextMonth}
+            className="p-2 rounded-xl transition-all hover:text-white"
+            style={{ background: '#eeedf2', color: '#002453' }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#002453'; e.currentTarget.style.color = '#fff' }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#eeedf2'; e.currentTarget.style.color = '#002453' }}
+            aria-label="Mes siguiente"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
       </div>
 
-      {/* Calendar grid */}
-      <div className="lg:flex lg:flex-auto lg:flex-col">
+      {/* ── Bento filter row ── */}
+      <div className="grid grid-cols-4 gap-4 mb-6">
+        {/* Doctor filter */}
+        <div
+          className="col-span-2 p-4 rounded-xl transition-all"
+          style={{ background: '#f4f3f8' }}
+        >
+          <label
+            className="block text-[10px] font-bold uppercase tracking-wider mb-1"
+            style={{ color: '#44474f' }}
+          >
+            Médico
+          </label>
+          {extraControls ?? (
+            <span className="text-sm font-semibold" style={{ color: '#002453' }}>
+              Todos los médicos
+            </span>
+          )}
+        </div>
+
+        {/* Today button */}
+        <button
+          onClick={() => handleSelectDay(today)}
+          className="col-span-1 p-4 rounded-xl text-left transition-all hover:opacity-80"
+          style={{ background: '#f4f3f8' }}
+        >
+          <p className="text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: '#44474f' }}>
+            Hoy
+          </p>
+          <p className="text-sm font-semibold capitalize" style={{ color: '#002453' }}>
+            {format(today, "d MMM", { locale: es })}
+          </p>
+        </button>
+
+        {/* New appointment */}
+        <button
+          onClick={onNewEvent}
+          className="col-span-1 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all active:scale-95"
+          style={{ background: 'linear-gradient(135deg, #002453 0%, #1e3a6a 100%)', color: '#a3f69c' }}
+        >
+          + Nuevo Turno
+        </button>
+      </div>
+
+      {/* ── Calendar grid ── */}
+      <div
+        className="flex-1 rounded-2xl overflow-hidden flex flex-col"
+        style={{
+          background: '#ffffff',
+          boxShadow: '0px 10px 30px rgba(0,26,65,0.06)',
+        }}
+      >
         {/* Week day headers */}
-        <div className="grid grid-cols-7 border text-center text-xs font-semibold leading-6 lg:flex-none">
+        <div
+          className="grid grid-cols-7"
+          style={{ background: '#f4f3f8', borderBottom: '1px solid rgba(196,198,208,0.1)' }}
+        >
           {WEEK_DAYS.map((d, i) => (
-            <div key={d} className={cn("py-2.5", i < 6 ? "border-r" : "")}>
+            <div
+              key={d}
+              className="py-4 text-center text-[11px] font-bold uppercase tracking-widest"
+              style={{ color: i === 6 ? 'rgba(186,26,26,0.6)' : '#44474f' }}
+            >
               {d}
             </div>
           ))}
         </div>
 
-        <div className="flex text-xs leading-6 lg:flex-auto">
-          {/* Desktop grid */}
-          <div className="hidden w-full border-x lg:grid lg:grid-cols-7 lg:grid-rows-5">
-            {days.map((day, dayIdx) =>
-              !isDesktop ? (
-                <MobileDay
-                  key={dayIdx}
-                  day={day}
-                  dayIdx={dayIdx}
-                  selectedDay={selectedDay}
-                  firstDayCurrentMonth={firstDayCurrentMonth}
-                  data={data}
-                  onSelect={setSelectedDay}
-                />
-              ) : (
-                <DesktopDay
-                  key={dayIdx}
-                  day={day}
-                  dayIdx={dayIdx}
-                  selectedDay={selectedDay}
-                  firstDayCurrentMonth={firstDayCurrentMonth}
-                  data={data}
-                  onSelect={setSelectedDay}
-                />
-              ),
-            )}
-          </div>
+        {/* Day cells */}
+        <div className="grid grid-cols-7 flex-1">
+          {days.map((day, dayIdx) => {
+            const dayData = data.find(d => isSameDay(d.day, day))
+            const isSelected = isEqual(day, selectedDay)
+            const isCurrentMonth = isSameMonth(day, firstDayCurrentMonth)
+            const isTodayDay = isToday(day)
 
-          {/* Mobile grid */}
-          <div className="isolate grid w-full grid-cols-7 grid-rows-5 border-x lg:hidden">
-            {days.map((day, dayIdx) => (
-              <MobileDay
+            return (
+              <div
                 key={dayIdx}
-                day={day}
-                dayIdx={dayIdx}
-                selectedDay={selectedDay}
-                firstDayCurrentMonth={firstDayCurrentMonth}
-                data={data}
-                onSelect={setSelectedDay}
-              />
-            ))}
-          </div>
+                onClick={() => handleSelectDay(day)}
+                className={cn(
+                  "min-h-[110px] border-r border-b p-3 relative cursor-pointer transition-colors",
+                  dayIdx === 0 && colStartClassesMon[getDay(day)],
+                  !isCurrentMonth && "opacity-30",
+                  isTodayDay && "bg-[#002453]/5",
+                  isSelected && !isTodayDay && "bg-[#f4f3f8]",
+                  "hover:bg-[#f4f3f8]",
+                )}
+                style={{ borderColor: 'rgba(196,198,208,0.08)' }}
+              >
+                {/* Day number */}
+                <span
+                  className={cn(
+                    "text-sm",
+                    isTodayDay
+                      ? "font-black underline underline-offset-4 decoration-2"
+                      : isCurrentMonth ? "font-bold" : "font-medium",
+                  )}
+                  style={{
+                    color: isTodayDay ? '#002453' : isCurrentMonth ? '#1a1b1f' : '#44474f',
+                  }}
+                >
+                  {format(day, "d")}
+                </span>
+
+                {/* Events */}
+                <div className="mt-2 space-y-1">
+                  {dayData?.events.slice(0, 2).map(event => {
+                    const card = (
+                      <div
+                        key={event.id}
+                        className="px-2 py-1 rounded text-[10px] font-bold truncate"
+                        style={{
+                          background: event.color ? `${event.color}18` : '#eeedf2',
+                          borderLeft: `2px solid ${event.color ?? '#747780'}`,
+                          color: event.color ?? '#44474f',
+                        }}
+                      >
+                        {event.time} - {event.name.split(',')[0]}
+                      </div>
+                    )
+
+                    return event.href ? (
+                      <Link key={event.id} href={event.href} onClick={e => e.stopPropagation()}>
+                        {card}
+                      </Link>
+                    ) : card
+                  })}
+                  {dayData && dayData.events.length > 2 && (
+                    <p
+                      className="text-[9px] font-bold px-1"
+                      style={{ color: '#44474f' }}
+                    >
+                      + {dayData.events.length - 2} más
+                    </p>
+                  )}
+                </div>
+
+                {/* Pulse dot for today */}
+                {isTodayDay && (
+                  <div className="absolute bottom-2 right-2 w-2 h-2 rounded-full bg-[#002453] animate-pulse" />
+                )}
+              </div>
+            )
+          })}
         </div>
-      </div>
-    </div>
-  )
-}
-
-/* ---------- sub-components ---------- */
-
-interface DayProps {
-  day: Date
-  dayIdx: number
-  selectedDay: Date
-  firstDayCurrentMonth: Date
-  data: CalendarDay[]
-  onSelect: (d: Date) => void
-}
-
-function MobileDay({ day, dayIdx, selectedDay, firstDayCurrentMonth, data, onSelect }: DayProps) {
-  return (
-    <button
-      onClick={() => onSelect(day)}
-      type="button"
-      className={cn(
-        isEqual(day, selectedDay) && "text-primary-foreground",
-        !isEqual(day, selectedDay) && !isToday(day) && isSameMonth(day, firstDayCurrentMonth) && "text-foreground",
-        !isEqual(day, selectedDay) && !isToday(day) && !isSameMonth(day, firstDayCurrentMonth) && "text-muted-foreground",
-        (isEqual(day, selectedDay) || isToday(day)) && "font-semibold",
-        "flex h-14 flex-col border-b border-r px-3 py-2 hover:bg-muted focus:z-10",
-      )}
-    >
-      <time
-        dateTime={format(day, "yyyy-MM-dd")}
-        className={cn(
-          "ml-auto flex size-6 items-center justify-center rounded-full",
-          isEqual(day, selectedDay) && "bg-primary text-primary-foreground",
-        )}
-      >
-        {format(day, "d")}
-      </time>
-      {data.filter(d => isSameDay(d.day, day)).length > 0 && (
-        <div className="-mx-0.5 mt-auto flex flex-wrap-reverse">
-          {data
-            .filter(d => isSameDay(d.day, day))
-            .flatMap(d => d.events)
-            .slice(0, 3)
-            .map((event, i) => (
-              <span key={i} className="mx-0.5 mt-1 h-1.5 w-1.5 rounded-full bg-muted-foreground" />
-            ))}
-        </div>
-      )}
-    </button>
-  )
-}
-
-function DesktopDay({ day, dayIdx, selectedDay, firstDayCurrentMonth, data, onSelect }: DayProps) {
-  const dayData = data.find(d => isSameDay(d.day, day))
-
-  return (
-    <div
-      onClick={() => onSelect(day)}
-      className={cn(
-        dayIdx === 0 && colStartClasses[getDay(day)],
-        !isEqual(day, selectedDay) && !isToday(day) && !isSameMonth(day, firstDayCurrentMonth) && "bg-accent/50 text-muted-foreground",
-        "relative flex flex-col border-b border-r",
-        !isEqual(day, selectedDay) && "hover:bg-accent/75 cursor-pointer",
-      )}
-    >
-      <header className="flex items-center justify-between p-2.5">
-        <button
-          type="button"
-          className={cn(
-            isEqual(day, selectedDay) && "text-primary-foreground",
-            !isEqual(day, selectedDay) && !isToday(day) && isSameMonth(day, firstDayCurrentMonth) && "text-foreground",
-            !isEqual(day, selectedDay) && !isToday(day) && !isSameMonth(day, firstDayCurrentMonth) && "text-muted-foreground",
-            isEqual(day, selectedDay) && isToday(day) && "border-none bg-primary",
-            isEqual(day, selectedDay) && !isToday(day) && "bg-foreground text-background",
-            isToday(day) && !isEqual(day, selectedDay) && "border border-primary text-primary",
-            (isEqual(day, selectedDay) || isToday(day)) && "font-semibold",
-            "flex h-7 w-7 items-center justify-center rounded-full text-xs hover:border",
-          )}
-        >
-          <time dateTime={format(day, "yyyy-MM-dd")}>{format(day, "d")}</time>
-        </button>
-      </header>
-
-      <div className="flex-1 p-2.5 space-y-1">
-        {dayData?.events.slice(0, 2).map(event => {
-          const inner = (
-            <div
-              key={event.id}
-              className="flex flex-col items-start gap-0.5 rounded-lg px-2 py-1.5 text-xs leading-tight"
-              style={{
-                backgroundColor: event.color ? `${event.color}18` : undefined,
-                borderLeft: event.color ? `3px solid ${event.color}` : undefined,
-                ...(event.color ? {} : { border: "1px solid var(--border)", backgroundColor: "hsl(var(--muted)/0.5)" }),
-              }}
-            >
-              <p className="font-medium leading-none truncate w-full" style={event.color ? { color: event.color } : {}}>
-                {event.name}
-              </p>
-              <p className="leading-none text-muted-foreground">{event.time}</p>
-            </div>
-          )
-
-          return event.href ? (
-            <Link key={event.id} href={event.href} onClick={e => e.stopPropagation()}>
-              {inner}
-            </Link>
-          ) : (
-            <div key={event.id}>{inner}</div>
-          )
-        })}
-        {dayData && dayData.events.length > 2 && (
-          <p className="text-xs text-muted-foreground px-1">
-            +{dayData.events.length - 2} más
-          </p>
-        )}
       </div>
     </div>
   )
