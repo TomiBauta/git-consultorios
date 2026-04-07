@@ -250,7 +250,7 @@ export default function NuevaConsultaForm({
               placeholder="Buscar por código o descripción (ej: E11, diabetes...)"
             />
             {dxResults.length > 0 && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg overflow-hidden max-h-52 overflow-y-auto">
+              <div className="absolute z-10 w-full mt-1 bg-white border border-[#E2E8F0] rounded shadow-lg overflow-hidden max-h-52 overflow-y-auto">
                 {dxResults.map((dx: any) => (
                   <button key={dx.icd10_code} type="button" onClick={() => addDiagnosis(dx)}
                     className="w-full text-left px-4 py-2.5 hover:bg-[#F8FAFC] border-b border-[#F1F5F9] last:border-b-0 transition-colors">
@@ -293,7 +293,7 @@ export default function NuevaConsultaForm({
             <button type="button" onClick={() => setShowTxForm(true)} className="text-sm text-[#0891B2] hover:underline">+ Agregar</button>
           </div>
           {showTxForm && (
-            <div className="border border-[#E2E8F0] rounded-xl p-4 space-y-3 bg-[#FAFCFF]">
+            <div className="border border-[#E2E8F0] rounded p-4 space-y-3 bg-[#FAFCFF]">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <Label className="text-xs">Tipo</Label>

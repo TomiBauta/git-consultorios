@@ -48,8 +48,8 @@ export default function ReservarPage() {
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {SPECIALTIES.map(s => (
           <Link key={s.slug} href={`/reservar/${s.slug}`}>
-            <div className={`flex items-center gap-4 p-5 rounded-2xl border-2 transition-all cursor-pointer ${s.color}`}>
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0 ${s.iconBg}`}>
+            <div className={`flex items-center gap-4 p-5 rounded border-2 transition-all cursor-pointer ${s.color}`}>
+              <div className={`w-12 h-12 rounded flex items-center justify-center text-2xl shrink-0 ${s.iconBg}`}>
                 {s.icon}
               </div>
               <div>

@@ -142,7 +142,7 @@ export default function SlotPicker({
 
   if (allSlots.length === 0) {
     return (
-      <div className="bg-white border border-[#E2E8F0] rounded-2xl text-center py-12 space-y-3">
+      <div className="bg-white border border-[#E2E8F0] rounded text-center py-12 space-y-3">
         <p className="text-3xl">😔</p>
         <p className="text-[#64748B]">No hay horarios configurados para este día.</p>
         <button onClick={() => router.back()} className="text-sm text-[#0891B2] hover:underline">
@@ -156,7 +156,7 @@ export default function SlotPicker({
     <div className="space-y-4">
       {/* Error banner */}
       {errorMsg && (
-        <div className="flex items-start gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
+        <div className="flex items-start gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded text-sm text-red-700">
           <span className="shrink-0">⚠️</span>
           <p>{errorMsg}</p>
         </div>
@@ -166,7 +166,7 @@ export default function SlotPicker({
       {(step === 'slots' || step === 'error') && (
         <div className="space-y-4">
           {freeSlots.length === 0 ? (
-            <div className="bg-white border border-[#E2E8F0] rounded-2xl text-center py-12 space-y-3">
+            <div className="bg-white border border-[#E2E8F0] rounded text-center py-12 space-y-3">
               <p className="text-3xl">📅</p>
               <p className="text-[#64748B]">No quedan turnos disponibles para este día.</p>
               <button onClick={() => router.back()} className="text-sm text-[#0891B2] hover:underline">
@@ -189,7 +189,7 @@ export default function SlotPicker({
                       disabled={taken}
                       onClick={() => { setSelectedSlot(slot); setStep('form'); setErrorMsg('') }}
                       className={[
-                        'py-3 rounded-xl text-sm font-medium transition-all border-2',
+                        'py-3 rounded text-sm font-medium transition-all border-2',
                         taken
                           ? 'bg-[#F8FAFC] text-[#CBD5E1] border-transparent cursor-not-allowed line-through'
                           : selected
@@ -211,7 +211,7 @@ export default function SlotPicker({
       {step === 'form' && selectedSlot && (
         <div className="space-y-4">
           {/* Slot seleccionado */}
-          <div className="flex items-center justify-between px-4 py-3 bg-[#EFF6FF] border-2 border-[#BFDBFE] rounded-xl">
+          <div className="flex items-center justify-between px-4 py-3 bg-[#EFF6FF] border-2 border-[#BFDBFE] rounded">
             <div>
               <p className="text-sm font-semibold text-[#1B3A6B]">Turno seleccionado</p>
               <p className="text-sm text-[#64748B]">{fmtTime(selectedSlot)} · {doctorName}</p>
@@ -225,7 +225,7 @@ export default function SlotPicker({
           </div>
 
           {/* Datos del paciente */}
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 space-y-4">
+          <div className="bg-white border border-[#E2E8F0] rounded p-5 space-y-4">
             <h3 className="font-semibold text-[#0F172A]">Tus datos</h3>
 
             <div className="space-y-1.5">
@@ -277,7 +277,7 @@ export default function SlotPicker({
           <Button
             onClick={handleConfirm}
             disabled={!fullName.trim() || !phone.trim()}
-            className="w-full bg-[#1B3A6B] hover:bg-[#2D5AA0] text-white h-12 text-base rounded-xl"
+            className="w-full bg-[#1B3A6B] hover:bg-[#2D5AA0] text-white h-12 text-base rounded"
           >
             Confirmar turno
           </Button>

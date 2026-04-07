@@ -12,14 +12,14 @@ import { Sun, Moon, ArrowRight, Plus } from 'lucide-react'
 type Profile = { id: string; full_name: string; role: string; specialty: string | null }
 type Doctor  = { id: string; full_name: string; specialty: string | null }
 
-const DOCTOR_COLORS = ['#002453', '#1e3a6a', '#0891B2', '#059669', '#7C3AED']
+const DOCTOR_COLORS = ['#00113a', '#002366', '#0891B2', '#059669', '#7C3AED']
 
 // ── Status helpers ──────────────────────────────────────────────────────────
 const STATUS_MAP: Record<string, { label: string; dot: string; text: string }> = {
-  confirmado: { label: 'Confirmado', dot: '#a3f69c', text: '#005312' },
-  atendido:   { label: 'Atendido',   dot: '#a3f69c', text: '#005312' },
+  confirmado: { label: 'Confirmado', dot: '#b3e5f0', text: '#0c6780' },
+  atendido:   { label: 'Atendido',   dot: '#b3e5f0', text: '#0c6780' },
   en_sala:    { label: 'En Sala',    dot: '#adc6ff', text: '#2b4677' },
-  pendiente:  { label: 'Pendiente',  dot: '#c4c6d0', text: '#44474f' },
+  pendiente:  { label: 'Pendiente',  dot: '#c4c6d0', text: '#3d4a5c' },
   cancelado:  { label: 'Cancelado',  dot: '#ba1a1a', text: '#93000a' },
   ausente:    { label: 'Ausente',    dot: '#ffb958', text: '#7a5800' },
 }
@@ -34,9 +34,9 @@ function AppointmentCard({ appt, doctorColor }: { appt: any; doctorColor: string
   return (
     <Link href={`/agenda/${appt.id}`}>
       <div
-        className="p-4 rounded-2xl cursor-pointer hover:brightness-95 transition-all"
+        className="p-4 rounded cursor-pointer hover:brightness-95 transition-all"
         style={{
-          background: '#f4f3f8',
+          background: '#f2f4f6',
           borderLeft: `4px solid ${isActive ? doctorColor : 'rgba(196,198,208,0.4)'}`,
         }}
       >
@@ -44,8 +44,8 @@ function AppointmentCard({ appt, doctorColor }: { appt: any; doctorColor: string
           <span
             className="text-[10px] font-bold px-2 py-0.5 rounded"
             style={{
-              background: isActive ? `${doctorColor}18` : '#eeedf2',
-              color: isActive ? doctorColor : '#44474f',
+              background: isActive ? `${doctorColor}18` : '#eaecef',
+              color: isActive ? doctorColor : '#3d4a5c',
             }}
           >
             {timeStr}
@@ -54,7 +54,7 @@ function AppointmentCard({ appt, doctorColor }: { appt: any; doctorColor: string
         </div>
         <p className="text-sm font-bold" style={{ color: '#1a1b1f' }}>{patient}</p>
         {appt.reason && (
-          <p className="text-[11px] mt-0.5" style={{ color: '#44474f' }}>{appt.reason}</p>
+          <p className="text-[11px] mt-0.5" style={{ color: '#3d4a5c' }}>{appt.reason}</p>
         )}
         <div className="mt-3 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full" style={{ background: st.dot }} />
@@ -120,7 +120,7 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
       const key = format(day, 'yyyy-MM-dd')
       if (!map[key]) map[key] = { day: new Date(key), events: [] }
       const patient = appt.patients
-      const color   = doctorColorMap[appt.doctor_id] ?? '#002453'
+      const color   = doctorColorMap[appt.doctor_id] ?? '#00113a'
       map[key].events.push({
         id:       appt.id,
         name:     patient ? `${patient.last_name}, ${patient.first_name}` : 'Paciente',
@@ -144,7 +144,7 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
       value={selectedDoctorId}
       onChange={e => setSelectedDoctorId(e.target.value)}
       className="w-full bg-transparent border-none p-0 text-sm font-semibold focus:ring-0 focus:outline-none"
-      style={{ color: '#002453' }}
+      style={{ color: '#00113a' }}
     >
       <option value="all">Todos los médicos</option>
       {doctors.map(d => (
@@ -180,18 +180,18 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
         <div className="mb-8">
           <h3
             className="text-[10px] font-bold uppercase tracking-widest mb-2"
-            style={{ color: '#44474f' }}
+            style={{ color: '#3d4a5c' }}
           >
             Detalle del Día
           </h3>
           <p
             className="text-xl font-extrabold capitalize"
-            style={{ color: '#002453', letterSpacing: '-0.02em' }}
+            style={{ color: '#00113a', letterSpacing: '-0.02em' }}
           >
             {format(selectedDay, "EEEE, d MMMM", { locale: es })}
           </p>
           {selectedDayAppts.length > 0 && (
-            <p className="text-xs mt-1" style={{ color: '#44474f' }}>
+            <p className="text-xs mt-1" style={{ color: '#3d4a5c' }}>
               {selectedDayAppts.length} turno{selectedDayAppts.length !== 1 ? 's' : ''}
             </p>
           )}
@@ -201,18 +201,18 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
         {selectedDayAppts.length === 0 && (
           <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
             <div
-              className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-              style={{ background: '#f4f3f8' }}
+              className="w-12 h-12 rounded flex items-center justify-center mb-4"
+              style={{ background: '#f2f4f6' }}
             >
               <span className="text-2xl">📅</span>
             </div>
-            <p className="text-sm font-medium" style={{ color: '#44474f' }}>
+            <p className="text-sm font-medium" style={{ color: '#3d4a5c' }}>
               Sin turnos para este día
             </p>
             <button
               onClick={() => router.push('/agenda/nuevo')}
-              className="mt-4 text-xs font-bold px-4 py-2 rounded-xl transition-all"
-              style={{ background: '#002453', color: '#a3f69c' }}
+              className="mt-4 text-xs font-bold px-4 py-2 rounded transition-all"
+              style={{ background: '#00113a', color: '#ffffff' }}
             >
               + Agendar turno
             </button>
@@ -223,7 +223,7 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
         {amAppts.length > 0 && (
           <section className="mb-6">
             <div className="flex items-center gap-2 mb-4">
-              <Sun className="w-4 h-4" style={{ color: '#44474f' }} />
+              <Sun className="w-4 h-4" style={{ color: '#3d4a5c' }} />
               <h4 className="text-xs font-bold uppercase tracking-wide" style={{ color: '#1a1b1f' }}>
                 Mañana
               </h4>
@@ -233,7 +233,7 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
                 <AppointmentCard
                   key={appt.id}
                   appt={appt}
-                  doctorColor={doctorColorMap[appt.doctor_id] ?? '#002453'}
+                  doctorColor={doctorColorMap[appt.doctor_id] ?? '#00113a'}
                 />
               ))}
             </div>
@@ -244,7 +244,7 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
         {pmAppts.length > 0 && (
           <section className="mb-6">
             <div className="flex items-center gap-2 mb-4">
-              <Moon className="w-4 h-4" style={{ color: '#44474f' }} />
+              <Moon className="w-4 h-4" style={{ color: '#3d4a5c' }} />
               <h4 className="text-xs font-bold uppercase tracking-wide" style={{ color: '#1a1b1f' }}>
                 Tarde / Noche
               </h4>
@@ -254,7 +254,7 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
                 <AppointmentCard
                   key={appt.id}
                   appt={appt}
-                  doctorColor={doctorColorMap[appt.doctor_id] ?? '#002453'}
+                  doctorColor={doctorColorMap[appt.doctor_id] ?? '#00113a'}
                 />
               ))}
             </div>
@@ -267,7 +267,7 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
             <Link
               href="/agenda/nuevo"
               className="flex items-center gap-2 text-xs font-bold transition-colors hover:opacity-70"
-              style={{ color: '#002453' }}
+              style={{ color: '#00113a' }}
             >
               <Plus className="w-3.5 h-3.5" />
               Agregar turno en este día
@@ -281,9 +281,9 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
         onClick={() => router.push('/agenda/nuevo')}
         className="fixed bottom-8 right-8 w-14 h-14 rounded-full flex items-center justify-center z-50 transition-all hover:scale-105 active:scale-95"
         style={{
-          background: '#002453',
+          background: '#00113a',
           color: 'white',
-          boxShadow: '0px 10px 30px rgba(0,26,65,0.25)',
+          boxShadow: '0px 10px 30px rgba(0,17,58,0.18)',
         }}
         aria-label="Nuevo turno"
       >

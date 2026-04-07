@@ -93,7 +93,7 @@ export default function NuevoTurnoForm({
           <div className="relative">
             <Label htmlFor="paciente">Buscar paciente</Label>
             {selectedPatient ? (
-              <div className="mt-1.5 flex items-center justify-between px-4 py-3 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl">
+              <div className="mt-1.5 flex items-center justify-between px-4 py-3 bg-[#EFF6FF] border border-[#BFDBFE] rounded">
                 <div>
                   <p className="font-medium text-sm text-[#1B3A6B]">
                     {selectedPatient.first_name} {selectedPatient.last_name}
@@ -114,7 +114,7 @@ export default function NuevoTurnoForm({
                   autoComplete="off"
                 />
                 {showDropdown && patients.length > 0 && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg overflow-hidden">
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-[#E2E8F0] rounded shadow-lg overflow-hidden">
                     {patients.map(p => (
                       <button
                         key={p.id} type="button"
@@ -128,7 +128,7 @@ export default function NuevoTurnoForm({
                   </div>
                 )}
                 {patientSearch.length >= 2 && patients.length === 0 && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg p-4 text-center">
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-[#E2E8F0] rounded shadow-lg p-4 text-center">
                     <p className="text-sm text-[#94A3B8]">No se encontraron pacientes</p>
                     <Link href="/pacientes/nuevo" className="text-sm text-[#0891B2] hover:underline">
                       Crear nuevo paciente →

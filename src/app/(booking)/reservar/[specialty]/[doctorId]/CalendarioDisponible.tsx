@@ -54,13 +54,13 @@ export default function CalendarioDisponible({
   while (cells.length % 7 !== 0) cells.push(null)
 
   return (
-    <div className="bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden">
+    <div className="bg-white border border-[#E2E8F0] rounded overflow-hidden">
       {/* Header mes */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-[#F1F5F9]">
         <button
           onClick={() => setViewDate(new Date(year, month - 1, 1))}
           disabled={!canGoPrev}
-          className="w-9 h-9 rounded-xl flex items-center justify-center text-[#64748B] hover:bg-[#F8FAFC] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="w-9 h-9 rounded flex items-center justify-center text-[#64748B] hover:bg-[#F8FAFC] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         >
           ‹
         </button>
@@ -68,7 +68,7 @@ export default function CalendarioDisponible({
         <button
           onClick={() => setViewDate(new Date(year, month + 1, 1))}
           disabled={!canGoNext}
-          className="w-9 h-9 rounded-xl flex items-center justify-center text-[#64748B] hover:bg-[#F8FAFC] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="w-9 h-9 rounded flex items-center justify-center text-[#64748B] hover:bg-[#F8FAFC] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         >
           ›
         </button>
@@ -101,7 +101,7 @@ export default function CalendarioDisponible({
               onClick={() => isEnabled && handleDayClick(day)}
               disabled={!isEnabled}
               className={[
-                'h-10 w-full rounded-xl text-sm font-medium transition-all',
+                'h-10 w-full rounded text-sm font-medium transition-all',
                 isToday && isEnabled ? 'ring-2 ring-[#0891B2] ring-offset-1' : '',
                 isEnabled
                   ? 'bg-[#EFF6FF] text-[#1B3A6B] hover:bg-[#1B3A6B] hover:text-white cursor-pointer'

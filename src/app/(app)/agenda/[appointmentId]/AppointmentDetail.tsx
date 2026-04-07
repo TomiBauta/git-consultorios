@@ -116,7 +116,7 @@ export default function AppointmentDetail({ appt, profile }: { appt: any; profil
 
       {/* Alergias del paciente */}
       {patient?.allergies?.length > 0 && (
-        <div className="flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-xl">
+        <div className="flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded">
           <span className="text-red-500">⚠️</span>
           <p className="text-sm text-red-700 font-medium">
             Alergias: {patient.allergies.join(', ')}

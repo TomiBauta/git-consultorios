@@ -5,10 +5,10 @@ import { ArrowRight } from 'lucide-react'
 // ── Status badge ────────────────────────────────────────────────────────────
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, { bg: string; text: string; label: string }> = {
-    confirmado: { bg: 'rgba(163,246,156,0.25)', text: '#005312',  label: 'Confirmado' },
-    atendido:   { bg: 'rgba(163,246,156,0.25)', text: '#005312',  label: 'Atendido'   },
-    en_sala:    { bg: 'rgba(216,226,255,0.6)',  text: '#2b4677',  label: 'En Sala'    },
-    pendiente:  { bg: '#e9e7ec',                text: '#44474f',  label: 'Pendiente'  },
+    confirmado: { bg: 'rgba(12,103,128,0.12)', text: '#0c6780',  label: 'Confirmado' },
+    atendido:   { bg: 'rgba(12,103,128,0.12)', text: '#0c6780',  label: 'Atendido'   },
+    en_sala:    { bg: 'rgba(0,35,102,0.08)',     text: '#002366',  label: 'En Sala'    },
+    pendiente:  { bg: '#e2e5e9',                text: '#3d4a5c',  label: 'Pendiente'  },
     cancelado:  { bg: '#ffdad6',                text: '#93000a',  label: 'Cancelado'  },
     ausente:    { bg: '#fff3cc',                text: '#7a5800',  label: 'Ausente'    },
   }
@@ -38,10 +38,10 @@ function AvailabilityBar({ label, count, maxCount }: { label: string; count: num
           }}
         />
       </div>
-      <span className="text-[10px] font-bold uppercase" style={{ color: 'var(--on-surface-variant, #44474f)' }}>
+      <span className="text-[10px] font-bold uppercase" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
         {label}
       </span>
-      <span className="text-[10px]" style={{ color: 'var(--on-surface-variant, #44474f)' }}>
+      <span className="text-[10px]" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
         {count}
       </span>
     </div>
@@ -159,11 +159,11 @@ export default async function DashboardPage() {
       <div>
         <h2
           className="text-3xl font-bold tracking-tight"
-          style={{ color: 'var(--primary-val, #002453)', letterSpacing: '-0.02em' }}
+          style={{ color: 'var(--primary-val, #00113a)', letterSpacing: '-0.02em' }}
         >
           Resumen de Actividad
         </h2>
-        <p className="text-sm mt-1" style={{ color: 'var(--on-surface-variant, #44474f)' }}>
+        <p className="text-sm mt-1" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
           {greeting}, {firstName}. Aquí tienes el estado de la clínica hoy.
         </p>
       </div>
@@ -171,30 +171,30 @@ export default async function DashboardPage() {
       {/* Stats — 3 cols bento */}
       <div className="grid grid-cols-3 gap-6">
         {/* Turnos hoy */}
-        <div className="card-ambient rounded-xl p-6 hover:-translate-y-1 transition-transform cursor-default">
+        <div className="card-ambient rounded p-6 hover:-translate-y-1 transition-transform cursor-default">
           <div className="flex justify-between items-start mb-4">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: '#d8e2ff' }}>
-              <svg className="w-6 h-6" style={{ color: '#002453' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-12 h-12 rounded flex items-center justify-center" style={{ background: '#d8e2ff' }}>
+              <svg className="w-6 h-6" style={{ color: '#00113a' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeWidth={2} />
                 <line x1="16" y1="2" x2="16" y2="6" strokeWidth={2} />
                 <line x1="8" y1="2" x2="8" y2="6" strokeWidth={2} />
                 <line x1="3" y1="10" x2="21" y2="10" strokeWidth={2} />
               </svg>
             </div>
-            <span className="px-3 py-1 text-[10px] font-bold rounded-full" style={{ background: 'rgba(163,246,156,0.3)', color: '#005312' }}>
+            <span className="px-3 py-1 text-[10px] font-bold rounded-full" style={{ background: 'rgba(12,103,128,0.15)', color: '#0c6780' }}>
               hoy
             </span>
           </div>
-          <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant, #44474f)' }}>Turnos de hoy</p>
-          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: '#002453' }}>
+          <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>Turnos de hoy</p>
+          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: '#00113a' }}>
             {todayAppointments?.length ?? 0}
           </h3>
         </div>
 
         {/* Turnos mes */}
-        <div className="card-ambient rounded-xl p-6 hover:-translate-y-1 transition-transform cursor-default">
+        <div className="card-ambient rounded p-6 hover:-translate-y-1 transition-transform cursor-default">
           <div className="flex justify-between items-start mb-4">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: '#d9e2fc' }}>
+            <div className="w-12 h-12 rounded flex items-center justify-center" style={{ background: '#d9e2fc' }}>
               <svg className="w-6 h-6" style={{ color: '#555e74' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -203,29 +203,29 @@ export default async function DashboardPage() {
               este mes
             </span>
           </div>
-          <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant, #44474f)' }}>Turnos este mes</p>
-          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: '#002453' }}>
+          <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>Turnos este mes</p>
+          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: '#00113a' }}>
             {monthAppointments ?? 0}
           </h3>
         </div>
 
         {/* Pacientes */}
-        <div className="card-ambient rounded-xl p-6 hover:-translate-y-1 transition-transform cursor-default">
+        <div className="card-ambient rounded p-6 hover:-translate-y-1 transition-transform cursor-default">
           <div className="flex justify-between items-start mb-4">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'rgba(163,246,156,0.2)' }}>
-              <svg className="w-6 h-6" style={{ color: '#005312' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-12 h-12 rounded flex items-center justify-center" style={{ background: 'rgba(12,103,128,0.10)' }}>
+              <svg className="w-6 h-6" style={{ color: '#0c6780' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" strokeWidth={2} />
                 <circle cx="9" cy="7" r="4" strokeWidth={2} />
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87" strokeWidth={2} />
                 <path d="M16 3.13a4 4 0 0 1 0 7.75" strokeWidth={2} />
               </svg>
             </div>
-            <span className="px-3 py-1 text-[10px] font-bold rounded-full" style={{ background: 'rgba(163,246,156,0.3)', color: '#005312' }}>
+            <span className="px-3 py-1 text-[10px] font-bold rounded-full" style={{ background: 'rgba(12,103,128,0.15)', color: '#0c6780' }}>
               total
             </span>
           </div>
-          <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant, #44474f)' }}>Pacientes totales</p>
-          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: '#002453' }}>
+          <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>Pacientes totales</p>
+          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: '#00113a' }}>
             {(totalPatients ?? 0).toLocaleString('es-AR')}
           </h3>
         </div>
@@ -237,13 +237,13 @@ export default async function DashboardPage() {
         {/* Appointments list — col-span-8 */}
         <div className="col-span-8 space-y-4">
           <div className="flex items-center justify-between">
-            <h4 className="text-xl font-bold tracking-tight" style={{ color: '#002453' }}>
+            <h4 className="text-xl font-bold tracking-tight" style={{ color: '#00113a' }}>
               Próximos Pacientes
             </h4>
             <Link
               href="/agenda"
               className="text-sm font-semibold hover:underline transition-colors"
-              style={{ color: '#1e3a6a' }}
+              style={{ color: '#002366' }}
             >
               Ver agenda completa
             </Link>
@@ -251,8 +251,8 @@ export default async function DashboardPage() {
 
           {(todayAppointments ?? []).length === 0 ? (
             <div
-              className="card-ambient rounded-xl p-10 text-center"
-              style={{ color: 'var(--on-surface-variant, #44474f)' }}
+              className="card-ambient rounded p-10 text-center"
+              style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}
             >
               <p className="font-medium">No hay turnos programados para hoy</p>
             </div>
@@ -274,7 +274,7 @@ export default async function DashboardPage() {
                 return (
                   <div
                     key={appt.id}
-                    className="flex items-center gap-6 p-5 rounded-xl hover:shadow-md transition-all"
+                    className="flex items-center gap-6 p-5 rounded hover:shadow-md transition-all"
                     style={{
                       background: 'var(--surface-container-lowest, #ffffff)',
                       boxShadow: 'var(--ambient-shadow)',
@@ -288,11 +288,11 @@ export default async function DashboardPage() {
                     >
                       <span
                         className="text-lg font-extrabold"
-                        style={{ color: isPast ? '#44474f' : '#002453' }}
+                        style={{ color: isPast ? '#3d4a5c' : '#00113a' }}
                       >
                         {timeStr}
                       </span>
-                      <span className="text-[10px] uppercase font-bold" style={{ color: '#44474f' }}>
+                      <span className="text-[10px] uppercase font-bold" style={{ color: '#3d4a5c' }}>
                         {period}
                       </span>
                     </div>
@@ -303,7 +303,7 @@ export default async function DashboardPage() {
                         {patientName}
                       </h5>
                       {subtitle && (
-                        <p className="text-xs truncate mt-0.5" style={{ color: '#44474f' }}>
+                        <p className="text-xs truncate mt-0.5" style={{ color: '#3d4a5c' }}>
                           {subtitle}
                         </p>
                       )}
@@ -315,11 +315,11 @@ export default async function DashboardPage() {
                       <Link href={`/agenda/${appt.id}`}>
                         <button
                           className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
-                          style={{ background: '#eeedf2' }}
+                          style={{ background: '#eaecef' }}
                           onMouseEnter={e => (e.currentTarget.style.background = '#d8e2ff')}
-                          onMouseLeave={e => (e.currentTarget.style.background = '#eeedf2')}
+                          onMouseLeave={e => (e.currentTarget.style.background = '#eaecef')}
                         >
-                          <ArrowRight className="w-4 h-4" style={{ color: '#002453' }} />
+                          <ArrowRight className="w-4 h-4" style={{ color: '#00113a' }} />
                         </button>
                       </Link>
                     </div>
@@ -335,8 +335,8 @@ export default async function DashboardPage() {
 
           {/* Capacity card — navy bg */}
           <div
-            className="rounded-xl p-8 overflow-hidden relative shadow-xl"
-            style={{ background: '#002453', color: 'white' }}
+            className="rounded p-8 overflow-hidden relative shadow-xl"
+            style={{ background: '#00113a', color: 'white' }}
           >
             <div className="relative z-10">
               <h4 className="text-lg font-bold mb-6">Capacidad Semanal</h4>
@@ -345,7 +345,7 @@ export default async function DashboardPage() {
                 {capacityPct > 70 && (
                   <span
                     className="text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest"
-                    style={{ color: '#a3f69c', background: 'rgba(163,246,156,0.1)' }}
+                    style={{ color: '#cce8f0', background: 'rgba(255,255,255,0.08)' }}
                   >
                     Alta demanda
                   </span>
@@ -354,7 +354,7 @@ export default async function DashboardPage() {
               <div className="w-full h-3 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
                 <div
                   className="h-full rounded-full transition-all"
-                  style={{ width: `${capacityPct}%`, background: '#a3f69c' }}
+                  style={{ width: `${capacityPct}%`, background: '#b3e5f0' }}
                 />
               </div>
               <p className="text-xs mt-5 leading-relaxed" style={{ color: '#94a3b8' }}>
@@ -374,8 +374,8 @@ export default async function DashboardPage() {
           </div>
 
           {/* Availability next 4 days */}
-          <div className="card-ambient rounded-xl p-6">
-            <h4 className="text-sm font-bold mb-5" style={{ color: '#002453' }}>
+          <div className="card-ambient rounded p-6">
+            <h4 className="text-sm font-bold mb-5" style={{ color: '#00113a' }}>
               Disponibilidad Próximos 4 Días
             </h4>
             <div className="flex justify-between items-end h-28 gap-3">
@@ -387,12 +387,12 @@ export default async function DashboardPage() {
 
           {/* Quick link */}
           <div
-            className="rounded-xl p-5"
-            style={{ background: 'var(--surface-container-low, #f4f3f8)' }}
+            className="rounded p-5"
+            style={{ background: 'var(--surface-container-low, #f2f4f6)' }}
           >
             <p
               className="text-xs font-bold uppercase tracking-widest mb-4"
-              style={{ color: '#002453' }}
+              style={{ color: '#00113a' }}
             >
               Acciones Rápidas
             </p>

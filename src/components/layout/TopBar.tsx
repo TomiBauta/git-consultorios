@@ -55,8 +55,8 @@ export default function TopBar({ profile }: { profile: Profile }) {
       {isSubRoute && (
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-1.5 mr-4 px-3 py-2 rounded-xl transition-all hover:opacity-70 shrink-0"
-          style={{ background: '#f4f3f8', color: '#002453' }}
+          className="flex items-center gap-1.5 mr-4 px-3 py-2 rounded transition-all hover:opacity-70 shrink-0"
+          style={{ background: '#f2f4f6', color: '#00113a' }}
           aria-label="Volver"
         >
           <ChevronLeft className="w-4 h-4" />
@@ -66,13 +66,13 @@ export default function TopBar({ profile }: { profile: Profile }) {
 
       {/* Search */}
       <form onSubmit={handleSearch} className="relative w-96">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--on-surface-variant, #44474f)' }} />
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }} />
         <input
           name="q"
           placeholder="Buscar pacientes o historias clínicas..."
           className="w-full rounded-full pl-10 pr-4 py-2 text-sm border-none outline-none focus:ring-2 transition-all"
           style={{
-            background: 'var(--surface-container-low, #f4f3f8)',
+            background: 'var(--surface-container-low, #f2f4f6)',
             color: 'var(--on-surface, #1a1b1f)',
           }}
         />
@@ -82,31 +82,31 @@ export default function TopBar({ profile }: { profile: Profile }) {
       <div className="flex items-center gap-5">
         {/* Notifications */}
         <button
-          className="relative p-2 rounded-full transition-colors hover:bg-[#f4f3f8] dark:hover:bg-white/8"
+          className="relative p-2 rounded-full transition-colors hover:bg-[#f2f4f6] dark:hover:bg-white/8"
           aria-label="Notificaciones"
         >
-          <Bell className="w-5 h-5" style={{ color: 'var(--on-surface-variant, #44474f)' }} />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-[#a3f69c] rounded-full ring-2 ring-white" />
+          <Bell className="w-5 h-5" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }} />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-[#0c6780] rounded-full ring-2 ring-white" />
         </button>
 
         {/* Help */}
         <button
-          className="p-2 rounded-full transition-colors hover:bg-[#f4f3f8] dark:hover:bg-white/8"
+          className="p-2 rounded-full transition-colors hover:bg-[#f2f4f6] dark:hover:bg-white/8"
           aria-label="Ayuda"
         >
-          <HelpCircle className="w-5 h-5" style={{ color: 'var(--on-surface-variant, #44474f)' }} />
+          <HelpCircle className="w-5 h-5" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }} />
         </button>
 
         {/* Theme toggle */}
         {mounted && (
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="p-2 rounded-full transition-colors hover:bg-[#f4f3f8] dark:hover:bg-white/8"
+            className="p-2 rounded-full transition-colors hover:bg-[#f2f4f6] dark:hover:bg-white/8"
             aria-label="Cambiar tema"
           >
             {theme === 'dark'
-              ? <Sun className="w-4 h-4" style={{ color: 'var(--on-surface-variant, #44474f)' }} />
-              : <Moon className="w-4 h-4" style={{ color: 'var(--on-surface-variant, #44474f)' }} />
+              ? <Sun className="w-4 h-4" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }} />
+              : <Moon className="w-4 h-4" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }} />
             }
           </button>
         )}
@@ -117,20 +117,20 @@ export default function TopBar({ profile }: { profile: Profile }) {
         {/* User */}
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <p className="text-sm font-bold leading-tight" style={{ color: 'var(--primary-val, #002453)' }}>
+            <p className="text-sm font-bold leading-tight" style={{ color: 'var(--primary-val, #00113a)' }}>
               {profile.full_name}
             </p>
-            <p className="text-[10px] font-medium capitalize" style={{ color: 'var(--on-surface-variant, #44474f)' }}>
+            <p className="text-[10px] font-medium capitalize" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
               {roleLabel[profile.role] ?? profile.role}
             </p>
           </div>
           <button
             onClick={handleSignOut}
-            className="w-10 h-10 rounded-full flex items-center justify-center text-[11px] font-bold border-2 transition-colors hover:border-[#a3f69c]"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-[11px] font-bold border-2 transition-colors hover:border-[#0c6780]"
             style={{
-              background: '#1e3a6a',
-              color: '#a3f69c',
-              borderColor: 'rgba(163,246,156,0.3)',
+              background: '#002366',
+              color: '#ffffff',
+              borderColor: 'rgba(0,35,102,0.4)',
             }}
             title="Cerrar sesión"
           >

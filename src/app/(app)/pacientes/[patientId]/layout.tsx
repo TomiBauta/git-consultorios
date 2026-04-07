@@ -36,7 +36,7 @@ export default async function PatientLayout({
       </div>
 
       {/* Header del paciente */}
-      <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5">
+      <div className="bg-white border border-[#E2E8F0] rounded p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-[#1B3A6B] flex items-center justify-center text-white font-bold text-lg shrink-0">
@@ -66,7 +66,7 @@ export default async function PatientLayout({
 
         {/* Banner alergias */}
         {patient.allergies && patient.allergies.length > 0 && (
-          <div className="mt-4 flex items-center gap-2 px-4 py-2.5 bg-red-50 border border-red-200 rounded-xl">
+          <div className="mt-4 flex items-center gap-2 px-4 py-2.5 bg-red-50 border border-red-200 rounded">
             <span className="text-red-500 shrink-0">⚠️</span>
             <p className="text-sm text-red-700 font-medium">
               Alergias: {patient.allergies.join(', ')}

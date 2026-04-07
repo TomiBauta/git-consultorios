@@ -42,7 +42,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
     <aside
       className={cn(
         'flex flex-col shrink-0 transition-all duration-300 ease-in-out',
-        'bg-[#002453] dark:bg-[#080f1e]',
+        'bg-[#00113a] dark:bg-[#080f1e]',
         collapsed ? 'w-[68px]' : 'w-64'
       )}
     >
@@ -51,8 +51,8 @@ export default function Sidebar({ profile }: { profile: Profile }) {
         'flex items-center gap-3 shrink-0 overflow-hidden',
         collapsed ? 'justify-center px-0 py-8' : 'px-5 py-8'
       )}>
-        <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-          <Stethoscope className="w-5 h-5 text-[#a3f69c]" />
+        <div className="w-10 h-10 rounded bg-white/10 flex items-center justify-center shrink-0">
+          <Stethoscope className="w-5 h-5 text-[#0c6780]" />
         </div>
         <div className={cn('min-w-0 transition-all duration-200', collapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto')}>
           <p className="text-white font-bold text-[17px] leading-tight whitespace-nowrap tracking-tight">
@@ -79,7 +79,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
                 'text-sm',
                 collapsed ? 'justify-center w-10 h-10 mx-auto' : 'py-3 px-4',
                 active
-                  ? 'bg-white/5 text-[#a3f69c] border-r-4 border-[#a3f69c]'
+                  ? 'bg-white/5 text-[#0c6780] border-r-4 border-[#0c6780]'
                   : 'text-slate-300 hover:text-white hover:bg-white/10'
               )}
             >
@@ -107,8 +107,8 @@ export default function Sidebar({ profile }: { profile: Profile }) {
         <div className="px-3 mt-6">
           <button
             onClick={() => router.push('/agenda/nuevo')}
-            className="w-full text-[#a3f69c] font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-95"
-            style={{ background: 'linear-gradient(135deg, #002453 0%, #1e3a6a 100%)', border: '1px solid rgba(163,246,156,0.2)' }}
+            className="w-full text-white font-bold py-3.5 rounded flex items-center justify-center gap-2 transition-all active:scale-95 hover:brightness-110"
+            style={{ background: 'linear-gradient(135deg, #00113a 0%, #002366 100%)', boxShadow: '0px 4px 16px rgba(0,17,58,0.18)' }}
           >
             <PlusCircle className="w-4 h-4" />
             <span className="text-sm">Nuevo Turno</span>
@@ -119,7 +119,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
       {/* Specialty badge */}
       {!collapsed && profile.role === 'doctor' && profile.specialty && (
         <div className="px-4 mt-3">
-          <div className="px-3 py-1.5 rounded-xl bg-[#a3f69c]/10 text-[#a3f69c] text-[11px] font-medium capitalize tracking-wide">
+          <div className="px-3 py-1.5 rounded bg-[#cce8f0]/10 text-[#0c6780] text-[11px] font-medium capitalize tracking-wide">
             {profile.specialty.replace('_', ' ')}
           </div>
         </div>
@@ -127,10 +127,10 @@ export default function Sidebar({ profile }: { profile: Profile }) {
 
       {/* User info */}
       <div className={cn(
-        'flex items-center gap-3 overflow-hidden transition-all duration-200 mx-3 mt-4 mb-3 rounded-xl p-2.5 bg-white/6',
+        'flex items-center gap-3 overflow-hidden transition-all duration-200 mx-3 mt-4 mb-3 rounded p-2.5 bg-white/6',
         collapsed ? 'justify-center' : ''
       )}>
-        <div className="w-8 h-8 rounded-full bg-[#1e3a6a] border border-[#a3f69c]/30 flex items-center justify-center text-[#a3f69c] text-[11px] font-bold shrink-0">
+        <div className="w-8 h-8 rounded-full bg-[#002366] border border-[#0c6780]/30 flex items-center justify-center text-[#0c6780] text-[11px] font-bold shrink-0">
           {initials}
         </div>
         <div className={cn(
@@ -151,7 +151,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
         }}
         title="Cerrar sesión"
         className={cn(
-          'flex items-center gap-3 mx-3 mb-1 rounded-xl py-2.5 px-3 transition-all duration-200',
+          'flex items-center gap-3 mx-3 mb-1 rounded py-2.5 px-3 transition-all duration-200',
           'text-white/50 hover:text-white hover:bg-white/10',
           collapsed ? 'justify-center' : ''
         )}
@@ -168,7 +168,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
       {/* Collapse toggle */}
       <button
         onClick={() => setCollapsed(c => !c)}
-        className="mx-3 mb-3 flex items-center justify-center rounded-xl py-2 text-white/30 hover:text-white/60 hover:bg-white/6 transition-all duration-200 gap-1.5 text-[11px]"
+        className="mx-3 mb-3 flex items-center justify-center rounded py-2 text-white/30 hover:text-white/60 hover:bg-white/6 transition-all duration-200 gap-1.5 text-[11px]"
         aria-label={collapsed ? 'Expandir menú' : 'Contraer menú'}
       >
         {collapsed

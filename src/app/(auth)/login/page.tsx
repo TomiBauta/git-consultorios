@@ -36,21 +36,21 @@ export default function LoginPage() {
   return (
     <div
       className="flex flex-col min-h-screen"
-      style={{ background: '#faf9fd', color: '#1a1b1f', fontFamily: 'Inter, sans-serif' }}
+      style={{ background: '#f7f9fb', color: '#1a1b1f', fontFamily: 'Inter, sans-serif' }}
     >
 
       {/* ── Fixed header ── */}
       <header className="fixed top-0 left-0 w-full z-50 px-8 py-5 flex justify-between items-center">
         <div className="flex items-center gap-2.5">
-          <Stethoscope className="w-7 h-7" style={{ color: '#002453' }} />
-          <span className="text-lg font-bold tracking-tight" style={{ color: '#002453' }}>
+          <Stethoscope className="w-7 h-7" style={{ color: '#00113a' }} />
+          <span className="text-lg font-bold tracking-tight" style={{ color: '#00113a' }}>
             DIT Consultorios Médicos
           </span>
         </div>
         <a
           href="#"
           className="text-sm font-medium transition-colors hover:opacity-70"
-          style={{ color: '#44474f' }}
+          style={{ color: '#3d4a5c' }}
         >
           Ayuda
         </a>
@@ -64,7 +64,7 @@ export default function LoginPage() {
           <div
             className="absolute inset-0"
             style={{
-              background: 'linear-gradient(135deg, #faf9fd 0%, #f4f3f8 50%, #d9e2fc 100%)',
+              background: 'linear-gradient(135deg, #f7f9fb 0%, #f2f4f6 50%, #d9e2fc 100%)',
               opacity: 0.5,
             }}
           />
@@ -73,12 +73,12 @@ export default function LoginPage() {
         {/* Login card */}
         <div className="relative z-10 w-full max-w-[440px]">
           <div
-            className="p-8 md:p-12 rounded-[2.5rem]"
+            className="p-8 md:p-12 rounded"
             style={{
               background: 'rgba(255,255,255,0.75)',
               backdropFilter: 'blur(20px)',
               WebkitBackdropFilter: 'blur(20px)',
-              boxShadow: '0px 10px 40px rgba(0,26,65,0.10)',
+              boxShadow: '0px 10px 40px rgba(0,17,58,0.08)',
               border: '1px solid rgba(255,255,255,0.6)',
             }}
           >
@@ -86,11 +86,11 @@ export default function LoginPage() {
             <div className="mb-10">
               <h1
                 className="text-3xl font-extrabold tracking-tight mb-2"
-                style={{ color: '#002453', letterSpacing: '-0.02em' }}
+                style={{ color: '#00113a', letterSpacing: '-0.02em' }}
               >
                 Bienvenido
               </h1>
-              <p className="text-sm" style={{ color: '#44474f' }}>
+              <p className="text-sm" style={{ color: '#3d4a5c' }}>
                 Inicie sesión para acceder a su portal médico profesional.
               </p>
             </div>
@@ -101,12 +101,12 @@ export default function LoginPage() {
               <div className="space-y-1">
                 <label
                   className="block text-xs font-semibold ml-1"
-                  style={{ color: '#44474f' }}
+                  style={{ color: '#3d4a5c' }}
                   htmlFor="email"
                 >
                   Correo Electrónico
                 </label>
-                <div className="login-tray rounded-xl px-4 py-3 flex items-center gap-3">
+                <div className="login-tray rounded px-4 py-3 flex items-center gap-3">
                   <Mail className="w-5 h-5 shrink-0" style={{ color: '#747780' }} />
                   <input
                     id="email"
@@ -127,7 +127,7 @@ export default function LoginPage() {
                 <div className="flex justify-between items-center ml-1">
                   <label
                     className="text-xs font-semibold"
-                    style={{ color: '#44474f' }}
+                    style={{ color: '#3d4a5c' }}
                     htmlFor="password"
                   >
                     Contraseña
@@ -135,12 +135,12 @@ export default function LoginPage() {
                   <a
                     href="#"
                     className="text-xs font-semibold transition-colors hover:opacity-70"
-                    style={{ color: '#1e3a6a' }}
+                    style={{ color: '#002366' }}
                   >
                     ¿Olvidó su contraseña?
                   </a>
                 </div>
-                <div className="login-tray rounded-xl px-4 py-3 flex items-center gap-3">
+                <div className="login-tray rounded px-4 py-3 flex items-center gap-3">
                   <Lock className="w-5 h-5 shrink-0" style={{ color: '#747780' }} />
                   <input
                     id="password"
@@ -175,13 +175,13 @@ export default function LoginPage() {
                   type="checkbox"
                   checked={remember}
                   onChange={e => setRemember(e.target.checked)}
-                  className="rounded h-4 w-4 border-[#c4c6d0] focus:ring-[#1e3a6a]"
-                  style={{ accentColor: '#002453' }}
+                  className="rounded h-4 w-4 border-[#c4c6d0] focus:ring-[#002366]"
+                  style={{ accentColor: '#00113a' }}
                 />
                 <label
                   htmlFor="remember"
                   className="text-xs"
-                  style={{ color: '#44474f' }}
+                  style={{ color: '#3d4a5c' }}
                 >
                   Recordar sesión
                 </label>
@@ -190,7 +190,7 @@ export default function LoginPage() {
               {/* Error */}
               {error && (
                 <div
-                  className="px-4 py-3 rounded-xl text-sm font-medium"
+                  className="px-4 py-3 rounded text-sm font-medium"
                   style={{ background: '#ffdad6', color: '#93000a' }}
                 >
                   {error}
@@ -201,11 +201,11 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-[1.5rem] font-bold text-sm flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-60"
+                className="w-full py-4 rounded font-bold text-sm flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-60"
                 style={{
-                  background: 'linear-gradient(135deg, #002453 0%, #1e3a6a 100%)',
+                  background: 'linear-gradient(135deg, #00113a 0%, #002366 100%)',
                   color: '#ffffff',
-                  boxShadow: '0px 8px 24px rgba(0,26,65,0.18)',
+                  boxShadow: '0px 8px 24px rgba(0,17,58,0.14)',
                 }}
                 onMouseEnter={e => { if (!loading) e.currentTarget.style.filter = 'brightness(1.12)' }}
                 onMouseLeave={e => { e.currentTarget.style.filter = '' }}
@@ -220,12 +220,12 @@ export default function LoginPage() {
               className="mt-10 pt-8 flex flex-col items-center gap-3"
               style={{ borderTop: '1px solid rgba(196,198,208,0.25)' }}
             >
-              <p className="text-xs" style={{ color: '#44474f' }}>
+              <p className="text-xs" style={{ color: '#3d4a5c' }}>
                 ¿No tiene una cuenta todavía?
               </p>
               <button
                 className="text-sm font-bold tracking-tight transition-colors hover:opacity-70"
-                style={{ color: '#002453' }}
+                style={{ color: '#00113a' }}
               >
                 Solicitar acceso institucional
               </button>
@@ -240,7 +240,7 @@ export default function LoginPage() {
         style={{ borderTop: '1px solid rgba(244,243,248,0.8)', background: 'rgba(244,243,248,0.4)' }}
       >
         <div className="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto gap-4">
-          <p className="text-xs" style={{ color: '#44474f' }}>
+          <p className="text-xs" style={{ color: '#3d4a5c' }}>
             © {new Date().getFullYear()} DIT Consultorios Médicos. Todos los derechos reservados.
           </p>
           <div className="flex gap-8">
@@ -249,7 +249,7 @@ export default function LoginPage() {
                 key={link}
                 href="#"
                 className="text-xs transition-colors hover:opacity-70"
-                style={{ color: '#44474f' }}
+                style={{ color: '#3d4a5c' }}
               >
                 {link}
               </a>

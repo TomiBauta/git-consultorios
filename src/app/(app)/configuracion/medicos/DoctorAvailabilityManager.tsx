@@ -146,7 +146,7 @@ export default function DoctorAvailabilityManager({
               <div
                 key={dow}
                 className={[
-                  'flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all',
+                  'flex items-center gap-3 px-4 py-3 rounded border-2 transition-all',
                   row.enabled
                     ? 'border-[#BFDBFE] bg-[#EFF6FF]'
                     : 'border-[#F1F5F9] bg-[#FAFAFA]',
@@ -259,7 +259,7 @@ export default function DoctorAvailabilityManager({
         </div>
 
         {showBlock && (
-          <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 space-y-3 mb-3">
+          <div className="bg-orange-50 border border-orange-200 rounded p-4 space-y-3 mb-3">
             <p className="text-xs font-medium text-orange-800">
               Los turnos dentro del rango quedará bloqueados para nuevas reservas online.
             </p>
