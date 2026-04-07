@@ -209,6 +209,16 @@
   filter: brightness(1.08);
 }
 
+/* ─── Utility: Login soft-tray input wrapper ────────────────────────────────── */
+.login-tray {
+  background: #e9e7ec;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+.login-tray:focus-within {
+  border-bottom-color: #002453;
+}
+
 /* ─── Utility: Settings form input ─────────────────────────────────────────── */
 .settings-input {
   background: var(--surface-container-low, #f4f3f8);
