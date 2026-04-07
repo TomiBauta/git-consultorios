@@ -54,7 +54,7 @@ export default function CalendarioDisponible({
   while (cells.length % 7 !== 0) cells.push(null)
 
   return (
-    <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded overflow-hidden">
+    <div className="bg-white border border-[#E2E8F0] rounded overflow-hidden">
       {/* Header mes */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-[#F1F5F9]">
         <button

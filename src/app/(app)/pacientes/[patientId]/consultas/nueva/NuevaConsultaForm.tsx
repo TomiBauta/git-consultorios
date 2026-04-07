@@ -165,7 +165,7 @@ export default function NuevaConsultaForm({
           <CardContent className="pt-5 space-y-1.5">
             <Label>Especialidad</Label>
             <select value={specialty} onChange={e => setSpecialty(e.target.value)}
-              className="w-full text-sm border border-[#E2E8F0] rounded-lg px-3 py-2 bg-white dark:bg-[#1a2235] text-[#334155] focus:outline-none focus:ring-2 focus:ring-[#0891B2]">
+              className="w-full text-sm border border-[#E2E8F0] rounded-lg px-3 py-2 bg-white text-[#334155] focus:outline-none focus:ring-2 focus:ring-[#0891B2]">
               <option value="">Seleccioná especialidad</option>
               {Object.entries(SPECIALTY_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
@@ -250,7 +250,7 @@ export default function NuevaConsultaForm({
               placeholder="Buscar por código o descripción (ej: E11, diabetes...)"
             />
             {dxResults.length > 0 && (
-              <div className="absolute z-10 w-full mt-1 bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded shadow-lg overflow-hidden max-h-52 overflow-y-auto">
+              <div className="absolute z-10 w-full mt-1 bg-white border border-[#E2E8F0] rounded shadow-lg overflow-hidden max-h-52 overflow-y-auto">
                 {dxResults.map((dx: any) => (
                   <button key={dx.icd10_code} type="button" onClick={() => addDiagnosis(dx)}
                     className="w-full text-left px-4 py-2.5 hover:bg-[#F8FAFC] border-b border-[#F1F5F9] last:border-b-0 transition-colors">
@@ -268,7 +268,7 @@ export default function NuevaConsultaForm({
                   <span className="text-xs font-mono font-semibold text-[#0891B2] w-16 shrink-0">{d.icd10_code}</span>
                   <span className="text-sm text-[#334155] flex-1 truncate">{d.icd10_description}</span>
                   <select value={d.type} onChange={e => setDiagnoses(prev => prev.map(x => x.icd10_code === d.icd10_code ? {...x, type: e.target.value} : x))}
-                    className="text-xs border border-[#E2E8F0] rounded px-1 py-0.5 bg-white dark:bg-[#1a2235]">
+                    className="text-xs border border-[#E2E8F0] rounded px-1 py-0.5 bg-white">
                     <option value="definitivo">Definitivo</option>
                     <option value="presuntivo">Presuntivo</option>
                     <option value="cronico">Crónico</option>
@@ -298,7 +298,7 @@ export default function NuevaConsultaForm({
                 <div className="space-y-1">
                   <Label className="text-xs">Tipo</Label>
                   <select value={newTx.type} onChange={e => setNewTx(t => ({...t, type: e.target.value}))}
-                    className="w-full text-sm border border-[#E2E8F0] rounded-lg px-2 py-1.5 bg-white dark:bg-[#1a2235]">
+                    className="w-full text-sm border border-[#E2E8F0] rounded-lg px-2 py-1.5 bg-white">
                     <option value="medicamento">Medicamento</option>
                     <option value="procedimiento">Procedimiento</option>
                     <option value="indicacion">Indicación</option>
@@ -338,7 +338,7 @@ export default function NuevaConsultaForm({
             <div className="space-y-2">
               {treatments.map((t, i) => (
                 <div key={i} className="flex items-center gap-2 px-3 py-2 bg-[#F8FAFC] rounded-lg">
-                  <span className="text-xs px-1.5 py-0.5 bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded text-[#64748B] capitalize">{t.type}</span>
+                  <span className="text-xs px-1.5 py-0.5 bg-white border border-[#E2E8F0] rounded text-[#64748B] capitalize">{t.type}</span>
                   <span className="text-sm font-medium text-[#0F172A] flex-1">{t.name}</span>
                   {t.dosage && <span className="text-xs text-[#64748B]">{t.dosage}</span>}
                   {t.frequency && <span className="text-xs text-[#94A3B8]">{t.frequency}</span>}

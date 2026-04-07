@@ -16,7 +16,7 @@ export default async function UsuariosPage() {
   return (
     <div className="space-y-5">
       <h1 className="text-xl font-semibold text-[#0F172A]" style={{ fontFamily: 'Poppins, sans-serif' }}>Usuarios</h1>
-      <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded overflow-hidden">
+      <div className="bg-white border border-[#E2E8F0] rounded overflow-hidden">
         <table className="w-full">
           <thead>
             <tr className="border-b border-[#F1F5F9]">

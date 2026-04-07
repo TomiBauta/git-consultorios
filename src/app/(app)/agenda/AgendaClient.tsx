@@ -36,7 +36,7 @@ function AppointmentCard({ appt, doctorColor }: { appt: any; doctorColor: string
       <div
         className="p-4 rounded cursor-pointer hover:brightness-95 transition-all"
         style={{
-          background: 'var(--surface-container-low)',
+          background: '#f2f4f6',
           borderLeft: `4px solid ${isActive ? doctorColor : 'rgba(196,198,208,0.4)'}`,
         }}
       >
@@ -52,9 +52,9 @@ function AppointmentCard({ appt, doctorColor }: { appt: any; doctorColor: string
           </span>
           <ArrowRight className="w-3.5 h-3.5 opacity-30" />
         </div>
-        <p className="text-sm font-bold" style={{ color: 'var(--on-surface)' }}>{patient}</p>
+        <p className="text-sm font-bold" style={{ color: '#1a1b1f' }}>{patient}</p>
         {appt.reason && (
-          <p className="text-[11px] mt-0.5" style={{ color: 'var(--on-surface-variant)' }}>{appt.reason}</p>
+          <p className="text-[11px] mt-0.5" style={{ color: '#3d4a5c' }}>{appt.reason}</p>
         )}
         <div className="mt-3 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full" style={{ background: st.dot }} />
@@ -144,7 +144,7 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
       value={selectedDoctorId}
       onChange={e => setSelectedDoctorId(e.target.value)}
       className="w-full bg-transparent border-none p-0 text-sm font-semibold focus:ring-0 focus:outline-none"
-      style={{ color: 'var(--on-surface)' }}
+      style={{ color: '#00113a' }}
     >
       <option value="all">Todos los médicos</option>
       {doctors.map(d => (
@@ -154,10 +154,10 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
   ) : null
 
   return (
-    <div className="flex flex-col lg:flex-row h-full -m-4 sm:-m-6 lg:-m-8 overflow-hidden">
+    <div className="flex h-full -m-8 overflow-hidden">
 
       {/* ── Calendar area ── */}
-      <div className="flex-1 flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto min-w-0">
+      <div className="flex-1 flex flex-col p-8 overflow-y-auto min-w-0">
         <FullScreenCalendar
           data={calendarData}
           onNewEvent={() => router.push('/agenda/nuevo')}
@@ -170,9 +170,9 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
 
       {/* ── Detail side panel ── */}
       <aside
-        className="w-full lg:w-80 flex flex-col p-4 sm:p-6 overflow-y-auto shrink-0 border-t lg:border-t-0 lg:border-l"
+        className="w-80 flex flex-col p-6 overflow-y-auto shrink-0"
         style={{
-          background: 'var(--surface-container-lowest)',
+          background: '#ffffff',
           borderLeft: '1px solid rgba(196,198,208,0.1)',
         }}
       >
@@ -180,18 +180,18 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
         <div className="mb-8">
           <h3
             className="text-[10px] font-bold uppercase tracking-widest mb-2"
-            style={{ color: 'var(--on-surface-variant)' }}
+            style={{ color: '#3d4a5c' }}
           >
             Detalle del Día
           </h3>
           <p
             className="text-xl font-extrabold capitalize"
-            style={{ color: 'var(--on-surface)', letterSpacing: '-0.02em' }}
+            style={{ color: '#00113a', letterSpacing: '-0.02em' }}
           >
             {format(selectedDay, "EEEE, d MMMM", { locale: es })}
           </p>
           {selectedDayAppts.length > 0 && (
-            <p className="text-xs mt-1" style={{ color: 'var(--on-surface-variant)' }}>
+            <p className="text-xs mt-1" style={{ color: '#3d4a5c' }}>
               {selectedDayAppts.length} turno{selectedDayAppts.length !== 1 ? 's' : ''}
             </p>
           )}
@@ -202,11 +202,11 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
           <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
             <div
               className="w-12 h-12 rounded flex items-center justify-center mb-4"
-              style={{ background: 'var(--surface-container-low)' }}
+              style={{ background: '#f2f4f6' }}
             >
               <span className="text-2xl">📅</span>
             </div>
-            <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant)' }}>
+            <p className="text-sm font-medium" style={{ color: '#3d4a5c' }}>
               Sin turnos para este día
             </p>
             <button
@@ -223,8 +223,8 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
         {amAppts.length > 0 && (
           <section className="mb-6">
             <div className="flex items-center gap-2 mb-4">
-              <Sun className="w-4 h-4" style={{ color: 'var(--on-surface-variant)' }} />
-              <h4 className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--on-surface)' }}>
+              <Sun className="w-4 h-4" style={{ color: '#3d4a5c' }} />
+              <h4 className="text-xs font-bold uppercase tracking-wide" style={{ color: '#1a1b1f' }}>
                 Mañana
               </h4>
             </div>
@@ -244,8 +244,8 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
         {pmAppts.length > 0 && (
           <section className="mb-6">
             <div className="flex items-center gap-2 mb-4">
-              <Moon className="w-4 h-4" style={{ color: 'var(--on-surface-variant)' }} />
-              <h4 className="text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--on-surface)' }}>
+              <Moon className="w-4 h-4" style={{ color: '#3d4a5c' }} />
+              <h4 className="text-xs font-bold uppercase tracking-wide" style={{ color: '#1a1b1f' }}>
                 Tarde / Noche
               </h4>
             </div>
@@ -267,7 +267,7 @@ export default function AgendaClient({ profile, doctors }: { profile: Profile | 
             <Link
               href="/agenda/nuevo"
               className="flex items-center gap-2 text-xs font-bold transition-colors hover:opacity-70"
-              style={{ color: 'var(--on-surface)' }}
+              style={{ color: '#00113a' }}
             >
               <Plus className="w-3.5 h-3.5" />
               Agregar turno en este día

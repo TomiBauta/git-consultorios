@@ -42,7 +42,7 @@ export default async function MedicosConfigPage() {
       </div>
 
       {(!doctors || doctors.length === 0) && (
-        <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded p-8 text-center">
+        <div className="bg-white border border-[#E2E8F0] rounded p-8 text-center">
           <p className="text-[#64748B]">No hay médicos registrados todavía.</p>
         </div>
       )}
@@ -56,7 +56,7 @@ export default async function MedicosConfigPage() {
             .map(b => ({ id: b.id, starts_at: b.starts_at, ends_at: b.ends_at, reason: b.reason ?? '' }))
 
           return (
-            <div key={doctor.id} className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded p-6">
+            <div key={doctor.id} className="bg-white border border-[#E2E8F0] rounded p-6">
               {/* Header médico */}
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-3">

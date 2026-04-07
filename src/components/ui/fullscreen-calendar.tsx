@@ -107,11 +107,11 @@ export function FullScreenCalendar({
         <div>
           <h2
             className="text-3xl font-extrabold tracking-tight capitalize"
-            style={{ color: 'var(--on-surface)', letterSpacing: '-0.02em' }}
+            style={{ color: '#00113a', letterSpacing: '-0.02em' }}
           >
             {format(firstDayCurrentMonth, "MMMM yyyy", { locale: es })}
           </h2>
-          <div className="flex items-center gap-4 text-sm font-medium mt-1" style={{ color: 'var(--on-surface-variant)' }}>
+          <div className="flex items-center gap-4 text-sm font-medium mt-1" style={{ color: '#3d4a5c' }}>
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-[#00113a]" />
               {totalEvents} Turnos
@@ -125,14 +125,14 @@ export function FullScreenCalendar({
 
         <div className="flex items-center gap-3">
           {/* View toggle — visual only */}
-          <div className="flex rounded p-1" style={{ background: 'var(--surface-container)' }}>
+          <div className="flex rounded p-1" style={{ background: '#eaecef' }}>
             {['Mes', 'Semana', 'Día'].map((v, i) => (
               <button
                 key={v}
                 className="px-4 py-2 text-xs font-bold rounded-lg transition-all"
                 style={i === 0
-                  ? { background: '#fff', color: 'var(--on-surface)', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }
-                  : { color: 'var(--on-surface-variant)' }
+                  ? { background: '#fff', color: '#00113a', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }
+                  : { color: '#3d4a5c' }
                 }
               >
                 {v}
@@ -144,7 +144,7 @@ export function FullScreenCalendar({
           <button
             onClick={previousMonth}
             className="p-2 rounded transition-all hover:text-white"
-            style={{ background: 'var(--surface-container)', color: 'var(--on-surface)' }}
+            style={{ background: '#eaecef', color: '#00113a' }}
             onMouseEnter={e => { e.currentTarget.style.background = '#00113a'; e.currentTarget.style.color = '#fff' }}
             onMouseLeave={e => { e.currentTarget.style.background = '#eaecef'; e.currentTarget.style.color = '#00113a' }}
             aria-label="Mes anterior"
@@ -154,7 +154,7 @@ export function FullScreenCalendar({
           <button
             onClick={nextMonth}
             className="p-2 rounded transition-all hover:text-white"
-            style={{ background: 'var(--surface-container)', color: 'var(--on-surface)' }}
+            style={{ background: '#eaecef', color: '#00113a' }}
             onMouseEnter={e => { e.currentTarget.style.background = '#00113a'; e.currentTarget.style.color = '#fff' }}
             onMouseLeave={e => { e.currentTarget.style.background = '#eaecef'; e.currentTarget.style.color = '#00113a' }}
             aria-label="Mes siguiente"
@@ -169,16 +169,16 @@ export function FullScreenCalendar({
         {/* Doctor filter */}
         <div
           className="col-span-2 p-4 rounded transition-all"
-          style={{ background: 'var(--surface-container-low)' }}
+          style={{ background: '#f2f4f6' }}
         >
           <label
             className="block text-[10px] font-bold uppercase tracking-wider mb-1"
-            style={{ color: 'var(--on-surface-variant)' }}
+            style={{ color: '#3d4a5c' }}
           >
             Médico
           </label>
           {extraControls ?? (
-            <span className="text-sm font-semibold" style={{ color: 'var(--on-surface)' }}>
+            <span className="text-sm font-semibold" style={{ color: '#00113a' }}>
               Todos los médicos
             </span>
           )}
@@ -188,12 +188,12 @@ export function FullScreenCalendar({
         <button
           onClick={() => handleSelectDay(today)}
           className="col-span-1 p-4 rounded text-left transition-all hover:opacity-80"
-          style={{ background: 'var(--surface-container-low)' }}
+          style={{ background: '#f2f4f6' }}
         >
-          <p className="text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--on-surface-variant)' }}>
+          <p className="text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: '#3d4a5c' }}>
             Hoy
           </p>
-          <p className="text-sm font-semibold capitalize" style={{ color: 'var(--on-surface)' }}>
+          <p className="text-sm font-semibold capitalize" style={{ color: '#00113a' }}>
             {format(today, "d MMM", { locale: es })}
           </p>
         </button>
@@ -212,14 +212,14 @@ export function FullScreenCalendar({
       <div
         className="flex-1 rounded overflow-hidden flex flex-col"
         style={{
-          background: 'var(--surface-container-lowest)',
+          background: '#ffffff',
           boxShadow: '0px 10px 30px rgba(0,17,58,0.04)',
         }}
       >
         {/* Week day headers */}
         <div
           className="grid grid-cols-7"
-          style={{ background: 'var(--surface-container-low)', borderBottom: '1px solid rgba(196,198,208,0.1)' }}
+          style={{ background: '#f2f4f6', borderBottom: '1px solid rgba(196,198,208,0.1)' }}
         >
           {WEEK_DAYS.map((d, i) => (
             <div
@@ -249,8 +249,8 @@ export function FullScreenCalendar({
                   dayIdx === 0 && colStartClassesMon[getDay(day)],
                   !isCurrentMonth && "opacity-30",
                   isTodayDay && "bg-[#00113a]/5",
-                  isSelected && !isTodayDay && "bg-[#f2f4f6] dark:bg-[#111827]",
-                  "hover:bg-[#f2f4f6] dark:bg-[#111827]",
+                  isSelected && !isTodayDay && "bg-[#f2f4f6]",
+                  "hover:bg-[#f2f4f6]",
                 )}
                 style={{ borderColor: 'rgba(196,198,208,0.08)' }}
               >
@@ -295,7 +295,7 @@ export function FullScreenCalendar({
                   {dayData && dayData.events.length > 2 && (
                     <p
                       className="text-[9px] font-bold px-1"
-                      style={{ color: 'var(--on-surface-variant)' }}
+                      style={{ color: '#3d4a5c' }}
                     >
                       + {dayData.events.length - 2} más
                     </p>

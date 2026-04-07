@@ -32,7 +32,7 @@ export function Menu({ trigger, children, align = "left", showChevron = true }: 
         <div
           className={`absolute ${
             align === "right" ? "right-0" : "left-0"
-          } mt-2 w-56 rounded-md bg-white dark:bg-[#1a2235] dark:bg-gray-800 shadow-lg ring-1 ring-black dark:ring-gray-700 ring-opacity-9 focus:outline-none z-50`}
+          } mt-2 w-56 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black dark:ring-gray-700 ring-opacity-9 focus:outline-none z-50`}
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="menu-button"
@@ -59,7 +59,7 @@ export function MenuItem({ children, onClick, disabled = false, icon, isActive =
     <button
       className={`relative block w-full h-16 text-center group
         ${disabled ? "text-gray-400 dark:text-gray-500 cursor-not-allowed" : "text-gray-600 dark:text-gray-300"}
-        ${isActive ? "bg-white dark:bg-[#1a2235]/10" : ""}
+        ${isActive ? "bg-white/10" : ""}
       `}
       role="menuitem"
       onClick={onClick}

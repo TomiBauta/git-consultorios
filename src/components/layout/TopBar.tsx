@@ -4,20 +4,15 @@ import { useRouter, usePathname } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Sun, Moon, Bell, HelpCircle, Search, ChevronLeft, Menu } from 'lucide-react'
+import { Sun, Moon, Bell, HelpCircle, Search, ChevronLeft } from 'lucide-react'
 import type { Database } from '@/types/database'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
 
+// Top-level routes — no back button on these
 const ROOT_PATHS = ['/dashboard', '/agenda', '/pacientes', '/whatsapp', '/configuracion']
 
-export default function TopBar({
-  profile,
-  onMenuOpen,
-}: {
-  profile: Profile
-  onMenuOpen?: () => void
-}) {
+export default function TopBar({ profile }: { profile: Profile }) {
   const router = useRouter()
   const pathname = usePathname()
   const supabase = createClient()
@@ -48,112 +43,94 @@ export default function TopBar({
 
   return (
     <header
-      className="h-14 sm:h-16 px-4 sm:px-8 flex items-center justify-between shrink-0 transition-colors sticky top-0 z-40"
+      className="h-16 px-8 flex items-center justify-between shrink-0 transition-colors sticky top-0 z-40"
       style={{
-        background: 'rgba(var(--surface-container-lowest-rgb, 255,255,255), 0.85)',
+        background: 'rgba(255,255,255,0.75)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-        boxShadow: '0px 1px 0px var(--outline-variant)',
+        boxShadow: '0px 1px 0px rgba(68,71,79,0.08)',
       }}
     >
-      {/* Left: hamburger (mobile) + back button + search */}
-      <div className="flex items-center gap-2 flex-1 min-w-0">
-
-        {/* Hamburger — mobile only */}
+      {/* Back button — only on sub-routes */}
+      {isSubRoute && (
         <button
-          onClick={onMenuOpen}
-          className="lg:hidden p-2 rounded flex items-center justify-center hover:opacity-70 transition-opacity shrink-0"
-          style={{ color: 'var(--on-surface-variant)' }}
-          aria-label="Abrir menú"
+          onClick={() => router.back()}
+          className="flex items-center gap-1.5 mr-4 px-3 py-2 rounded transition-all hover:opacity-70 shrink-0"
+          style={{ background: '#f2f4f6', color: '#00113a' }}
+          aria-label="Volver"
         >
-          <Menu className="w-5 h-5" />
+          <ChevronLeft className="w-4 h-4" />
+          <span className="text-xs font-bold">Volver</span>
         </button>
+      )}
 
-        {/* Back button — sub-routes only */}
-        {isSubRoute && (
-          <button
-            onClick={() => router.back()}
-            className="hidden sm:flex items-center gap-1.5 mr-2 px-3 py-2 rounded transition-all hover:opacity-70 shrink-0"
-            style={{ background: 'var(--surface-container-low)', color: 'var(--on-surface)' }}
-            aria-label="Volver"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            <span className="text-xs font-bold">Volver</span>
-          </button>
-        )}
-
-        {/* Search — hidden on smallest screens */}
-        <form onSubmit={handleSearch} className="relative hidden sm:block w-full max-w-xs lg:max-w-sm">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--on-surface-variant)' }} />
-          <input
-            name="q"
-            placeholder="Buscar pacientes..."
-            className="w-full rounded-full pl-10 pr-4 py-2 text-sm border-none outline-none focus:ring-2 transition-all"
-            style={{
-              background: 'var(--surface-container-low)',
-              color: 'var(--on-surface)',
-            }}
-          />
-        </form>
-      </div>
+      {/* Search */}
+      <form onSubmit={handleSearch} className="relative w-96">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }} />
+        <input
+          name="q"
+          placeholder="Buscar pacientes o historias clínicas..."
+          className="w-full rounded-full pl-10 pr-4 py-2 text-sm border-none outline-none focus:ring-2 transition-all"
+          style={{
+            background: 'var(--surface-container-low, #f2f4f6)',
+            color: 'var(--on-surface, #1a1b1f)',
+          }}
+        />
+      </form>
 
       {/* Right actions */}
-      <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-
+      <div className="flex items-center gap-5">
         {/* Notifications */}
         <button
-          className="relative p-2 rounded transition-colors"
-          style={{ color: 'var(--on-surface-variant)' }}
+          className="relative p-2 rounded-full transition-colors hover:bg-[#f2f4f6] dark:hover:bg-white/8"
           aria-label="Notificaciones"
         >
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-[#0c6780] rounded-full ring-2 ring-white dark:ring-[#0e1420]" />
+          <Bell className="w-5 h-5" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }} />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-[#0c6780] rounded-full ring-2 ring-white" />
         </button>
 
-        {/* Help — hidden on small screens */}
+        {/* Help */}
         <button
-          className="hidden md:flex p-2 rounded transition-colors"
-          style={{ color: 'var(--on-surface-variant)' }}
+          className="p-2 rounded-full transition-colors hover:bg-[#f2f4f6] dark:hover:bg-white/8"
           aria-label="Ayuda"
         >
-          <HelpCircle className="w-5 h-5" />
+          <HelpCircle className="w-5 h-5" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }} />
         </button>
 
         {/* Theme toggle */}
         {mounted && (
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="p-2 rounded transition-colors"
-            style={{ color: 'var(--on-surface-variant)' }}
+            className="p-2 rounded-full transition-colors hover:bg-[#f2f4f6] dark:hover:bg-white/8"
             aria-label="Cambiar tema"
           >
             {theme === 'dark'
-              ? <Sun className="w-4 h-4" />
-              : <Moon className="w-4 h-4" />
+              ? <Sun className="w-4 h-4" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }} />
+              : <Moon className="w-4 h-4" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }} />
             }
           </button>
         )}
 
         {/* Divider */}
-        <div className="hidden sm:block h-8 w-px" style={{ background: 'var(--outline-variant)' }} />
+        <div className="h-8 w-px bg-[#c4c6d0]/50" />
 
         {/* User */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div className="hidden sm:block text-right">
-            <p className="text-sm font-bold leading-tight" style={{ color: 'var(--primary-val)' }}>
+        <div className="flex items-center gap-3">
+          <div className="text-right">
+            <p className="text-sm font-bold leading-tight" style={{ color: 'var(--primary-val, #00113a)' }}>
               {profile.full_name}
             </p>
-            <p className="text-[10px] font-medium capitalize" style={{ color: 'var(--on-surface-variant)' }}>
+            <p className="text-[10px] font-medium capitalize" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
               {roleLabel[profile.role] ?? profile.role}
             </p>
           </div>
           <button
             onClick={handleSignOut}
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-[11px] font-bold border-2 transition-colors hover:border-[#0c6780]"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-[11px] font-bold border-2 transition-colors hover:border-[#0c6780]"
             style={{
-              background: 'var(--primary-container-val)',
+              background: '#002366',
               color: '#ffffff',
-              borderColor: 'rgba(0,35,102,0.3)',
+              borderColor: 'rgba(0,35,102,0.4)',
             }}
             title="Cerrar sesión"
           >

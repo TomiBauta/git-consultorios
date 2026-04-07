@@ -87,7 +87,7 @@ export default function NuevoPacienteForm({ obrasSociales }: { obrasSociales: Ob
             <div className="space-y-1.5">
               <Label>Sexo</Label>
               <select value={form.sex} onChange={e => set('sex', e.target.value)}
-                className="w-full text-sm border border-[#E2E8F0] rounded-lg px-3 py-2 bg-white dark:bg-[#1a2235] text-[#334155] focus:outline-none focus:ring-2 focus:ring-[#0891B2]">
+                className="w-full text-sm border border-[#E2E8F0] rounded-lg px-3 py-2 bg-white text-[#334155] focus:outline-none focus:ring-2 focus:ring-[#0891B2]">
                 <option value="">Sin especificar</option>
                 <option value="masculino">Masculino</option>
                 <option value="femenino">Femenino</option>
@@ -97,7 +97,7 @@ export default function NuevoPacienteForm({ obrasSociales }: { obrasSociales: Ob
             <div className="space-y-1.5">
               <Label>Grupo sanguíneo</Label>
               <select value={form.blood_type} onChange={e => set('blood_type', e.target.value)}
-                className="w-full text-sm border border-[#E2E8F0] rounded-lg px-3 py-2 bg-white dark:bg-[#1a2235] text-[#334155] focus:outline-none focus:ring-2 focus:ring-[#0891B2]">
+                className="w-full text-sm border border-[#E2E8F0] rounded-lg px-3 py-2 bg-white text-[#334155] focus:outline-none focus:ring-2 focus:ring-[#0891B2]">
                 <option value="">Desconocido</option>
                 {['A+','A-','B+','B-','AB+','AB-','O+','O-'].map(t => <option key={t} value={t}>{t}</option>)}
               </select>
@@ -139,7 +139,7 @@ export default function NuevoPacienteForm({ obrasSociales }: { obrasSociales: Ob
             <div className="space-y-1.5 col-span-2">
               <Label>Obra social</Label>
               <select value={form.obra_social_id} onChange={e => set('obra_social_id', e.target.value)}
-                className="w-full text-sm border border-[#E2E8F0] rounded-lg px-3 py-2 bg-white dark:bg-[#1a2235] text-[#334155] focus:outline-none focus:ring-2 focus:ring-[#0891B2]">
+                className="w-full text-sm border border-[#E2E8F0] rounded-lg px-3 py-2 bg-white text-[#334155] focus:outline-none focus:ring-2 focus:ring-[#0891B2]">
                 <option value="">Sin obra social / Particular</option>
                 {obrasSociales.map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
               </select>

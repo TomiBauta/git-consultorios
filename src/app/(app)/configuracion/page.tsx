@@ -44,23 +44,23 @@ export default async function ConfiguracionPage() {
     .eq('is_active', true)
 
   return (
-    <div className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-6 lg:-m-8 lg:h-[calc(100vh-0px)] lg:overflow-hidden">
+    <div className="grid grid-cols-12 gap-6 -m-8 h-[calc(100vh-0px)] overflow-hidden">
 
       {/* ── Left nav ── */}
       <aside
-        className="col-span-3 flex flex-col p-5 lg:p-6 overflow-y-auto"
-        style={{ background: 'var(--surface-container-lowest)', borderRight: '1px solid rgba(196,198,208,0.08)' }}
+        className="col-span-3 flex flex-col p-6 overflow-y-auto"
+        style={{ background: '#ffffff', borderRight: '1px solid rgba(196,198,208,0.08)' }}
       >
         <div className="mb-8">
           <p
             className="text-[10px] font-bold uppercase tracking-widest mb-1"
-            style={{ color: 'var(--on-surface-variant)' }}
+            style={{ color: '#3d4a5c' }}
           >
             Configuración
           </p>
           <h2
             className="text-xl font-extrabold"
-            style={{ color: 'var(--on-surface)', letterSpacing: '-0.02em' }}
+            style={{ color: '#00113a', letterSpacing: '-0.02em' }}
           >
             Ajustes del sistema
           </h2>
@@ -80,7 +80,7 @@ export default async function ConfiguracionPage() {
               className="flex items-center gap-3 px-4 py-3 rounded transition-all"
               style={item.active
                 ? { background: '#00113a', color: '#ffffff' }
-                : { color: 'var(--on-surface-variant)' }
+                : { color: '#3d4a5c' }
               }
             >
               <item.icon className="w-4 h-4 shrink-0" />
@@ -107,16 +107,16 @@ export default async function ConfiguracionPage() {
       </aside>
 
       {/* ── Right content ── */}
-      <main className="col-span-9 overflow-y-auto p-5 lg:p-8 space-y-8">
+      <main className="col-span-9 overflow-y-auto p-8 space-y-8">
 
         {/* ── Doctors section ── */}
         <section>
           <div className="flex items-end justify-between mb-5">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: 'var(--on-surface-variant)' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#3d4a5c' }}>
                 Cuerpo Médico
               </p>
-              <h3 className="text-xl font-extrabold" style={{ color: 'var(--on-surface)', letterSpacing: '-0.02em' }}>
+              <h3 className="text-xl font-extrabold" style={{ color: '#00113a', letterSpacing: '-0.02em' }}>
                 Médicos Activos
               </h3>
             </div>
@@ -132,14 +132,14 @@ export default async function ConfiguracionPage() {
           {(!doctors || doctors.length === 0) ? (
             <div
               className="p-12 rounded text-center"
-              style={{ background: 'var(--surface-container-low)' }}
+              style={{ background: '#f2f4f6' }}
             >
-              <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant)' }}>
+              <p className="text-sm font-medium" style={{ color: '#3d4a5c' }}>
                 No hay médicos registrados aún.
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               {doctors.map((doctor, i) => {
                 const doctorDays = (availability ?? [])
                   .filter(a => a.doctor_id === doctor.id)
@@ -153,7 +153,7 @@ export default async function ConfiguracionPage() {
                     key={doctor.id}
                     className="p-5 rounded transition-all hover:shadow-md"
                     style={{
-                      background: 'var(--surface-container-lowest)',
+                      background: '#ffffff',
                       boxShadow: '0px 4px 16px rgba(0,17,58,0.04)',
                     }}
                   >
@@ -169,7 +169,7 @@ export default async function ConfiguracionPage() {
                       {/* Info */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
-                          <p className="font-extrabold truncate" style={{ color: 'var(--on-surface)' }}>
+                          <p className="font-extrabold truncate" style={{ color: '#1a1b1f' }}>
                             {doctor.full_name}
                           </p>
                           <span
@@ -178,7 +178,7 @@ export default async function ConfiguracionPage() {
                             title={doctor.is_active ? 'Disponible' : 'Inactivo'}
                           />
                         </div>
-                        <p className="text-xs mb-2" style={{ color: 'var(--on-surface-variant)' }}>{spec}</p>
+                        <p className="text-xs mb-2" style={{ color: '#3d4a5c' }}>{spec}</p>
                         {doctorDays.length > 0 ? (
                           <div className="flex flex-wrap gap-1">
                             {doctorDays.map(d => (
@@ -192,7 +192,7 @@ export default async function ConfiguracionPage() {
                             ))}
                           </div>
                         ) : (
-                          <span className="text-[10px]" style={{ color: 'var(--outline)' }}>Sin horarios configurados</span>
+                          <span className="text-[10px]" style={{ color: '#747780' }}>Sin horarios configurados</span>
                         )}
                       </div>
 
@@ -200,7 +200,7 @@ export default async function ConfiguracionPage() {
                       <Link
                         href="/configuracion/medicos"
                         className="shrink-0 w-8 h-8 rounded flex items-center justify-center transition-all hover:opacity-80"
-                        style={{ background: 'var(--surface-container-low)', color: 'var(--on-surface-variant)' }}
+                        style={{ background: '#f2f4f6', color: '#3d4a5c' }}
                         title="Editar horarios"
                       >
                         <CalendarDays className="w-4 h-4" />
@@ -216,10 +216,10 @@ export default async function ConfiguracionPage() {
         {/* ── Clinic settings form ── */}
         <section>
           <div className="mb-5">
-            <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: 'var(--on-surface-variant)' }}>
+            <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#3d4a5c' }}>
               Clínica
             </p>
-            <h3 className="text-xl font-extrabold" style={{ color: 'var(--on-surface)', letterSpacing: '-0.02em' }}>
+            <h3 className="text-xl font-extrabold" style={{ color: '#00113a', letterSpacing: '-0.02em' }}>
               Ajustes de la Clínica
             </h3>
           </div>
@@ -227,14 +227,14 @@ export default async function ConfiguracionPage() {
           <div
             className="p-6 rounded space-y-5"
             style={{
-              background: 'var(--surface-container-lowest)',
+              background: '#ffffff',
               boxShadow: '0px 4px 16px rgba(0,17,58,0.04)',
             }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="grid grid-cols-2 gap-5">
               {/* Clinic name */}
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--on-surface-variant)' }}>
+                <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: '#3d4a5c' }}>
                   Nombre de la clínica
                 </label>
                 <input
@@ -246,7 +246,7 @@ export default async function ConfiguracionPage() {
 
               {/* Email */}
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--on-surface-variant)' }}>
+                <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: '#3d4a5c' }}>
                   Email de contacto
                 </label>
                 <input
@@ -258,7 +258,7 @@ export default async function ConfiguracionPage() {
 
               {/* Phone */}
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--on-surface-variant)' }}>
+                <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: '#3d4a5c' }}>
                   Teléfono
                 </label>
                 <input
@@ -270,7 +270,7 @@ export default async function ConfiguracionPage() {
 
               {/* Address */}
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--on-surface-variant)' }}>
+                <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: '#3d4a5c' }}>
                   Dirección
                 </label>
                 <input
@@ -284,13 +284,13 @@ export default async function ConfiguracionPage() {
             {/* Online booking toggle */}
             <div
               className="flex items-center justify-between p-4 rounded"
-              style={{ background: 'var(--surface-container-low)' }}
+              style={{ background: '#f2f4f6' }}
             >
               <div>
-                <p className="text-sm font-bold" style={{ color: 'var(--on-surface)' }}>
+                <p className="text-sm font-bold" style={{ color: '#1a1b1f' }}>
                   Reservas online
                 </p>
-                <p className="text-xs mt-0.5" style={{ color: 'var(--on-surface-variant)' }}>
+                <p className="text-xs mt-0.5" style={{ color: '#3d4a5c' }}>
                   Habilitar el portal público de turnos para pacientes
                 </p>
               </div>
@@ -299,7 +299,7 @@ export default async function ConfiguracionPage() {
                 style={{ background: '#00113a' }}
               >
                 <span
-                  className="absolute top-1 left-5 w-4 h-4 rounded-full bg-white dark:bg-[#1a2235] shadow transition-all"
+                  className="absolute top-1 left-5 w-4 h-4 rounded-full bg-white shadow transition-all"
                 />
               </div>
             </div>
@@ -314,7 +314,7 @@ export default async function ConfiguracionPage() {
               </button>
               <button
                 className="px-6 py-2.5 rounded text-sm font-bold transition-all hover:opacity-80"
-                style={{ background: 'var(--surface-container-low)', color: 'var(--on-surface-variant)' }}
+                style={{ background: '#f2f4f6', color: '#3d4a5c' }}
               >
                 Descartar
               </button>
@@ -323,31 +323,31 @@ export default async function ConfiguracionPage() {
         </section>
 
         {/* ── Bottom bento row ── */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-8">
+        <section className="grid grid-cols-2 gap-6 pb-8">
           {/* Servicios y Costos */}
           <div
             className="p-6 rounded flex flex-col justify-between"
             style={{
-              background: 'var(--surface-container-lowest)',
+              background: '#ffffff',
               boxShadow: '0px 4px 16px rgba(0,17,58,0.04)',
               minHeight: '160px',
             }}
           >
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: 'var(--on-surface-variant)' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: '#3d4a5c' }}>
                 Catálogo
               </p>
-              <h4 className="text-base font-extrabold mb-1" style={{ color: 'var(--on-surface)' }}>
+              <h4 className="text-base font-extrabold mb-1" style={{ color: '#1a1b1f' }}>
                 Servicios y Costos
               </h4>
-              <p className="text-xs" style={{ color: 'var(--on-surface-variant)' }}>
+              <p className="text-xs" style={{ color: '#3d4a5c' }}>
                 Gestioná los servicios ofrecidos, aranceles y coberturas por obra social.
               </p>
             </div>
             <Link
               href="/configuracion/obras-sociales"
               className="mt-4 text-xs font-bold flex items-center gap-1 transition-all hover:opacity-70"
-              style={{ color: 'var(--on-surface)' }}
+              style={{ color: '#00113a' }}
             >
               Configurar servicios <ChevronRight className="w-3.5 h-3.5" />
             </Link>

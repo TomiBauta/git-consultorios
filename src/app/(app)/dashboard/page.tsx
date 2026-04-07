@@ -38,10 +38,10 @@ function AvailabilityBar({ label, count, maxCount }: { label: string; count: num
           }}
         />
       </div>
-      <span className="text-[10px] font-bold uppercase" style={{ color: 'var(--on-surface-variant)' }}>
+      <span className="text-[10px] font-bold uppercase" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
         {label}
       </span>
-      <span className="text-[10px]" style={{ color: 'var(--on-surface-variant)' }}>
+      <span className="text-[10px]" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
         {count}
       </span>
     </div>
@@ -159,22 +159,22 @@ export default async function DashboardPage() {
       <div>
         <h2
           className="text-3xl font-bold tracking-tight"
-          style={{ color: 'var(--primary-val)', letterSpacing: '-0.02em' }}
+          style={{ color: 'var(--primary-val, #00113a)', letterSpacing: '-0.02em' }}
         >
           Resumen de Actividad
         </h2>
-        <p className="text-sm mt-1" style={{ color: 'var(--on-surface-variant)' }}>
+        <p className="text-sm mt-1" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
           {greeting}, {firstName}. Aquí tienes el estado de la clínica hoy.
         </p>
       </div>
 
       {/* Stats — 3 cols bento */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-3 gap-6">
         {/* Turnos hoy */}
         <div className="card-ambient rounded p-6 hover:-translate-y-1 transition-transform cursor-default">
           <div className="flex justify-between items-start mb-4">
             <div className="w-12 h-12 rounded flex items-center justify-center" style={{ background: '#d8e2ff' }}>
-              <svg className="w-6 h-6" style={{ color: 'var(--on-surface)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-6 h-6" style={{ color: '#00113a' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeWidth={2} />
                 <line x1="16" y1="2" x2="16" y2="6" strokeWidth={2} />
                 <line x1="8" y1="2" x2="8" y2="6" strokeWidth={2} />
@@ -185,8 +185,8 @@ export default async function DashboardPage() {
               hoy
             </span>
           </div>
-          <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant)' }}>Turnos de hoy</p>
-          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: 'var(--on-surface)' }}>
+          <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>Turnos de hoy</p>
+          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: '#00113a' }}>
             {todayAppointments?.length ?? 0}
           </h3>
         </div>
@@ -203,8 +203,8 @@ export default async function DashboardPage() {
               este mes
             </span>
           </div>
-          <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant)' }}>Turnos este mes</p>
-          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: 'var(--on-surface)' }}>
+          <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>Turnos este mes</p>
+          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: '#00113a' }}>
             {monthAppointments ?? 0}
           </h3>
         </div>
@@ -224,20 +224,20 @@ export default async function DashboardPage() {
               total
             </span>
           </div>
-          <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant)' }}>Pacientes totales</p>
-          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: 'var(--on-surface)' }}>
+          <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>Pacientes totales</p>
+          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: '#00113a' }}>
             {(totalPatients ?? 0).toLocaleString('es-AR')}
           </h3>
         </div>
       </div>
 
       {/* Main content — 8/4 split */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-12 gap-6">
 
         {/* Appointments list — col-span-8 */}
-        <div className="lg:col-span-8 space-y-4">
+        <div className="col-span-8 space-y-4">
           <div className="flex items-center justify-between">
-            <h4 className="text-xl font-bold tracking-tight" style={{ color: 'var(--on-surface)' }}>
+            <h4 className="text-xl font-bold tracking-tight" style={{ color: '#00113a' }}>
               Próximos Pacientes
             </h4>
             <Link
@@ -252,7 +252,7 @@ export default async function DashboardPage() {
           {(todayAppointments ?? []).length === 0 ? (
             <div
               className="card-ambient rounded p-10 text-center"
-              style={{ color: 'var(--on-surface-variant)' }}
+              style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}
             >
               <p className="font-medium">No hay turnos programados para hoy</p>
             </div>
@@ -276,7 +276,7 @@ export default async function DashboardPage() {
                     key={appt.id}
                     className="flex items-center gap-6 p-5 rounded hover:shadow-md transition-all"
                     style={{
-                      background: 'var(--surface-container-lowest)',
+                      background: 'var(--surface-container-lowest, #ffffff)',
                       boxShadow: 'var(--ambient-shadow)',
                       opacity: isPast ? 0.65 : 1,
                     }}
@@ -292,18 +292,18 @@ export default async function DashboardPage() {
                       >
                         {timeStr}
                       </span>
-                      <span className="text-[10px] uppercase font-bold" style={{ color: 'var(--on-surface-variant)' }}>
+                      <span className="text-[10px] uppercase font-bold" style={{ color: '#3d4a5c' }}>
                         {period}
                       </span>
                     </div>
 
                     {/* Patient info */}
                     <div className="flex-1 min-w-0">
-                      <h5 className="text-base font-bold truncate" style={{ color: 'var(--on-surface)' }}>
+                      <h5 className="text-base font-bold truncate" style={{ color: 'var(--on-surface, #1a1b1f)' }}>
                         {patientName}
                       </h5>
                       {subtitle && (
-                        <p className="text-xs truncate mt-0.5" style={{ color: 'var(--on-surface-variant)' }}>
+                        <p className="text-xs truncate mt-0.5" style={{ color: '#3d4a5c' }}>
                           {subtitle}
                         </p>
                       )}
@@ -315,11 +315,11 @@ export default async function DashboardPage() {
                       <Link href={`/agenda/${appt.id}`}>
                         <button
                           className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
-                          style={{ background: 'var(--surface-container)' }}
+                          style={{ background: '#eaecef' }}
                           onMouseEnter={e => (e.currentTarget.style.background = '#d8e2ff')}
                           onMouseLeave={e => (e.currentTarget.style.background = '#eaecef')}
                         >
-                          <ArrowRight className="w-4 h-4" style={{ color: 'var(--on-surface)' }} />
+                          <ArrowRight className="w-4 h-4" style={{ color: '#00113a' }} />
                         </button>
                       </Link>
                     </div>
@@ -331,7 +331,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Analysis sidebar — col-span-4 */}
-        <div className="lg:col-span-4 space-y-5">
+        <div className="col-span-4 space-y-5">
 
           {/* Capacity card — navy bg */}
           <div
@@ -375,7 +375,7 @@ export default async function DashboardPage() {
 
           {/* Availability next 4 days */}
           <div className="card-ambient rounded p-6">
-            <h4 className="text-sm font-bold mb-5" style={{ color: 'var(--on-surface)' }}>
+            <h4 className="text-sm font-bold mb-5" style={{ color: '#00113a' }}>
               Disponibilidad Próximos 4 Días
             </h4>
             <div className="flex justify-between items-end h-28 gap-3">
@@ -388,11 +388,11 @@ export default async function DashboardPage() {
           {/* Quick link */}
           <div
             className="rounded p-5"
-            style={{ background: 'var(--surface-container-low)' }}
+            style={{ background: 'var(--surface-container-low, #f2f4f6)' }}
           >
             <p
               className="text-xs font-bold uppercase tracking-widest mb-4"
-              style={{ color: 'var(--on-surface)' }}
+              style={{ color: '#00113a' }}
             >
               Acciones Rápidas
             </p>
@@ -400,7 +400,7 @@ export default async function DashboardPage() {
               <Link
                 href="/agenda/nuevo"
                 className="flex items-center justify-between text-sm font-medium transition-colors hover:opacity-70"
-                style={{ color: 'var(--on-surface)' }}
+                style={{ color: 'var(--on-surface, #1a1b1f)' }}
               >
                 <span>Nuevo turno</span>
                 <ArrowRight className="w-4 h-4" />
@@ -408,7 +408,7 @@ export default async function DashboardPage() {
               <Link
                 href="/pacientes/nuevo"
                 className="flex items-center justify-between text-sm font-medium transition-colors hover:opacity-70"
-                style={{ color: 'var(--on-surface)' }}
+                style={{ color: 'var(--on-surface, #1a1b1f)' }}
               >
                 <span>Nuevo paciente</span>
                 <ArrowRight className="w-4 h-4" />
@@ -416,7 +416,7 @@ export default async function DashboardPage() {
               <Link
                 href="/configuracion/medicos"
                 className="flex items-center justify-between text-sm font-medium transition-colors hover:opacity-70"
-                style={{ color: 'var(--on-surface)' }}
+                style={{ color: 'var(--on-surface, #1a1b1f)' }}
               >
                 <span>Configurar agenda</span>
                 <ArrowRight className="w-4 h-4" />

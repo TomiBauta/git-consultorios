@@ -11,7 +11,7 @@ export default function BookingLayout({ children }: { children: React.ReactNode 
       {/* Header */}
       <header className="bg-[#1B3A6B] text-white">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-3">
-          <div className="w-9 h-9 rounded bg-white dark:bg-[#1a2235]/15 flex items-center justify-center font-bold text-sm">
+          <div className="w-9 h-9 rounded bg-white/15 flex items-center justify-center font-bold text-sm">
             DIT
           </div>
           <div>

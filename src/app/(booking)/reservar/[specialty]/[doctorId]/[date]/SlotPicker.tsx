@@ -142,7 +142,7 @@ export default function SlotPicker({
 
   if (allSlots.length === 0) {
     return (
-      <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded text-center py-12 space-y-3">
+      <div className="bg-white border border-[#E2E8F0] rounded text-center py-12 space-y-3">
         <p className="text-3xl">😔</p>
         <p className="text-[#64748B]">No hay horarios configurados para este día.</p>
         <button onClick={() => router.back()} className="text-sm text-[#0891B2] hover:underline">
@@ -166,7 +166,7 @@ export default function SlotPicker({
       {(step === 'slots' || step === 'error') && (
         <div className="space-y-4">
           {freeSlots.length === 0 ? (
-            <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded text-center py-12 space-y-3">
+            <div className="bg-white border border-[#E2E8F0] rounded text-center py-12 space-y-3">
               <p className="text-3xl">📅</p>
               <p className="text-[#64748B]">No quedan turnos disponibles para este día.</p>
               <button onClick={() => router.back()} className="text-sm text-[#0891B2] hover:underline">
@@ -194,7 +194,7 @@ export default function SlotPicker({
                           ? 'bg-[#F8FAFC] text-[#CBD5E1] border-transparent cursor-not-allowed line-through'
                           : selected
                           ? 'bg-[#1B3A6B] text-white border-[#1B3A6B]'
-                          : 'bg-white dark:bg-[#1a2235] text-[#1B3A6B] border-[#BFDBFE] hover:border-[#1B3A6B] hover:bg-[#EFF6FF]',
+                          : 'bg-white text-[#1B3A6B] border-[#BFDBFE] hover:border-[#1B3A6B] hover:bg-[#EFF6FF]',
                       ].join(' ')}
                     >
                       {fmtTime(slot)}
@@ -225,7 +225,7 @@ export default function SlotPicker({
           </div>
 
           {/* Datos del paciente */}
-          <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded p-5 space-y-4">
+          <div className="bg-white border border-[#E2E8F0] rounded p-5 space-y-4">
             <h3 className="font-semibold text-[#0F172A]">Tus datos</h3>
 
             <div className="space-y-1.5">

@@ -114,7 +114,7 @@ export default function NuevoTurnoForm({
                   autoComplete="off"
                 />
                 {showDropdown && patients.length > 0 && (
-                  <div className="absolute z-10 w-full mt-1 bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded shadow-lg overflow-hidden">
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-[#E2E8F0] rounded shadow-lg overflow-hidden">
                     {patients.map(p => (
                       <button
                         key={p.id} type="button"
@@ -128,7 +128,7 @@ export default function NuevoTurnoForm({
                   </div>
                 )}
                 {patientSearch.length >= 2 && patients.length === 0 && (
-                  <div className="absolute z-10 w-full mt-1 bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded shadow-lg p-4 text-center">
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-[#E2E8F0] rounded shadow-lg p-4 text-center">
                     <p className="text-sm text-[#94A3B8]">No se encontraron pacientes</p>
                     <Link href="/pacientes/nuevo" className="text-sm text-[#0891B2] hover:underline">
                       Crear nuevo paciente →
@@ -153,7 +153,7 @@ export default function NuevoTurnoForm({
                 value={doctorId}
                 onChange={e => setDoctorId(e.target.value)}
                 required
-                className="w-full text-sm border border-[#E2E8F0] rounded-lg px-3 py-2 bg-white dark:bg-[#1a2235] text-[#334155] focus:outline-none focus:ring-2 focus:ring-[#0891B2]"
+                className="w-full text-sm border border-[#E2E8F0] rounded-lg px-3 py-2 bg-white text-[#334155] focus:outline-none focus:ring-2 focus:ring-[#0891B2]"
               >
                 <option value="">Seleccioná un médico</option>
                 {doctors.map(d => (
@@ -187,7 +187,7 @@ export default function NuevoTurnoForm({
             <select
               value={duracion}
               onChange={e => setDuracion(e.target.value)}
-              className="w-full text-sm border border-[#E2E8F0] rounded-lg px-3 py-2 bg-white dark:bg-[#1a2235] text-[#334155] focus:outline-none focus:ring-2 focus:ring-[#0891B2]"
+              className="w-full text-sm border border-[#E2E8F0] rounded-lg px-3 py-2 bg-white text-[#334155] focus:outline-none focus:ring-2 focus:ring-[#0891B2]"
             >
               <option value="15">15 minutos</option>
               <option value="30">30 minutos</option>

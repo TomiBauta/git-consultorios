@@ -51,7 +51,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
         'flex items-center gap-3 shrink-0 overflow-hidden',
         collapsed ? 'justify-center px-0 py-8' : 'px-5 py-8'
       )}>
-        <div className="w-10 h-10 rounded bg-white dark:bg-[#1a2235]/10 flex items-center justify-center shrink-0">
+        <div className="w-10 h-10 rounded bg-white/10 flex items-center justify-center shrink-0">
           <Stethoscope className="w-5 h-5 text-[#0c6780]" />
         </div>
         <div className={cn('min-w-0 transition-all duration-200', collapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto')}>
@@ -79,8 +79,8 @@ export default function Sidebar({ profile }: { profile: Profile }) {
                 'text-sm',
                 collapsed ? 'justify-center w-10 h-10 mx-auto' : 'py-3 px-4',
                 active
-                  ? 'bg-white dark:bg-[#1a2235]/5 text-[#0c6780] border-r-4 border-[#0c6780]'
-                  : 'text-slate-300 hover:text-white hover:bg-white dark:bg-[#1a2235]/10'
+                  ? 'bg-white/5 text-[#0c6780] border-r-4 border-[#0c6780]'
+                  : 'text-slate-300 hover:text-white hover:bg-white/10'
               )}
             >
               <Icon className={cn('shrink-0', collapsed ? 'w-5 h-5' : 'w-4 h-4')} />
@@ -127,7 +127,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
 
       {/* User info */}
       <div className={cn(
-        'flex items-center gap-3 overflow-hidden transition-all duration-200 mx-3 mt-4 mb-3 rounded p-2.5 bg-white dark:bg-[#1a2235]/6',
+        'flex items-center gap-3 overflow-hidden transition-all duration-200 mx-3 mt-4 mb-3 rounded p-2.5 bg-white/6',
         collapsed ? 'justify-center' : ''
       )}>
         <div className="w-8 h-8 rounded-full bg-[#002366] border border-[#0c6780]/30 flex items-center justify-center text-[#0c6780] text-[11px] font-bold shrink-0">
@@ -152,7 +152,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
         title="Cerrar sesión"
         className={cn(
           'flex items-center gap-3 mx-3 mb-1 rounded py-2.5 px-3 transition-all duration-200',
-          'text-white/50 hover:text-white hover:bg-white dark:bg-[#1a2235]/10',
+          'text-white/50 hover:text-white hover:bg-white/10',
           collapsed ? 'justify-center' : ''
         )}
       >
@@ -168,7 +168,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
       {/* Collapse toggle */}
       <button
         onClick={() => setCollapsed(c => !c)}
-        className="mx-3 mb-3 flex items-center justify-center rounded py-2 text-white/30 hover:text-white/60 hover:bg-white dark:bg-[#1a2235]/6 transition-all duration-200 gap-1.5 text-[11px]"
+        className="mx-3 mb-3 flex items-center justify-center rounded py-2 text-white/30 hover:text-white/60 hover:bg-white/6 transition-all duration-200 gap-1.5 text-[11px]"
         aria-label={collapsed ? 'Expandir menú' : 'Contraer menú'}
       >
         {collapsed

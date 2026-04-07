@@ -59,7 +59,7 @@ export default async function SelectDatePage({
         <span className="text-[#0F172A] font-medium">{doctor.full_name}</span>
       </div>
 
-      <div className="bg-white dark:bg-[#1a2235] border border-[#E2E8F0] rounded p-5">
+      <div className="bg-white border border-[#E2E8F0] rounded p-5">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-full bg-[#1B3A6B] flex items-center justify-center text-white font-bold text-lg shrink-0">
             {doctor.full_name.split(' ').filter((w: string) => !['Dr.','Dra.'].includes(w)).slice(0,2).map((w: string) => w[0]).join('')}
