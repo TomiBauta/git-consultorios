@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import {
@@ -12,6 +12,8 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
+  Stethoscope,
+  PlusCircle,
 } from 'lucide-react'
 import type { Database } from '@/types/database'
 
@@ -27,6 +29,7 @@ const navItems = [
 
 export default function Sidebar({ profile }: { profile: Profile }) {
   const pathname = usePathname()
+  const router = useRouter()
   const [collapsed, setCollapsed] = useState(false)
 
   const visibleItems = navItems.filter(item => item.roles.includes(profile.role))
@@ -37,27 +40,29 @@ export default function Sidebar({ profile }: { profile: Profile }) {
       className={cn(
         'flex flex-col shrink-0 transition-all duration-300 ease-in-out',
         'bg-[#002453] dark:bg-[#080f1e]',
-        collapsed ? 'w-[68px]' : 'w-56'
+        collapsed ? 'w-[68px]' : 'w-64'
       )}
     >
-      {/* Logo — no border, tonal depth via opacity */}
+      {/* Logo */}
       <div className={cn(
-        'h-16 flex items-center gap-3 shrink-0 overflow-hidden',
-        collapsed ? 'justify-center px-0' : 'px-5'
+        'flex items-center gap-3 shrink-0 overflow-hidden',
+        collapsed ? 'justify-center px-0 py-8' : 'px-5 py-8'
       )}>
-        <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white font-bold text-xs tracking-wider shrink-0">
-          DIT
+        <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+          <Stethoscope className="w-5 h-5 text-[#a3f69c]" />
         </div>
         <div className={cn('min-w-0 transition-all duration-200', collapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto')}>
-          <p className="text-white font-semibold text-sm leading-tight whitespace-nowrap tracking-tight">
+          <p className="text-white font-bold text-[17px] leading-tight whitespace-nowrap tracking-tight">
             DIT Consultorios
           </p>
-          <p className="text-white/40 text-[11px] whitespace-nowrap mt-0.5">Sistema médico</p>
+          <p className="text-[9px] uppercase tracking-widest text-slate-400 font-semibold whitespace-nowrap mt-0.5">
+            Clinical Authority
+          </p>
         </div>
       </div>
 
-      {/* Nav — sparse, editorial */}
-      <nav className="flex-1 py-6 px-3 space-y-0.5 overflow-hidden">
+      {/* Nav */}
+      <nav className="flex-1 px-3 space-y-0.5 overflow-hidden">
         {visibleItems.map(item => {
           const active = pathname === item.href || pathname.startsWith(item.href + '/')
           const { Icon } = item
@@ -67,23 +72,15 @@ export default function Sidebar({ profile }: { profile: Profile }) {
               href={item.href}
               title={collapsed ? item.label : undefined}
               className={cn(
-                'flex items-center gap-3 rounded-xl font-medium transition-all duration-150 group relative',
-                'text-[13px]',  /* title-sm per spec */
-                collapsed ? 'justify-center w-10 h-10 mx-auto' : 'px-3 py-2.5',
+                'flex items-center gap-4 rounded-lg font-medium transition-all duration-150 group relative',
+                'text-sm',
+                collapsed ? 'justify-center w-10 h-10 mx-auto' : 'py-3 px-4',
                 active
-                  ? 'bg-white/12 text-white'
-                  : 'text-white/50 hover:bg-white/8 hover:text-white/80'
+                  ? 'bg-white/5 text-[#a3f69c] border-r-4 border-[#a3f69c]'
+                  : 'text-slate-300 hover:text-white hover:bg-white/10'
               )}
             >
-              {/* Green active indicator bar */}
-              {active && !collapsed && (
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-full bg-[#a3f69c]" />
-              )}
-              <Icon className={cn(
-                'shrink-0 transition-all duration-150',
-                collapsed ? 'w-5 h-5' : 'w-4 h-4',
-                active ? 'text-white' : ''
-              )} />
+              <Icon className={cn('shrink-0', collapsed ? 'w-5 h-5' : 'w-4 h-4')} />
               <span className={cn(
                 'whitespace-nowrap transition-all duration-200 overflow-hidden',
                 collapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
@@ -102,9 +99,23 @@ export default function Sidebar({ profile }: { profile: Profile }) {
         })}
       </nav>
 
+      {/* Nueva Cita CTA */}
+      {!collapsed && (
+        <div className="px-3 mt-6">
+          <button
+            onClick={() => router.push('/agenda/nuevo')}
+            className="w-full text-[#a3f69c] font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-95"
+            style={{ background: 'linear-gradient(135deg, #002453 0%, #1e3a6a 100%)', border: '1px solid rgba(163,246,156,0.2)' }}
+          >
+            <PlusCircle className="w-4 h-4" />
+            <span className="text-sm">Nueva Cita</span>
+          </button>
+        </div>
+      )}
+
       {/* Specialty badge */}
       {!collapsed && profile.role === 'doctor' && profile.specialty && (
-        <div className="px-4 pb-3">
+        <div className="px-4 mt-3">
           <div className="px-3 py-1.5 rounded-xl bg-[#a3f69c]/10 text-[#a3f69c] text-[11px] font-medium capitalize tracking-wide">
             {profile.specialty.replace('_', ' ')}
           </div>
@@ -113,18 +124,17 @@ export default function Sidebar({ profile }: { profile: Profile }) {
 
       {/* User info */}
       <div className={cn(
-        'flex items-center gap-3 overflow-hidden transition-all duration-200 mx-3 mb-3 rounded-xl p-2.5',
-        'bg-white/6',
+        'flex items-center gap-3 overflow-hidden transition-all duration-200 mx-3 mt-4 mb-3 rounded-xl p-2.5 bg-white/6',
         collapsed ? 'justify-center' : ''
       )}>
-        <div className="w-7 h-7 rounded-full bg-[#1e3a6a] border border-[#a3f69c]/30 flex items-center justify-center text-[#a3f69c] text-[10px] font-bold shrink-0">
+        <div className="w-8 h-8 rounded-full bg-[#1e3a6a] border border-[#a3f69c]/30 flex items-center justify-center text-[#a3f69c] text-[11px] font-bold shrink-0">
           {initials}
         </div>
         <div className={cn(
           'min-w-0 flex-1 transition-all duration-200',
           collapsed ? 'opacity-0 w-0' : 'opacity-100'
         )}>
-          <p className="text-white text-[12px] font-medium truncate leading-tight">{profile.full_name}</p>
+          <p className="text-white text-[12px] font-bold truncate leading-tight">{profile.full_name}</p>
           <p className="text-white/40 text-[11px] capitalize mt-0.5">{profile.role}</p>
         </div>
       </div>
@@ -132,10 +142,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
       {/* Collapse toggle */}
       <button
         onClick={() => setCollapsed(c => !c)}
-        className={cn(
-          'mx-3 mb-3 flex items-center justify-center rounded-xl py-2 text-white/30 hover:text-white/60 hover:bg-white/6 transition-all duration-200 gap-1.5',
-          'text-[11px]'
-        )}
+        className="mx-3 mb-3 flex items-center justify-center rounded-xl py-2 text-white/30 hover:text-white/60 hover:bg-white/6 transition-all duration-200 gap-1.5 text-[11px]"
         aria-label={collapsed ? 'Expandir menú' : 'Contraer menú'}
       >
         {collapsed

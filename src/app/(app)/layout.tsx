@@ -22,7 +22,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <Sidebar profile={profile} />
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <TopBar profile={profile} />
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-8">
           {children}
         </main>
       </div>
