@@ -14,7 +14,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Stethoscope,
-  PlusCircle,
   LogOut,
 } from 'lucide-react'
 import type { Database } from '@/types/database'
@@ -102,20 +101,6 @@ export default function Sidebar({ profile }: { profile: Profile }) {
         })}
       </nav>
 
-      {/* Nuevo Turno CTA */}
-      {!collapsed && (
-        <div className="px-3 mt-6">
-          <button
-            onClick={() => router.push('/agenda/nuevo')}
-            className="w-full text-white font-bold py-3.5 rounded flex items-center justify-center gap-2 transition-all active:scale-95 hover:brightness-110"
-            style={{ background: 'linear-gradient(135deg, #00113a 0%, #002366 100%)', boxShadow: '0px 4px 16px rgba(0,17,58,0.18)' }}
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span className="text-sm">Nuevo Turno</span>
-          </button>
-        </div>
-      )}
-
       {/* Specialty badge */}
       {!collapsed && profile.role === 'doctor' && profile.specialty && (
         <div className="px-4 mt-3">
@@ -124,23 +109,6 @@ export default function Sidebar({ profile }: { profile: Profile }) {
           </div>
         </div>
       )}
-
-      {/* User info */}
-      <div className={cn(
-        'flex items-center gap-3 overflow-hidden transition-all duration-200 mx-3 mt-4 mb-3 rounded p-2.5 bg-white/6',
-        collapsed ? 'justify-center' : ''
-      )}>
-        <div className="w-8 h-8 rounded-full bg-[#002366] border border-[#0c6780]/30 flex items-center justify-center text-[#0c6780] text-[11px] font-bold shrink-0">
-          {initials}
-        </div>
-        <div className={cn(
-          'min-w-0 flex-1 transition-all duration-200',
-          collapsed ? 'opacity-0 w-0' : 'opacity-100'
-        )}>
-          <p className="text-white text-[12px] font-bold truncate leading-tight">{profile.full_name}</p>
-          <p className="text-white/40 text-[11px] capitalize mt-0.5">{profile.role}</p>
-        </div>
-      </div>
 
       {/* Logout */}
       <button

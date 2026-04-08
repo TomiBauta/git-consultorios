@@ -124,18 +124,16 @@ export default function TopBar({ profile }: { profile: Profile }) {
               {roleLabel[profile.role] ?? profile.role}
             </p>
           </div>
-          <button
-            onClick={handleSignOut}
-            className="w-10 h-10 rounded-full flex items-center justify-center text-[11px] font-bold border-2 transition-colors hover:border-[#0c6780]"
+          <div
+            className="w-10 h-10 rounded-full flex items-center justify-center text-[11px] font-bold border-2"
             style={{
               background: '#002366',
               color: '#ffffff',
               borderColor: 'rgba(0,35,102,0.4)',
             }}
-            title="Cerrar sesión"
           >
             {profile.full_name.split(' ').map(n => n[0]).slice(0, 2).join('')}
-          </button>
+          </div>
         </div>
       </div>
     </header>
