@@ -1,11 +1,8 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 
 type Availability = { start_time: string; end_time: string; slot_duration: number }
 
@@ -26,18 +23,23 @@ function generateSlots(date: string, availability: Availability[]): string[] {
 }
 
 function fmtTime(iso: string) {
-  return new Date(iso).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
+  return new Date(iso + (iso.endsWith('Z') ? '' : '')).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Argentina/Buenos_Aires' })
 }
 
 function normalizeSlot(iso: string) {
-  // Normalizar a segundos=0 para comparación
   return iso.replace(/:\d\d(\.\d+)?(Z|[+-]\d{2}:\d{2})?$/, ':00')
 }
 
+function fmtDate(date: string) {
+  return new Date(date + 'T12:00:00').toLocaleDateString('es-AR', {
+    weekday: 'long', day: 'numeric', month: 'long',
+  })
+}
+
 export default function SlotPicker({
-  doctorId, date, specialty, doctorName, availability, initialTakenSlots,
+  doctorId, date, specialty, doctorName, doctorSpecialtyLabel, availability, initialTakenSlots,
 }: {
-  doctorId: string; date: string; specialty: string; doctorName: string
+  doctorId: string; date: string; specialty: string; doctorName: string; doctorSpecialtyLabel: string
   availability: Availability[]; initialTakenSlots: string[]
 }) {
   const router = useRouter()
@@ -51,13 +53,15 @@ export default function SlotPicker({
   const [step, setStep] = useState<'slots' | 'form' | 'loading' | 'error'>('slots')
   const [errorMsg, setErrorMsg] = useState('')
 
-  // Formulario
   const [fullName, setFullName] = useState('')
   const [dni, setDni]           = useState('')
+  const [email, setEmail]       = useState('')
   const [phone, setPhone]       = useState('')
+  const [obraSocial, setObraSocial] = useState('')
   const [reason, setReason]     = useState('')
+  const [agreed, setAgreed]     = useState(false)
 
-  // Realtime: suscripción a nuevos turnos para este médico y fecha
+  // Realtime subscription
   useEffect(() => {
     const channel = supabase
       .channel(`slots-${doctorId}-${date}`)
@@ -67,12 +71,11 @@ export default function SlotPicker({
         table: 'appointments',
         filter: `doctor_id=eq.${doctorId}`,
       }, payload => {
-        const appt = payload.new as any
-        const slotDate = appt.scheduled_at?.split('T')[0]
+        const appt = payload.new as Record<string, unknown>
+        const slotDate = (appt.scheduled_at as string)?.split('T')[0]
         if (slotDate === date && appt.status !== 'cancelado') {
-          setTakenSlots(prev => new Set([...prev, normalizeSlot(appt.scheduled_at)]))
-          // Si alguien tomó el slot que el usuario tenía seleccionado
-          if (selectedSlot && normalizeSlot(appt.scheduled_at) === normalizeSlot(selectedSlot)) {
+          setTakenSlots(prev => new Set([...prev, normalizeSlot(appt.scheduled_at as string)]))
+          if (selectedSlot && normalizeSlot(appt.scheduled_at as string) === normalizeSlot(selectedSlot)) {
             setSelectedSlot(null)
             setStep('slots')
             setErrorMsg('Ese turno acaba de ser tomado. Elegí otro horario.')
@@ -85,12 +88,12 @@ export default function SlotPicker({
         table: 'appointments',
         filter: `doctor_id=eq.${doctorId}`,
       }, payload => {
-        const appt = payload.new as any
-        const slotDate = appt.scheduled_at?.split('T')[0]
+        const appt = payload.new as Record<string, unknown>
+        const slotDate = (appt.scheduled_at as string)?.split('T')[0]
         if (slotDate !== date) return
         setTakenSlots(prev => {
           const next = new Set(prev)
-          const key = normalizeSlot(appt.scheduled_at)
+          const key = normalizeSlot(appt.scheduled_at as string)
           if (appt.status === 'cancelado') next.delete(key)
           else next.add(key)
           return next
@@ -104,7 +107,7 @@ export default function SlotPicker({
   const freeSlots = allSlots.filter(s => !takenSlots.has(normalizeSlot(s)))
 
   async function handleConfirm() {
-    if (!selectedSlot || !fullName.trim() || !phone.trim()) return
+    if (!selectedSlot || !fullName.trim() || !phone.trim() || !agreed) return
     setStep('loading')
     setErrorMsg('')
 
@@ -117,7 +120,9 @@ export default function SlotPicker({
           scheduled_at: selectedSlot,
           full_name: fullName.trim(),
           dni: dni.trim(),
+          email: email.trim(),
           phone: phone.trim(),
+          obra_social: obraSocial.trim(),
           reason: reason.trim(),
         }),
       })
@@ -140,159 +145,431 @@ export default function SlotPicker({
     }
   }
 
+  function getInitials(name: string) {
+    return name.split(' ').filter(w => !['Dr.','Dra.'].includes(w)).slice(0,2).map(w => w[0]).join('')
+  }
+
   if (allSlots.length === 0) {
     return (
-      <div className="bg-white border border-[#E2E8F0] rounded text-center py-12 space-y-3">
-        <p className="text-3xl">😔</p>
-        <p className="text-[#64748B]">No hay horarios configurados para este día.</p>
-        <button onClick={() => router.back()} className="text-sm text-[#0891B2] hover:underline">
+      <div
+        className="rounded p-16 text-center space-y-4"
+        style={{
+          background: 'var(--surface-container-lowest, #ffffff)',
+          boxShadow: '0px 8px 32px rgba(0, 17, 58, 0.04)',
+          border: '1px solid var(--outline-variant, rgba(61,74,92,0.15))',
+        }}
+      >
+        <p className="text-5xl">📅</p>
+        <p className="font-bold" style={{ color: 'var(--primary-val, #00113a)' }}>Sin horarios configurados</p>
+        <p className="text-sm" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
+          No hay horarios disponibles para este día.
+        </p>
+        <button
+          onClick={() => router.back()}
+          className="text-sm font-semibold hover:opacity-70 transition-opacity"
+          style={{ color: 'var(--secondary-val, #0c6780)' }}
+        >
           ← Elegir otra fecha
         </button>
       </div>
     )
   }
 
+  // STEP: Loading
+  if (step === 'loading') {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 space-y-4">
+        <div
+          className="w-12 h-12 rounded-full border-4 border-t-transparent animate-spin"
+          style={{ borderColor: 'var(--primary-val, #00113a)', borderTopColor: 'transparent' }}
+        />
+        <p style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>Reservando tu turno...</p>
+      </div>
+    )
+  }
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Error banner */}
       {errorMsg && (
-        <div className="flex items-start gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded text-sm text-red-700">
-          <span className="shrink-0">⚠️</span>
+        <div className="flex items-start gap-2 px-4 py-3 rounded text-sm" style={{ background: '#fff1f0', border: '1px solid #ffd6d6', color: '#9b1c1c' }}>
+          <span className="shrink-0 text-base">⚠️</span>
           <p>{errorMsg}</p>
         </div>
       )}
 
-      {/* STEP 1: Grilla de slots */}
+      {/* STEP 1: Slots */}
       {(step === 'slots' || step === 'error') && (
-        <div className="space-y-4">
-          {freeSlots.length === 0 ? (
-            <div className="bg-white border border-[#E2E8F0] rounded text-center py-12 space-y-3">
-              <p className="text-3xl">📅</p>
-              <p className="text-[#64748B]">No quedan turnos disponibles para este día.</p>
-              <button onClick={() => router.back()} className="text-sm text-[#0891B2] hover:underline">
-                ← Elegir otra fecha
-              </button>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          {/* Slot grid */}
+          <div
+            className="lg:col-span-3 rounded p-6 space-y-5"
+            style={{
+              background: 'var(--surface-container-lowest, #ffffff)',
+              boxShadow: '0px 8px 32px rgba(0, 17, 58, 0.04)',
+              border: '1px solid var(--outline-variant, rgba(61,74,92,0.15))',
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold" style={{ color: 'var(--primary-val, #00113a)' }}>
+                Horarios disponibles
+              </h3>
+              <span className="text-xs font-medium" style={{ color: 'var(--secondary-val, #0c6780)' }}>
+                {freeSlots.length} libre{freeSlots.length !== 1 ? 's' : ''} · Tiempo real
+              </span>
             </div>
-          ) : (
-            <>
-              <p className="text-sm text-[#64748B] text-center">
-                {freeSlots.length} turno{freeSlots.length !== 1 ? 's' : ''} disponible{freeSlots.length !== 1 ? 's' : ''}
-                <span className="text-xs text-[#0891B2] ml-2">· Se actualiza en tiempo real</span>
-              </p>
-              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+
+            {freeSlots.length === 0 ? (
+              <div className="text-center py-8 space-y-2">
+                <p className="text-3xl">📅</p>
+                <p className="text-sm" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
+                  No quedan turnos para este día.
+                </p>
+                <button
+                  onClick={() => router.back()}
+                  className="text-sm font-semibold hover:opacity-70"
+                  style={{ color: 'var(--secondary-val, #0c6780)' }}
+                >
+                  ← Elegir otra fecha
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                 {allSlots.map(slot => {
                   const taken = takenSlots.has(normalizeSlot(slot))
-                  const selected = selectedSlot === slot
                   return (
                     <button
                       key={slot}
                       disabled={taken}
                       onClick={() => { setSelectedSlot(slot); setStep('form'); setErrorMsg('') }}
-                      className={[
-                        'py-3 rounded text-sm font-medium transition-all border-2',
+                      className="py-3 rounded text-sm font-semibold transition-all"
+                      style={
                         taken
-                          ? 'bg-[#F8FAFC] text-[#CBD5E1] border-transparent cursor-not-allowed line-through'
-                          : selected
-                          ? 'bg-[#1B3A6B] text-white border-[#1B3A6B]'
-                          : 'bg-white text-[#1B3A6B] border-[#BFDBFE] hover:border-[#1B3A6B] hover:bg-[#EFF6FF]',
-                      ].join(' ')}
+                          ? {
+                              background: 'var(--surface-container-low, #f2f4f6)',
+                              color: 'var(--on-surface-variant, #3d4a5c)',
+                              opacity: 0.4,
+                              cursor: 'not-allowed',
+                              textDecoration: 'line-through',
+                            }
+                          : {
+                              background: 'var(--secondary-container-val, #cce8f0)',
+                              color: 'var(--secondary-val, #0c6780)',
+                              border: '1px solid rgba(12,103,128,0.2)',
+                              cursor: 'pointer',
+                            }
+                      }
                     >
                       {fmtTime(slot)}
                     </button>
                   )
                 })}
               </div>
-            </>
-          )}
-        </div>
-      )}
-
-      {/* STEP 2: Formulario de paciente */}
-      {step === 'form' && selectedSlot && (
-        <div className="space-y-4">
-          {/* Slot seleccionado */}
-          <div className="flex items-center justify-between px-4 py-3 bg-[#EFF6FF] border-2 border-[#BFDBFE] rounded">
-            <div>
-              <p className="text-sm font-semibold text-[#1B3A6B]">Turno seleccionado</p>
-              <p className="text-sm text-[#64748B]">{fmtTime(selectedSlot)} · {doctorName}</p>
-            </div>
-            <button
-              onClick={() => { setSelectedSlot(null); setStep('slots') }}
-              className="text-xs text-[#64748B] hover:text-[#1B3A6B] underline"
-            >
-              Cambiar
-            </button>
+            )}
           </div>
 
-          {/* Datos del paciente */}
-          <div className="bg-white border border-[#E2E8F0] rounded p-5 space-y-4">
-            <h3 className="font-semibold text-[#0F172A]">Tus datos</h3>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="full_name">Nombre completo <span className="text-red-500">*</span></Label>
-              <Input
-                id="full_name"
-                value={fullName}
-                onChange={e => setFullName(e.target.value)}
-                placeholder="Ej: María González"
-                autoComplete="name"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="dni">DNI</Label>
-                <Input
-                  id="dni"
-                  value={dni}
-                  onChange={e => setDni(e.target.value)}
-                  placeholder="12345678"
-                  inputMode="numeric"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="phone">Teléfono / WhatsApp <span className="text-red-500">*</span></Label>
-                <Input
-                  id="phone"
-                  value={phone}
-                  onChange={e => setPhone(e.target.value)}
-                  placeholder="+54 9 11 ..."
-                  inputMode="tel"
-                  autoComplete="tel"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="reason">Motivo de consulta <span className="text-[#94A3B8] font-normal">(opcional)</span></Label>
-              <Input
-                id="reason"
-                value={reason}
-                onChange={e => setReason(e.target.value)}
-                placeholder="Ej: Control anual, dolor de estómago..."
-              />
-            </div>
-          </div>
-
-          <Button
-            onClick={handleConfirm}
-            disabled={!fullName.trim() || !phone.trim()}
-            className="w-full bg-[#1B3A6B] hover:bg-[#2D5AA0] text-white h-12 text-base rounded"
+          {/* Summary card */}
+          <div
+            className="lg:col-span-2 rounded p-6 flex flex-col gap-4"
+            style={{ background: 'linear-gradient(135deg, #00113a 0%, #002366 100%)' }}
           >
-            Confirmar turno
-          </Button>
+            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.5)' }}>
+              Resumen de reserva
+            </p>
 
-          <p className="text-xs text-center text-[#94A3B8]">
-            Al confirmar aceptás que tus datos se usen para gestionar tu turno médico.
-          </p>
+            <div className="flex items-center gap-3">
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
+                style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}
+              >
+                {getInitials(doctorName)}
+              </div>
+              <div>
+                <p className="font-bold text-white">{doctorName}</p>
+                <p className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>{doctorSpecialtyLabel}</p>
+              </div>
+            </div>
+
+            <div className="space-y-2 pt-2 border-t" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{ background: 'rgba(255,255,255,0.1)' }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} className="w-4 h-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>Fecha</p>
+                  <p className="text-sm font-semibold capitalize" style={{ color: 'rgba(255,255,255,0.9)' }}>{fmtDate(date)}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{ background: 'rgba(255,255,255,0.1)' }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} className="w-4 h-4">
+                    <circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M12 6v6l4 2" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>Horario</p>
+                  <p className="text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.9)' }}>
+                    {selectedSlot ? fmtTime(selectedSlot) : 'Seleccioná un horario'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-xs mt-auto" style={{ color: 'rgba(255,255,255,0.4)' }}>
+              Seleccioná un horario disponible para continuar con la reserva.
+            </p>
+          </div>
         </div>
       )}
 
-      {/* STEP 3: Loading */}
-      {step === 'loading' && (
-        <div className="flex flex-col items-center justify-center py-16 space-y-4">
-          <div className="w-12 h-12 rounded-full border-4 border-[#1B3A6B] border-t-transparent animate-spin" />
-          <p className="text-[#64748B]">Reservando tu turno...</p>
+      {/* STEP 2: Form */}
+      {step === 'form' && selectedSlot && (
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          {/* Patient form */}
+          <div
+            className="lg:col-span-3 rounded p-6 space-y-5"
+            style={{
+              background: 'var(--surface-container-lowest, #ffffff)',
+              boxShadow: '0px 8px 32px rgba(0, 17, 58, 0.04)',
+              border: '1px solid var(--outline-variant, rgba(61,74,92,0.15))',
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold" style={{ color: 'var(--primary-val, #00113a)' }}>
+                Tus datos
+              </h3>
+              <button
+                onClick={() => { setSelectedSlot(null); setStep('slots') }}
+                className="text-xs font-semibold hover:opacity-70 transition-opacity"
+                style={{ color: 'var(--secondary-val, #0c6780)' }}
+              >
+                ← Cambiar horario
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Full name */}
+              <div className="sm:col-span-2 space-y-1.5">
+                <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
+                  Nombre completo <span style={{ color: '#dc2626' }}>*</span>
+                </label>
+                <div className="login-tray rounded px-4 py-3">
+                  <input
+                    value={fullName}
+                    onChange={e => setFullName(e.target.value)}
+                    placeholder="Ej: María González"
+                    autoComplete="name"
+                    className="w-full bg-transparent text-sm outline-none"
+                    style={{ color: 'var(--on-surface, #00113a)' }}
+                  />
+                </div>
+              </div>
+
+              {/* DNI */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
+                  DNI
+                </label>
+                <div className="login-tray rounded px-4 py-3">
+                  <input
+                    value={dni}
+                    onChange={e => setDni(e.target.value)}
+                    placeholder="12345678"
+                    inputMode="numeric"
+                    className="w-full bg-transparent text-sm outline-none"
+                    style={{ color: 'var(--on-surface, #00113a)' }}
+                  />
+                </div>
+              </div>
+
+              {/* Phone */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
+                  Teléfono / WhatsApp <span style={{ color: '#dc2626' }}>*</span>
+                </label>
+                <div className="login-tray rounded px-4 py-3">
+                  <input
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
+                    placeholder="+54 9 11 ..."
+                    inputMode="tel"
+                    autoComplete="tel"
+                    className="w-full bg-transparent text-sm outline-none"
+                    style={{ color: 'var(--on-surface, #00113a)' }}
+                  />
+                </div>
+              </div>
+
+              {/* Email */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
+                  Email
+                </label>
+                <div className="login-tray rounded px-4 py-3">
+                  <input
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="tu@email.com"
+                    type="email"
+                    autoComplete="email"
+                    className="w-full bg-transparent text-sm outline-none"
+                    style={{ color: 'var(--on-surface, #00113a)' }}
+                  />
+                </div>
+              </div>
+
+              {/* Obra social */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
+                  Obra social
+                </label>
+                <div className="login-tray rounded px-4 py-3">
+                  <select
+                    value={obraSocial}
+                    onChange={e => setObraSocial(e.target.value)}
+                    className="w-full bg-transparent text-sm outline-none"
+                    style={{ color: obraSocial ? 'var(--on-surface, #00113a)' : 'var(--on-surface-variant, #3d4a5c)' }}
+                  >
+                    <option value="">Seleccioná</option>
+                    <option value="OSDE">OSDE</option>
+                    <option value="Swiss Medical">Swiss Medical</option>
+                    <option value="Galeno">Galeno</option>
+                    <option value="IOMA">IOMA</option>
+                    <option value="Medicus">Medicus</option>
+                    <option value="Particular">Particular</option>
+                    <option value="Otra">Otra</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Reason */}
+              <div className="sm:col-span-2 space-y-1.5">
+                <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
+                  Motivo de consulta <span className="font-normal normal-case" style={{ color: 'var(--on-surface-variant)' }}>(opcional)</span>
+                </label>
+                <div className="login-tray rounded px-4 py-3">
+                  <input
+                    value={reason}
+                    onChange={e => setReason(e.target.value)}
+                    placeholder="Ej: Control anual, dolor de estómago..."
+                    className="w-full bg-transparent text-sm outline-none"
+                    style={{ color: 'var(--on-surface, #00113a)' }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Terms */}
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={agreed}
+                onChange={e => setAgreed(e.target.checked)}
+                className="mt-0.5 w-4 h-4 rounded accent-current shrink-0"
+                style={{ accentColor: 'var(--primary-val, #00113a)' }}
+              />
+              <span className="text-xs" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
+                Acepto que mis datos se usen para la gestión de mi turno médico según la política de privacidad de DIT Consultorios.
+              </span>
+            </label>
+          </div>
+
+          {/* Appointment summary sidebar */}
+          <div className="lg:col-span-2 space-y-4">
+            <div
+              className="rounded p-6 flex flex-col gap-5"
+              style={{ background: 'linear-gradient(135deg, #00113a 0%, #002366 100%)' }}
+            >
+              <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                Tu turno
+              </p>
+
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
+                  style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}
+                >
+                  {getInitials(doctorName)}
+                </div>
+                <div>
+                  <p className="font-bold text-white">{doctorName}</p>
+                  <p className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>{doctorSpecialtyLabel}</p>
+                </div>
+              </div>
+
+              <div className="space-y-3 pt-2 border-t" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
+                {[
+                  {
+                    icon: (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    ),
+                    label: 'Fecha',
+                    value: fmtDate(date),
+                    capitalize: true,
+                  },
+                  {
+                    icon: (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} className="w-4 h-4">
+                        <circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M12 6v6l4 2" />
+                      </svg>
+                    ),
+                    label: 'Horario',
+                    value: `${fmtTime(selectedSlot)} hs`,
+                    capitalize: false,
+                  },
+                  {
+                    icon: (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2} className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><circle cx="12" cy="11" r="3" />
+                      </svg>
+                    ),
+                    label: 'Lugar',
+                    value: 'DIT Consultorios · Buenos Aires',
+                    capitalize: false,
+                  },
+                ].map(item => (
+                  <div key={item.label} className="flex items-center gap-3">
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{ background: 'rgba(255,255,255,0.1)' }}
+                    >
+                      {item.icon}
+                    </div>
+                    <div>
+                      <p className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>{item.label}</p>
+                      <p className={`text-sm font-semibold ${item.capitalize ? 'capitalize' : ''}`} style={{ color: 'rgba(255,255,255,0.9)' }}>
+                        {item.value}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Confirm CTA */}
+              <button
+                onClick={handleConfirm}
+                disabled={!fullName.trim() || !phone.trim() || !agreed}
+                className="w-full py-3 rounded text-sm font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:brightness-110"
+                style={{ background: 'var(--secondary-val, #0c6780)', color: '#ffffff' }}
+              >
+                Confirmar Turno
+              </button>
+
+              <p className="text-xs text-center" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                Al confirmar aceptás los términos indicados en el formulario.
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </div>

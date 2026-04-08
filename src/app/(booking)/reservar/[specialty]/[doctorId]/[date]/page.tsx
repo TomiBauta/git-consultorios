@@ -17,7 +17,6 @@ export default async function SelectSlotPage({
 }) {
   const { specialty, doctorId, date } = await params
 
-  // Validar formato fecha
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) notFound()
 
   const supabase = await createClient()
@@ -40,7 +39,6 @@ export default async function SelectSlotPage({
     .eq('day_of_week', dayOfWeek)
     .eq('is_active', true)
 
-  // Turnos ya ocupados ese día
   const { data: takenAppointments } = await supabase
     .from('appointments')
     .select('scheduled_at')
@@ -56,25 +54,30 @@ export default async function SelectSlotPage({
   })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-[#64748B] flex-wrap">
-        <Link href="/reservar" className="hover:text-[#1B3A6B]">Especialidades</Link>
+      <div className="flex items-center gap-2 text-sm flex-wrap" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
+        <Link href="/reservar" className="hover:opacity-70 transition-opacity">Especialidades</Link>
         <span>›</span>
-        <Link href={`/reservar/${specialty}`} className="hover:text-[#1B3A6B]">{SPECIALTY_LABELS[specialty]}</Link>
+        <Link href={`/reservar/${specialty}`} className="hover:opacity-70 transition-opacity">
+          {SPECIALTY_LABELS[specialty]}
+        </Link>
         <span>›</span>
-        <Link href={`/reservar/${specialty}/${doctorId}`} className="hover:text-[#1B3A6B]">
+        <Link href={`/reservar/${specialty}/${doctorId}`} className="hover:opacity-70 transition-opacity">
           {doctor.full_name}
         </Link>
         <span>›</span>
-        <span className="text-[#0F172A] font-medium capitalize">{dateFormatted}</span>
+        <span className="font-semibold capitalize" style={{ color: 'var(--primary-val, #00113a)' }}>{dateFormatted}</span>
       </div>
 
-      <div className="text-center space-y-1">
-        <h2 className="text-xl font-bold text-[#0F172A] capitalize" style={{ fontFamily: 'Poppins, sans-serif' }}>
+      {/* Header */}
+      <div>
+        <h2 className="text-2xl font-bold tracking-tight capitalize" style={{ color: 'var(--primary-val, #00113a)' }}>
           {dateFormatted}
         </h2>
-        <p className="text-sm text-[#64748B]">{doctor.full_name} · {SPECIALTY_LABELS[specialty]}</p>
+        <p className="text-sm mt-1" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
+          {doctor.full_name} · {SPECIALTY_LABELS[specialty]}
+        </p>
       </div>
 
       <SlotPicker
@@ -82,6 +85,7 @@ export default async function SelectSlotPage({
         date={date}
         specialty={specialty}
         doctorName={doctor.full_name}
+        doctorSpecialtyLabel={SPECIALTY_LABELS[specialty] ?? specialty}
         availability={availability ?? []}
         initialTakenSlots={takenSlots}
       />
