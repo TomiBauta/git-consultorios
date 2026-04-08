@@ -290,7 +290,7 @@ export default function NuevoTurnoForm({
                     }}
                   >
                     <span className="text-sm" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
-                      Sin resultados para "{patientSearch}"
+                      Sin resultados para &quot;{patientSearch}&quot;
                     </span>
                     <button
                       type="button"
