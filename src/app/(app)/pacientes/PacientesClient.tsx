@@ -53,19 +53,31 @@ export default function PacientesClient({
   const supabase = createClient()
   const router = useRouter()
 
-  const [search, setSearch]         = useState('')
-  const [page, setPage]             = useState(1)
-  const [selected, setSelected]     = useState<PatientRow | null>(patients[0] ?? null)
-  const [appts, setAppts]           = useState<any[]>([])
-  const [loadingAppts, setLoading]  = useState(false)
+  const [search, setSearch]           = useState('')
+  const [obraFilter, setObraFilter]   = useState('')
+  const [showFilters, setShowFilters] = useState(false)
+  const [page, setPage]               = useState(1)
+  const [selected, setSelected]       = useState<PatientRow | null>(patients[0] ?? null)
+  const [appts, setAppts]             = useState<any[]>([])
+  const [loadingAppts, setLoading]    = useState(false)
+
+  // Unique obras sociales from loaded patients
+  const obrasOptions = Array.from(
+    new Set(patients.map(p => p.obra_social).filter(Boolean) as string[])
+  ).sort()
+
+  // Active filter count
+  const activeFilters = (obraFilter ? 1 : 0)
 
   // Client-side filter
-  const filtered = search.length >= 2
-    ? patients.filter(p =>
-        `${p.first_name} ${p.last_name}`.toLowerCase().includes(search.toLowerCase()) ||
-        (p.dni ?? '').includes(search)
-      )
-    : patients
+  const filtered = patients.filter(p => {
+    const matchSearch = search.length < 2 ||
+      `${p.first_name} ${p.last_name}`.toLowerCase().includes(search.toLowerCase()) ||
+      (p.dni ?? '').includes(search) ||
+      (p.obra_social ?? '').toLowerCase().includes(search.toLowerCase())
+    const matchObra = !obraFilter || p.obra_social === obraFilter
+    return matchSearch && matchObra
+  })
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const paginated  = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
@@ -93,8 +105,8 @@ export default function PacientesClient({
     if (patients[0]) loadAppts(patients[0].id)
   }, [])
 
-  // Reset page on search
-  useEffect(() => { setPage(1) }, [search])
+  // Reset page on filter change
+  useEffect(() => { setPage(1) }, [search, obraFilter])
 
   return (
     <div className="flex h-full -m-8 overflow-hidden">
@@ -121,11 +133,23 @@ export default function PacientesClient({
           </div>
           <div className="flex gap-2">
             <button
-              className="px-4 py-2.5 font-bold rounded flex items-center gap-2 text-sm transition-all hover:opacity-80"
-              style={{ background: '#e3e2e7', color: '#00113a' }}
+              onClick={() => setShowFilters(f => !f)}
+              className="px-4 py-2.5 font-bold rounded flex items-center gap-2 text-sm transition-all hover:opacity-80 relative"
+              style={{
+                background: showFilters || activeFilters > 0 ? '#00113a' : '#e3e2e7',
+                color: showFilters || activeFilters > 0 ? '#ffffff' : '#00113a',
+              }}
             >
               <Filter className="w-4 h-4" />
               Filtros
+              {activeFilters > 0 && (
+                <span
+                  className="w-5 h-5 rounded-full text-[10px] font-black flex items-center justify-center"
+                  style={{ background: '#0c6780', color: '#fff' }}
+                >
+                  {activeFilters}
+                </span>
+              )}
             </button>
             <Link href="/pacientes/nuevo">
               <button
@@ -150,6 +174,68 @@ export default function PacientesClient({
             style={{ background: '#f2f4f6', color: '#1a1b1f' }}
           />
         </div>
+
+        {/* Filter panel */}
+        {showFilters && (
+          <div
+            className="mb-4 rounded p-4 flex flex-wrap items-end gap-4 shrink-0"
+            style={{
+              background: 'var(--surface-container-lowest, #ffffff)',
+              border: '1px solid var(--outline-variant, rgba(61,74,92,0.15))',
+            }}
+          >
+            {/* Nombre / Apellido — same as search but labeled */}
+            <div className="flex-1 min-w-48 space-y-1.5">
+              <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#3d4a5c' }}>
+                Nombre o Apellido
+              </label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: '#3d4a5c' }} />
+                <input
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder="Buscar..."
+                  className="w-full rounded pl-9 pr-4 py-2 text-sm outline-none"
+                  style={{ background: '#f2f4f6', color: '#1a1b1f' }}
+                />
+              </div>
+            </div>
+
+            {/* Obra social */}
+            <div className="flex-1 min-w-48 space-y-1.5">
+              <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#3d4a5c' }}>
+                Obra Social
+              </label>
+              <select
+                value={obraFilter}
+                onChange={e => setObraFilter(e.target.value)}
+                className="w-full rounded px-3 py-2 text-sm outline-none appearance-none"
+                style={{ background: '#f2f4f6', color: obraFilter ? '#1a1b1f' : '#3d4a5c' }}
+              >
+                <option value="">Todas</option>
+                {obrasOptions.map(o => (
+                  <option key={o} value={o}>{o}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Clear */}
+            {(search || obraFilter) && (
+              <button
+                onClick={() => { setSearch(''); setObraFilter('') }}
+                className="px-4 py-2 rounded text-sm font-bold transition-all hover:opacity-80 shrink-0"
+                style={{ background: '#f2f4f6', color: '#3d4a5c' }}
+              >
+                Limpiar
+              </button>
+            )}
+
+            {/* Result count */}
+            <p className="text-xs ml-auto self-end pb-0.5 shrink-0" style={{ color: '#3d4a5c' }}>
+              {filtered.length} resultado{filtered.length !== 1 ? 's' : ''}
+            </p>
+          </div>
+        )}
 
         {/* Table */}
         <div className="rounded overflow-hidden flex flex-col flex-1 min-h-0" style={{ background: '#f2f4f6' }}>
