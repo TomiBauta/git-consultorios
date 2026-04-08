@@ -41,11 +41,23 @@ export default async function SelectDoctorPage({ params }: { params: Promise<{ s
 
   return (
     <div className="space-y-8">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm flex-wrap" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
-        <Link href="/reservar" className="hover:opacity-70 transition-opacity">Especialidades</Link>
-        <span style={{ color: 'var(--outline-variant)' }}>›</span>
-        <span className="font-semibold" style={{ color: 'var(--primary-val, #00113a)' }}>{SPECIALTY_LABELS[specialty]}</span>
+      {/* Back + Breadcrumb */}
+      <div className="flex items-center gap-4 flex-wrap">
+        <Link
+          href="/reservar"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded text-sm font-bold transition-all hover:opacity-80 shrink-0"
+          style={{ background: 'var(--surface-container-low, #f2f4f6)', color: 'var(--primary-val, #00113a)' }}
+        >
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-3.5 h-3.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 3L5 8l5 5" />
+          </svg>
+          Volver
+        </Link>
+        <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
+          <Link href="/reservar" className="hover:opacity-70 transition-opacity">Especialidades</Link>
+          <span>›</span>
+          <span className="font-semibold" style={{ color: 'var(--primary-val, #00113a)' }}>{SPECIALTY_LABELS[specialty]}</span>
+        </div>
       </div>
 
       {/* Header */}

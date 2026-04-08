@@ -55,19 +55,31 @@ export default async function SelectSlotPage({
 
   return (
     <div className="space-y-8">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm flex-wrap" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
-        <Link href="/reservar" className="hover:opacity-70 transition-opacity">Especialidades</Link>
-        <span>›</span>
-        <Link href={`/reservar/${specialty}`} className="hover:opacity-70 transition-opacity">
-          {SPECIALTY_LABELS[specialty]}
+      {/* Back + Breadcrumb */}
+      <div className="flex items-center gap-4 flex-wrap">
+        <Link
+          href={`/reservar/${specialty}/${doctorId}`}
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded text-sm font-bold transition-all hover:opacity-80 shrink-0"
+          style={{ background: 'var(--surface-container-low, #f2f4f6)', color: 'var(--primary-val, #00113a)' }}
+        >
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-3.5 h-3.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 3L5 8l5 5" />
+          </svg>
+          Volver
         </Link>
-        <span>›</span>
-        <Link href={`/reservar/${specialty}/${doctorId}`} className="hover:opacity-70 transition-opacity">
-          {doctor.full_name}
-        </Link>
-        <span>›</span>
-        <span className="font-semibold capitalize" style={{ color: 'var(--primary-val, #00113a)' }}>{dateFormatted}</span>
+        <div className="flex items-center gap-2 text-sm flex-wrap" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>
+          <Link href="/reservar" className="hover:opacity-70 transition-opacity">Especialidades</Link>
+          <span>›</span>
+          <Link href={`/reservar/${specialty}`} className="hover:opacity-70 transition-opacity">
+            {SPECIALTY_LABELS[specialty]}
+          </Link>
+          <span>›</span>
+          <Link href={`/reservar/${specialty}/${doctorId}`} className="hover:opacity-70 transition-opacity">
+            {doctor.full_name}
+          </Link>
+          <span>›</span>
+          <span className="font-semibold capitalize" style={{ color: 'var(--primary-val, #00113a)' }}>{dateFormatted}</span>
+        </div>
       </div>
 
       {/* Header */}

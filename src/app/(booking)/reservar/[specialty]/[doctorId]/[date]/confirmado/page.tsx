@@ -205,17 +205,29 @@ export default async function ConfirmadoPage({
         </p>
       </div>
 
-      {/* Back CTA */}
-      <Link
-        href="/reservar"
-        className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded text-sm font-bold transition-all hover:opacity-85"
-        style={{
-          background: 'linear-gradient(135deg, #00113a 0%, #002366 100%)',
-          color: '#ffffff',
-        }}
-      >
-        Reservar otro turno
-      </Link>
+      {/* CTAs */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Link
+          href="/reservar"
+          className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded text-sm font-bold transition-all hover:opacity-85"
+          style={{
+            background: 'linear-gradient(135deg, #00113a 0%, #002366 100%)',
+            color: '#ffffff',
+          }}
+        >
+          Reservar otro turno
+        </Link>
+        <Link
+          href="/"
+          className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded text-sm font-bold transition-all hover:opacity-80"
+          style={{
+            background: 'var(--surface-container-low, #f2f4f6)',
+            color: 'var(--primary-val, #00113a)',
+          }}
+        >
+          Volver al inicio
+        </Link>
+      </div>
     </div>
   )
 }
