@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Stethoscope, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
 
   const [email,       setEmail]       = useState('')
@@ -15,6 +16,11 @@ export default function LoginPage() {
   const [remember,    setRemember]    = useState(false)
   const [error,       setError]       = useState('')
   const [loading,     setLoading]     = useState(false)
+  const [timedOut,    setTimedOut]    = useState(false)
+
+  useEffect(() => {
+    if (searchParams.get('timeout') === '1') setTimedOut(true)
+  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -186,6 +192,16 @@ export default function LoginPage() {
                   Recordar sesión
                 </label>
               </div>
+
+              {/* Timeout notice */}
+              {timedOut && (
+                <div
+                  className="px-4 py-3 rounded text-sm font-medium"
+                  style={{ background: '#fff3cd', color: '#7a5800' }}
+                >
+                  Tu sesión expiró por inactividad. Por favor ingresá nuevamente.
+                </div>
+              )}
 
               {/* Error */}
               {error && (
