@@ -23,10 +23,10 @@ export type PatientRow = {
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 const AVATAR_COLORS = [
-  { bg: '#d8e2ff', text: '#00113a' },
+  { bg: '#d8e2ff', text: 'var(--primary-val)' },
   { bg: '#d9e2fc', text: '#555e74' },
   { bg: 'rgba(12,103,128,0.12)', text: '#0c6780' },
-  { bg: '#e3e2e7', text: '#3d4a5c' },
+  { bg: '#e3e2e7', text: 'var(--on-surface-variant)' },
 ]
 function avatarColor(name: string) {
   return AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length]
@@ -121,11 +121,11 @@ export default function PacientesClient({
           <div>
             <h2
               className="text-3xl font-extrabold tracking-tight"
-              style={{ color: '#00113a', letterSpacing: '-0.02em' }}
+              style={{ color: 'var(--primary-val)', letterSpacing: '-0.02em' }}
             >
               Directorio de Pacientes
             </h2>
-            <p className="mt-1 text-sm" style={{ color: '#3d4a5c' }}>
+            <p className="mt-1 text-sm" style={{ color: 'var(--on-surface-variant)' }}>
               Gestiona y consulta el historial de tus{' '}
               <span className="font-semibold">{totalCount.toLocaleString('es-AR')}</span>{' '}
               pacientes registrados.
@@ -136,8 +136,8 @@ export default function PacientesClient({
               onClick={() => setShowFilters(f => !f)}
               className="px-4 py-2.5 font-bold rounded flex items-center gap-2 text-sm transition-all hover:opacity-80 relative"
               style={{
-                background: showFilters || activeFilters > 0 ? '#00113a' : '#e3e2e7',
-                color: showFilters || activeFilters > 0 ? '#ffffff' : '#00113a',
+                background: showFilters || activeFilters > 0 ? 'var(--primary-val)' : '#e3e2e7',
+                color: showFilters || activeFilters > 0 ? 'var(--surface-container-lowest)' : 'var(--primary-val)',
               }}
             >
               <Filter className="w-4 h-4" />
@@ -165,13 +165,13 @@ export default function PacientesClient({
 
         {/* Search */}
         <div className="relative mb-5 shrink-0">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#3d4a5c' }} />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--on-surface-variant)' }} />
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Buscar pacientes por nombre, DNI o patología..."
             className="w-full rounded-full py-2.5 pl-10 pr-4 text-sm border-none outline-none transition-all"
-            style={{ background: '#f2f4f6', color: '#1a1b1f' }}
+            style={{ background: 'var(--surface-container-low)', color: 'var(--on-surface)' }}
           />
         </div>
 
@@ -180,37 +180,37 @@ export default function PacientesClient({
           <div
             className="mb-4 rounded p-4 flex flex-wrap items-end gap-4 shrink-0"
             style={{
-              background: 'var(--surface-container-lowest, #ffffff)',
+              background: 'var(--surface-container-lowest, var(--surface-container-lowest))',
               border: '1px solid var(--outline-variant, rgba(61,74,92,0.15))',
             }}
           >
             {/* Nombre / Apellido — same as search but labeled */}
             <div className="flex-1 min-w-48 space-y-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#3d4a5c' }}>
+              <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--on-surface-variant)' }}>
                 Nombre o Apellido
               </label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: '#3d4a5c' }} />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: 'var(--on-surface-variant)' }} />
                 <input
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                   placeholder="Buscar..."
                   className="w-full rounded pl-9 pr-4 py-2 text-sm outline-none"
-                  style={{ background: '#f2f4f6', color: '#1a1b1f' }}
+                  style={{ background: 'var(--surface-container-low)', color: 'var(--on-surface)' }}
                 />
               </div>
             </div>
 
             {/* Obra social */}
             <div className="flex-1 min-w-48 space-y-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#3d4a5c' }}>
+              <label className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--on-surface-variant)' }}>
                 Obra Social
               </label>
               <select
                 value={obraFilter}
                 onChange={e => setObraFilter(e.target.value)}
                 className="w-full rounded px-3 py-2 text-sm outline-none appearance-none"
-                style={{ background: '#f2f4f6', color: obraFilter ? '#1a1b1f' : '#3d4a5c' }}
+                style={{ background: 'var(--surface-container-low)', color: obraFilter ? 'var(--on-surface)' : 'var(--on-surface-variant)' }}
               >
                 <option value="">Todas</option>
                 {obrasOptions.map(o => (
@@ -224,25 +224,25 @@ export default function PacientesClient({
               <button
                 onClick={() => { setSearch(''); setObraFilter('') }}
                 className="px-4 py-2 rounded text-sm font-bold transition-all hover:opacity-80 shrink-0"
-                style={{ background: '#f2f4f6', color: '#3d4a5c' }}
+                style={{ background: 'var(--surface-container-low)', color: 'var(--on-surface-variant)' }}
               >
                 Limpiar
               </button>
             )}
 
             {/* Result count */}
-            <p className="text-xs ml-auto self-end pb-0.5 shrink-0" style={{ color: '#3d4a5c' }}>
+            <p className="text-xs ml-auto self-end pb-0.5 shrink-0" style={{ color: 'var(--on-surface-variant)' }}>
               {filtered.length} resultado{filtered.length !== 1 ? 's' : ''}
             </p>
           </div>
         )}
 
         {/* Table */}
-        <div className="rounded overflow-hidden flex flex-col flex-1 min-h-0" style={{ background: '#f2f4f6' }}>
+        <div className="rounded overflow-hidden flex flex-col flex-1 min-h-0" style={{ background: 'var(--surface-container-low)' }}>
           <div className="overflow-y-auto flex-1">
             <table className="w-full text-left border-separate border-spacing-0">
-              <thead className="sticky top-0 z-10" style={{ background: '#f2f4f6' }}>
-                <tr style={{ color: '#3d4a5c' }}>
+              <thead className="sticky top-0 z-10" style={{ background: 'var(--surface-container-low)' }}>
+                <tr style={{ color: 'var(--on-surface-variant)' }}>
                   {['Nombre del Paciente', 'Última Visita', 'Obra Social', 'Estado', ''].map(col => (
                     <th key={col} className="px-6 py-4 text-[11px] font-semibold uppercase tracking-wider">
                       {col}
@@ -262,9 +262,9 @@ export default function PacientesClient({
                       key={patient.id}
                       onClick={() => selectPatient(patient)}
                       className="cursor-pointer transition-colors"
-                      style={{ background: isSelected ? 'rgba(0,36,83,0.05)' : isEven ? '#ffffff' : '#f2f4f6' }}
-                      onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = 'rgba(0,36,83,0.04)' }}
-                      onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = isEven ? '#ffffff' : '#f2f4f6' }}
+                      style={{ background: isSelected ? 'var(--surface-container)' : isEven ? 'var(--surface-container-lowest)' : 'var(--surface-container-low)' }}
+                      onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = 'var(--surface-container-low)' }}
+                      onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = isEven ? 'var(--surface-container-lowest)' : 'var(--surface-container-low)' }}
                     >
                       {/* Patient name + phone */}
                       <td className="px-6 py-4">
@@ -276,10 +276,10 @@ export default function PacientesClient({
                             {initials}
                           </div>
                           <div>
-                            <p className="font-bold text-sm" style={{ color: '#1a1b1f' }}>
+                            <p className="font-bold text-sm" style={{ color: 'var(--on-surface)' }}>
                               {patient.last_name}, {patient.first_name}
                             </p>
-                            <p className="text-[11px]" style={{ color: '#3d4a5c' }}>
+                            <p className="text-[11px]" style={{ color: 'var(--on-surface-variant)' }}>
                               {patient.dni ? `DNI: ${patient.dni}` : patient.phone ?? ''}
                             </p>
                           </div>
@@ -287,7 +287,7 @@ export default function PacientesClient({
                       </td>
 
                       {/* Última visita — placeholder, requires join */}
-                      <td className="px-6 py-4 text-sm" style={{ color: '#3d4a5c' }}>—</td>
+                      <td className="px-6 py-4 text-sm" style={{ color: 'var(--on-surface-variant)' }}>—</td>
 
                       {/* Obra social */}
                       <td className="px-6 py-4">
@@ -299,7 +299,7 @@ export default function PacientesClient({
                             {patient.obra_social}
                           </span>
                         ) : (
-                          <span className="text-sm" style={{ color: '#3d4a5c' }}>—</span>
+                          <span className="text-sm" style={{ color: 'var(--on-surface-variant)' }}>—</span>
                         )}
                       </td>
 
@@ -319,11 +319,11 @@ export default function PacientesClient({
                           href={`/pacientes/${patient.id}`}
                           onClick={e => e.stopPropagation()}
                           className="inline-flex items-center justify-center w-8 h-8 rounded-full transition-colors"
-                          style={{ background: '#eaecef' }}
+                          style={{ background: 'var(--surface-container)' }}
                           onMouseEnter={e => (e.currentTarget.style.background = '#d8e2ff')}
-                          onMouseLeave={e => (e.currentTarget.style.background = '#eaecef')}
+                          onMouseLeave={e => (e.currentTarget.style.background = 'var(--surface-container)')}
                         >
-                          <ArrowRight className="w-3.5 h-3.5" style={{ color: '#00113a' }} />
+                          <ArrowRight className="w-3.5 h-3.5" style={{ color: 'var(--primary-val)' }} />
                         </Link>
                       </td>
                     </tr>
@@ -332,7 +332,7 @@ export default function PacientesClient({
 
                 {paginated.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-sm" style={{ color: '#3d4a5c', background: '#fff' }}>
+                    <td colSpan={5} className="px-6 py-12 text-center text-sm" style={{ color: 'var(--on-surface-variant)', background: '#fff' }}>
                       No se encontraron pacientes
                     </td>
                   </tr>
@@ -344,9 +344,9 @@ export default function PacientesClient({
           {/* Pagination */}
           <div
             className="px-6 py-4 flex justify-between items-center shrink-0"
-            style={{ borderTop: '1px solid rgba(196,198,208,0.1)', background: '#f2f4f6' }}
+            style={{ borderTop: '1px solid rgba(196,198,208,0.1)', background: 'var(--surface-container-low)' }}
           >
-            <p className="text-xs" style={{ color: '#3d4a5c' }}>
+            <p className="text-xs" style={{ color: 'var(--on-surface-variant)' }}>
               {filtered.length === 0
                 ? 'Sin resultados'
                 : `Mostrando ${(page - 1) * PAGE_SIZE + 1}–${Math.min(page * PAGE_SIZE, filtered.length)} de ${filtered.length} pacientes`
@@ -357,7 +357,7 @@ export default function PacientesClient({
                 onClick={() => setPage(p => Math.max(1, p - 1))}
                 disabled={page === 1}
                 className="w-8 h-8 rounded-lg flex items-center justify-center disabled:opacity-30"
-                style={{ color: '#3d4a5c' }}
+                style={{ color: 'var(--on-surface-variant)' }}
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -367,8 +367,8 @@ export default function PacientesClient({
                   onClick={() => setPage(p)}
                   className="w-8 h-8 rounded-lg text-xs font-bold transition-all"
                   style={{
-                    background: page === p ? '#00113a' : 'transparent',
-                    color: page === p ? '#fff' : '#3d4a5c',
+                    background: page === p ? 'var(--primary-val)' : 'transparent',
+                    color: page === p ? '#fff' : 'var(--on-surface-variant)',
                   }}
                 >
                   {p}
@@ -378,7 +378,7 @@ export default function PacientesClient({
                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                 disabled={page >= totalPages}
                 className="w-8 h-8 rounded-lg flex items-center justify-center disabled:opacity-30"
-                style={{ color: '#3d4a5c' }}
+                style={{ color: 'var(--on-surface-variant)' }}
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -390,7 +390,7 @@ export default function PacientesClient({
       {/* ════ RIGHT — Patient Detail Panel ════ */}
       <aside
         className="w-96 shrink-0 p-8 overflow-y-auto"
-        style={{ background: '#f7f9fb' }}
+        style={{ background: 'var(--surface)' }}
       >
         {!selected ? (
           <div className="h-full flex items-center justify-center text-center">
@@ -398,7 +398,7 @@ export default function PacientesClient({
               <div className="w-12 h-12 rounded bg-[#f2f4f6] flex items-center justify-center mx-auto mb-4 text-2xl">
                 👤
               </div>
-              <p className="text-sm font-medium" style={{ color: '#3d4a5c' }}>
+              <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant)' }}>
                 Seleccioná un paciente
               </p>
             </div>
@@ -412,7 +412,7 @@ export default function PacientesClient({
             <div
               className="rounded-3xl p-6"
               style={{
-                background: '#ffffff',
+                background: 'var(--surface-container-lowest)',
                 boxShadow: '0px 10px 30px rgba(0,26,65,0.03)',
                 border: '1px solid rgba(196,198,208,0.1)',
               }}
@@ -433,12 +433,12 @@ export default function PacientesClient({
                 </div>
                 <h3
                   className="text-2xl font-extrabold tracking-tight"
-                  style={{ color: '#00113a', letterSpacing: '-0.02em' }}
+                  style={{ color: 'var(--primary-val)', letterSpacing: '-0.02em' }}
                 >
                   {selected.first_name} {selected.last_name}
                 </h3>
                 {selected.obra_social && (
-                  <p className="text-sm mt-1" style={{ color: '#3d4a5c' }}>{selected.obra_social}</p>
+                  <p className="text-sm mt-1" style={{ color: 'var(--on-surface-variant)' }}>{selected.obra_social}</p>
                 )}
 
                 {/* CTA buttons */}
@@ -454,7 +454,7 @@ export default function PacientesClient({
                   <Link href={`/agenda/nuevo?patient=${selected.id}`}>
                     <button
                       className="p-3 rounded transition-all hover:opacity-80"
-                      style={{ background: '#e2e5e9', color: '#00113a' }}
+                      style={{ background: '#e2e5e9', color: 'var(--primary-val)' }}
                       title="Nuevo turno"
                     >
                       <Plus className="w-4 h-4" />
@@ -464,13 +464,13 @@ export default function PacientesClient({
               </div>
 
               {/* Personal data grid */}
-              <div className="rounded p-4 mb-5" style={{ background: '#f2f4f6' }}>
+              <div className="rounded p-4 mb-5" style={{ background: 'var(--surface-container-low)' }}>
                 <div className="flex justify-between items-center mb-3">
-                  <h4 className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#3d4a5c' }}>
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--on-surface-variant)' }}>
                     Datos Personales
                   </h4>
                   <Link href={`/pacientes/${selected.id}`}>
-                    <ArrowRight className="w-4 h-4" style={{ color: '#00113a' }} />
+                    <ArrowRight className="w-4 h-4" style={{ color: 'var(--primary-val)' }} />
                   </Link>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -481,14 +481,14 @@ export default function PacientesClient({
                     { label: 'Nacimiento', value: fmtDate(selected.birth_date) },
                   ].map(({ label, value }) => (
                     <div key={label}>
-                      <p className="text-[10px] uppercase font-bold" style={{ color: '#3d4a5c' }}>{label}</p>
-                      <p className="text-sm font-bold truncate" style={{ color: '#1a1b1f' }}>{value}</p>
+                      <p className="text-[10px] uppercase font-bold" style={{ color: 'var(--on-surface-variant)' }}>{label}</p>
+                      <p className="text-sm font-bold truncate" style={{ color: 'var(--on-surface)' }}>{value}</p>
                     </div>
                   ))}
                   {selected.email && (
                     <div className="col-span-2">
-                      <p className="text-[10px] uppercase font-bold" style={{ color: '#3d4a5c' }}>Email</p>
-                      <p className="text-sm font-bold truncate" style={{ color: '#1a1b1f' }}>{selected.email}</p>
+                      <p className="text-[10px] uppercase font-bold" style={{ color: 'var(--on-surface-variant)' }}>Email</p>
+                      <p className="text-sm font-bold truncate" style={{ color: 'var(--on-surface)' }}>{selected.email}</p>
                     </div>
                   )}
                 </div>
@@ -496,14 +496,14 @@ export default function PacientesClient({
 
               {/* Appointment timeline */}
               <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest mb-4 px-1" style={{ color: '#3d4a5c' }}>
+                <h4 className="text-[10px] font-bold uppercase tracking-widest mb-4 px-1" style={{ color: 'var(--on-surface-variant)' }}>
                   Últimos Turnos
                 </h4>
 
                 {loadingAppts ? (
-                  <p className="text-xs px-1" style={{ color: '#3d4a5c' }}>Cargando...</p>
+                  <p className="text-xs px-1" style={{ color: 'var(--on-surface-variant)' }}>Cargando...</p>
                 ) : appts.length === 0 ? (
-                  <p className="text-xs px-1" style={{ color: '#3d4a5c' }}>Sin turnos registrados</p>
+                  <p className="text-xs px-1" style={{ color: 'var(--on-surface-variant)' }}>Sin turnos registrados</p>
                 ) : (
                   <div className="relative pl-6 space-y-5">
                     {/* Timeline line */}
@@ -515,17 +515,17 @@ export default function PacientesClient({
                       <div key={appt.id} className="relative">
                         <span
                           className="absolute -left-[19.5px] top-1 w-[9px] h-[9px] rounded-full ring-4 ring-white"
-                          style={{ background: i === 0 ? '#00113a' : '#c4c6d0' }}
+                          style={{ background: i === 0 ? 'var(--primary-val)' : '#c4c6d0' }}
                         />
-                        <p className="text-[10px] font-bold uppercase" style={{ color: '#3d4a5c' }}>
+                        <p className="text-[10px] font-bold uppercase" style={{ color: 'var(--on-surface-variant)' }}>
                           {new Date(appt.scheduled_at).toLocaleDateString('es-AR', {
                             day: 'numeric', month: 'short', year: 'numeric',
                           }).toUpperCase()}
                         </p>
-                        <p className="text-sm font-bold" style={{ color: '#1a1b1f' }}>
+                        <p className="text-sm font-bold" style={{ color: 'var(--on-surface)' }}>
                           {appt.reason ?? appt.specialty ?? 'Consulta'}
                         </p>
-                        <p className="text-[11px] mt-0.5 capitalize" style={{ color: '#3d4a5c' }}>
+                        <p className="text-[11px] mt-0.5 capitalize" style={{ color: 'var(--on-surface-variant)' }}>
                           {appt.status}
                         </p>
                       </div>
@@ -538,7 +538,7 @@ export default function PacientesClient({
               <Link href={`/pacientes/${selected.id}`}>
                 <button
                   className="w-full mt-8 py-3 font-bold rounded text-sm transition-all hover:bg-[#00113a]/5"
-                  style={{ border: '2px solid rgba(0,36,83,0.1)', color: '#00113a', background: 'transparent' }}
+                  style={{ border: '2px solid rgba(0,36,83,0.1)', color: 'var(--primary-val)', background: 'transparent' }}
                 >
                   Ver Historia Completa →
                 </button>

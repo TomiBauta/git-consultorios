@@ -64,9 +64,9 @@ function EventChip({ event, compact = false }: { event: CalendarEvent; compact?:
         compact ? "px-2 py-1 text-[10px]" : "px-3 py-2 text-xs",
       )}
       style={{
-        background: event.color ? `${event.color}18` : '#eaecef',
+        background: event.color ? `${event.color}18` : 'var(--surface-container)',
         borderLeft: `3px solid ${event.color ?? '#747780'}`,
-        color: event.color ?? '#3d4a5c',
+        color: event.color ?? 'var(--on-surface-variant)',
       }}
     >
       <span className="opacity-70">{event.time}</span>
@@ -172,13 +172,13 @@ export function FullScreenCalendar({
         <div>
           <h2
             className="text-3xl font-extrabold tracking-tight capitalize"
-            style={{ color: '#00113a', letterSpacing: '-0.02em' }}
+            style={{ color: 'var(--primary-val)', letterSpacing: '-0.02em' }}
           >
             {headerLabel}
           </h2>
-          <div className="flex items-center gap-4 text-sm font-medium mt-1" style={{ color: '#3d4a5c' }}>
+          <div className="flex items-center gap-4 text-sm font-medium mt-1" style={{ color: 'var(--on-surface-variant)' }}>
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#00113a]" />
+              <span className="w-2 h-2 rounded-full bg-[#00113a] dark:bg-[oklch(0.30_0.08_230)]" />
               {totalEvents} Turnos
             </span>
             <span className="flex items-center gap-1.5">
@@ -190,15 +190,15 @@ export function FullScreenCalendar({
 
         <div className="flex items-center gap-3">
           {/* View toggle */}
-          <div className="flex rounded p-1" style={{ background: '#eaecef' }}>
+          <div className="flex rounded p-1" style={{ background: 'var(--surface-container)' }}>
             {(['mes', 'semana', 'dia'] as View[]).map(v => (
               <button
                 key={v}
                 onClick={() => setView(v)}
                 className="px-4 py-2 text-xs font-bold rounded transition-all capitalize"
                 style={view === v
-                  ? { background: '#fff', color: '#00113a', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }
-                  : { color: '#3d4a5c' }
+                  ? { background: 'var(--surface-container-lowest)', color: 'var(--primary-val)', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }
+                  : { color: 'var(--on-surface-variant)' }
                 }
               >
                 {v === 'dia' ? 'Día' : v.charAt(0).toUpperCase() + v.slice(1)}
@@ -210,18 +210,18 @@ export function FullScreenCalendar({
           <button
             onClick={goBack}
             className="p-2 rounded transition-all hover:text-white"
-            style={{ background: '#eaecef', color: '#00113a' }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#00113a'; e.currentTarget.style.color = '#fff' }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#eaecef'; e.currentTarget.style.color = '#00113a' }}
+            style={{ background: 'var(--surface-container)', color: 'var(--primary-val)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'var(--primary-val)'; e.currentTarget.style.color = 'var(--surface-container-lowest)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface-container)'; e.currentTarget.style.color = 'var(--primary-val)' }}
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
             onClick={goForward}
             className="p-2 rounded transition-all hover:text-white"
-            style={{ background: '#eaecef', color: '#00113a' }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#00113a'; e.currentTarget.style.color = '#fff' }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#eaecef'; e.currentTarget.style.color = '#00113a' }}
+            style={{ background: 'var(--surface-container)', color: 'var(--primary-val)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'var(--primary-val)'; e.currentTarget.style.color = 'var(--surface-container-lowest)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface-container)'; e.currentTarget.style.color = 'var(--primary-val)' }}
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -230,28 +230,28 @@ export function FullScreenCalendar({
 
       {/* ── Bento filter row ── */}
       <div className="grid grid-cols-4 gap-4 mb-6">
-        <div className="col-span-2 p-4 rounded" style={{ background: '#f2f4f6' }}>
-          <label className="block text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: '#3d4a5c' }}>
+        <div className="col-span-2 p-4 rounded" style={{ background: 'var(--surface-container-low)' }}>
+          <label className="block text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--on-surface-variant)' }}>
             Médico
           </label>
           {extraControls ?? (
-            <span className="text-sm font-semibold" style={{ color: '#00113a' }}>Todos los médicos</span>
+            <span className="text-sm font-semibold" style={{ color: 'var(--primary-val)' }}>Todos los médicos</span>
           )}
         </div>
         <button
           onClick={() => handleSelectDay(today)}
           className="col-span-1 p-4 rounded text-left transition-all hover:opacity-80"
-          style={{ background: '#f2f4f6' }}
+          style={{ background: 'var(--surface-container-low)' }}
         >
-          <p className="text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: '#3d4a5c' }}>Hoy</p>
-          <p className="text-sm font-semibold capitalize" style={{ color: '#00113a' }}>
+          <p className="text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--on-surface-variant)' }}>Hoy</p>
+          <p className="text-sm font-semibold capitalize" style={{ color: 'var(--primary-val)' }}>
             {format(today, "d MMM", { locale: es })}
           </p>
         </button>
         <button
           onClick={onNewEvent}
           className="col-span-1 rounded font-bold text-sm flex items-center justify-center gap-2 transition-all active:scale-95"
-          style={{ background: 'linear-gradient(135deg, #00113a 0%, #002366 100%)', color: '#ffffff' }}
+          style={{ background: 'linear-gradient(135deg, var(--primary-val) 0%, #002366 100%)', color: 'var(--surface-container-lowest)' }}
         >
           + Nuevo Turno
         </button>
@@ -261,15 +261,15 @@ export function FullScreenCalendar({
       {view === 'mes' && (
         <div
           className="flex-1 rounded overflow-hidden flex flex-col"
-          style={{ background: '#ffffff', boxShadow: '0px 10px 30px rgba(0,17,58,0.04)' }}
+          style={{ background: 'var(--surface-container-lowest)', boxShadow: '0px 10px 30px var(--ambient-shadow)' }}
         >
           {/* Week day headers */}
-          <div className="grid grid-cols-7" style={{ background: '#f2f4f6', borderBottom: '1px solid rgba(196,198,208,0.1)' }}>
+          <div className="grid grid-cols-7" style={{ background: 'var(--surface-container-low)', borderBottom: '1px solid var(--outline-variant)' }}>
             {WEEK_DAYS.map((d, i) => (
               <div
                 key={d}
                 className="py-4 text-center text-[11px] font-bold uppercase tracking-widest"
-                style={{ color: i === 6 ? 'rgba(186,26,26,0.6)' : '#3d4a5c' }}
+                style={{ color: i === 6 ? 'rgba(186,26,26,0.6)' : 'var(--on-surface-variant)' }}
               >
                 {d}
               </div>
@@ -292,18 +292,18 @@ export function FullScreenCalendar({
                     "min-h-[110px] border-r border-b p-3 relative cursor-pointer transition-colors",
                     dayIdx === 0 && colStartClassesMon[getDay(day)],
                     !isCurrentMonth && "opacity-30",
-                    isTodayDay && "bg-[#00113a]/5",
-                    isSelected && !isTodayDay && "bg-[#f2f4f6]",
-                    "hover:bg-[#f2f4f6]",
+                    isTodayDay && "bg-[#00113a]/5 dark:bg-white/5",
+                    isSelected && !isTodayDay && "bg-[#f2f4f6] dark:bg-[oklch(0.15_0.025_240)]",
+                    "hover:bg-[#f2f4f6] dark:hover:bg-[oklch(0.15_0.025_240)]",
                   )}
-                  style={{ borderColor: 'rgba(196,198,208,0.08)' }}
+                  style={{ borderColor: 'var(--outline-variant)' }}
                 >
                   <span
                     className={cn(
                       "text-sm",
                       isTodayDay ? "font-black underline underline-offset-4 decoration-2" : isCurrentMonth ? "font-bold" : "font-medium",
                     )}
-                    style={{ color: isTodayDay ? '#00113a' : isCurrentMonth ? '#1a1b1f' : '#3d4a5c' }}
+                    style={{ color: isTodayDay ? 'var(--primary-val)' : isCurrentMonth ? 'var(--on-surface)' : 'var(--on-surface-variant)' }}
                   >
                     {format(day, "d")}
                   </span>
@@ -312,13 +312,13 @@ export function FullScreenCalendar({
                       <EventChip key={event.id} event={event} compact />
                     ))}
                     {dayData && dayData.events.length > 2 && (
-                      <p className="text-[9px] font-bold px-1" style={{ color: '#3d4a5c' }}>
+                      <p className="text-[9px] font-bold px-1" style={{ color: 'var(--on-surface-variant)' }}>
                         + {dayData.events.length - 2} más
                       </p>
                     )}
                   </div>
                   {isTodayDay && (
-                    <div className="absolute bottom-2 right-2 w-2 h-2 rounded-full bg-[#00113a] animate-pulse" />
+                    <div className="absolute bottom-2 right-2 w-2 h-2 rounded-full bg-[#00113a] dark:bg-[oklch(0.30_0.08_230)] animate-pulse" />
                   )}
                 </div>
               )
@@ -331,10 +331,10 @@ export function FullScreenCalendar({
       {view === 'semana' && (
         <div
           className="flex-1 rounded overflow-hidden flex flex-col"
-          style={{ background: '#ffffff', boxShadow: '0px 10px 30px rgba(0,17,58,0.04)' }}
+          style={{ background: 'var(--surface-container-lowest)', boxShadow: '0px 10px 30px var(--ambient-shadow)' }}
         >
           {/* Column headers */}
-          <div className="grid grid-cols-7" style={{ background: '#f2f4f6', borderBottom: '1px solid rgba(196,198,208,0.1)' }}>
+          <div className="grid grid-cols-7" style={{ background: 'var(--surface-container-low)', borderBottom: '1px solid var(--outline-variant)' }}>
             {weekDays.map((day, i) => {
               const isTodayDay = isToday(day)
               const isSelected = isSameDay(day, selectedDay)
@@ -342,11 +342,11 @@ export function FullScreenCalendar({
                 <button
                   key={i}
                   onClick={() => handleSelectDay(day)}
-                  className="py-4 text-center transition-colors hover:bg-[#eaecef] w-full"
+                  className="py-4 text-center transition-colors hover:bg-[#eaecef] dark:hover:bg-[oklch(0.15_0.025_240)] w-full"
                 >
                   <p
                     className="text-[10px] font-bold uppercase tracking-widest"
-                    style={{ color: i === 6 ? 'rgba(186,26,26,0.6)' : '#3d4a5c' }}
+                    style={{ color: i === 6 ? 'rgba(186,26,26,0.6)' : 'var(--on-surface-variant)' }}
                   >
                     {WEEK_DAYS[i]}
                   </p>
@@ -354,10 +354,10 @@ export function FullScreenCalendar({
                     className="mt-1 w-8 h-8 rounded-full flex items-center justify-center mx-auto text-sm font-bold"
                     style={
                       isTodayDay
-                        ? { background: '#00113a', color: '#fff' }
+                        ? { background: 'var(--primary-val)', color: 'var(--surface-container-lowest)' }
                         : isSelected
-                        ? { background: '#cce8f0', color: '#00113a' }
-                        : { color: '#1a1b1f' }
+                        ? { background: '#cce8f0', color: 'var(--primary-val)' }
+                        : { color: 'var(--on-surface)' }
                     }
                   >
                     {format(day, "d")}
@@ -368,7 +368,7 @@ export function FullScreenCalendar({
           </div>
 
           {/* Event columns */}
-          <div className="grid grid-cols-7 flex-1 overflow-y-auto divide-x" style={{ borderColor: 'rgba(196,198,208,0.08)' }}>
+          <div className="grid grid-cols-7 flex-1 overflow-y-auto divide-x" style={{ borderColor: 'var(--outline-variant)' }}>
             {weekDays.map((day, i) => {
               const dayData = data.find(d => isSameDay(d.day, day))
               const isTodayDay = isToday(day)
@@ -378,10 +378,10 @@ export function FullScreenCalendar({
                 <div
                   key={i}
                   onClick={() => handleSelectDay(day)}
-                  className="p-3 space-y-2 cursor-pointer min-h-[200px] transition-colors hover:bg-[#f7f9fb]"
+                  className="p-3 space-y-2 cursor-pointer min-h-[200px] transition-colors hover:bg-[#f7f9fb] dark:hover:bg-[oklch(0.15_0.025_240)]"
                   style={{
-                    background: isTodayDay ? 'rgba(0,17,58,0.03)' : isSelected ? '#f7f9fb' : 'transparent',
-                    borderRight: '1px solid rgba(196,198,208,0.08)',
+                    background: isTodayDay ? 'rgba(0,17,58,0.03)' : isSelected ? 'var(--surface)' : 'transparent',
+                    borderRight: '1px solid var(--outline-variant)',
                   }}
                 >
                   {!dayData || dayData.events.length === 0 ? (
@@ -402,28 +402,28 @@ export function FullScreenCalendar({
       {view === 'dia' && (
         <div
           className="flex-1 rounded overflow-hidden flex flex-col"
-          style={{ background: '#ffffff', boxShadow: '0px 10px 30px rgba(0,17,58,0.04)' }}
+          style={{ background: 'var(--surface-container-lowest)', boxShadow: '0px 10px 30px var(--ambient-shadow)' }}
         >
           {/* Day header */}
           <div
             className="px-6 py-4 flex items-center gap-4"
-            style={{ background: '#f2f4f6', borderBottom: '1px solid rgba(196,198,208,0.1)' }}
+            style={{ background: 'var(--surface-container-low)', borderBottom: '1px solid var(--outline-variant)' }}
           >
             <div
               className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-black shrink-0"
               style={
                 isToday(selectedDay)
-                  ? { background: '#00113a', color: '#fff' }
-                  : { background: '#eaecef', color: '#00113a' }
+                  ? { background: 'var(--primary-val)', color: 'var(--surface-container-lowest)' }
+                  : { background: 'var(--surface-container)', color: 'var(--primary-val)' }
               }
             >
               {format(selectedDay, "d")}
             </div>
             <div>
-              <p className="font-bold capitalize" style={{ color: '#00113a' }}>
+              <p className="font-bold capitalize" style={{ color: 'var(--primary-val)' }}>
                 {format(selectedDay, "EEEE", { locale: es })}
               </p>
-              <p className="text-sm capitalize" style={{ color: '#3d4a5c' }}>
+              <p className="text-sm capitalize" style={{ color: 'var(--on-surface-variant)' }}>
                 {format(selectedDay, "d 'de' MMMM yyyy", { locale: es })}
               </p>
             </div>
@@ -444,14 +444,14 @@ export function FullScreenCalendar({
               if (!dayData || dayData.events.length === 0) {
                 return (
                   <div className="flex flex-col items-center justify-center h-full py-16 text-center space-y-3">
-                    <div className="w-14 h-14 rounded flex items-center justify-center text-3xl" style={{ background: '#f2f4f6' }}>
+                    <div className="w-14 h-14 rounded flex items-center justify-center text-3xl" style={{ background: 'var(--surface-container-low)' }}>
                       📅
                     </div>
-                    <p className="font-semibold" style={{ color: '#3d4a5c' }}>Sin turnos para este día</p>
+                    <p className="font-semibold" style={{ color: 'var(--on-surface-variant)' }}>Sin turnos para este día</p>
                     <button
                       onClick={onNewEvent}
                       className="mt-2 px-4 py-2 rounded text-xs font-bold transition-all hover:opacity-85"
-                      style={{ background: '#00113a', color: '#fff' }}
+                      style={{ background: 'var(--primary-val)', color: 'var(--surface-container-lowest)' }}
                     >
                       + Agendar turno
                     </button>
@@ -475,7 +475,7 @@ export function FullScreenCalendar({
                       <div key={hour} className="flex gap-4 items-start">
                         {/* Time label */}
                         <div className="w-14 pt-3 shrink-0 text-right">
-                          <span className="text-xs font-bold" style={{ color: '#3d4a5c' }}>
+                          <span className="text-xs font-bold" style={{ color: 'var(--on-surface-variant)' }}>
                             {String(hour).padStart(2,'0')}:00
                           </span>
                         </div>

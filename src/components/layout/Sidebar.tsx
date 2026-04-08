@@ -41,7 +41,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
     <aside
       className={cn(
         'flex flex-col shrink-0 transition-all duration-300 ease-in-out',
-        'bg-[#00113a] dark:bg-[#080f1e]',
+        'bg-[#00113a] dark:bg-[#070d1a]',
         collapsed ? 'w-[68px]' : 'w-64'
       )}
     >

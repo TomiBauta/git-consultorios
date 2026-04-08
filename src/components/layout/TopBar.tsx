@@ -42,15 +42,7 @@ export default function TopBar({ profile }: { profile: Profile }) {
   }
 
   return (
-    <header
-      className="h-16 px-8 flex items-center justify-between shrink-0 transition-colors sticky top-0 z-40"
-      style={{
-        background: 'rgba(255,255,255,0.75)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        boxShadow: '0px 1px 0px rgba(68,71,79,0.08)',
-      }}
-    >
+    <header className="topbar-glass h-16 px-8 flex items-center justify-between shrink-0 transition-colors sticky top-0 z-40">
       {/* Back button — only on sub-routes */}
       {isSubRoute && (
         <button
@@ -72,8 +64,8 @@ export default function TopBar({ profile }: { profile: Profile }) {
           placeholder="Buscar pacientes o historias clínicas..."
           className="w-full rounded-full pl-10 pr-4 py-2 text-sm border-none outline-none focus:ring-2 transition-all"
           style={{
-            background: 'var(--surface-container-low, #f2f4f6)',
-            color: 'var(--on-surface, #1a1b1f)',
+            background: 'var(--surface-container-low)',
+            color: 'var(--on-surface)',
           }}
         />
       </form>

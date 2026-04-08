@@ -8,7 +8,7 @@ function StatusBadge({ status }: { status: string }) {
     confirmado: { bg: 'rgba(12,103,128,0.12)', text: '#0c6780',  label: 'Confirmado' },
     atendido:   { bg: 'rgba(12,103,128,0.12)', text: '#0c6780',  label: 'Atendido'   },
     en_sala:    { bg: 'rgba(0,35,102,0.08)',     text: '#002366',  label: 'En Sala'    },
-    pendiente:  { bg: '#e2e5e9',                text: '#3d4a5c',  label: 'Pendiente'  },
+    pendiente:  { bg: '#e2e5e9',                text: 'var(--on-surface-variant)',  label: 'Pendiente'  },
     cancelado:  { bg: '#ffdad6',                text: '#93000a',  label: 'Cancelado'  },
     ausente:    { bg: '#fff3cc',                text: '#7a5800',  label: 'Ausente'    },
   }
@@ -159,7 +159,7 @@ export default async function DashboardPage() {
       <div>
         <h2
           className="text-3xl font-bold tracking-tight"
-          style={{ color: 'var(--primary-val, #00113a)', letterSpacing: '-0.02em' }}
+          style={{ color: 'var(--primary-val, var(--primary-val))', letterSpacing: '-0.02em' }}
         >
           Resumen de Actividad
         </h2>
@@ -174,7 +174,7 @@ export default async function DashboardPage() {
         <div className="card-ambient rounded p-6 hover:-translate-y-1 transition-transform cursor-default">
           <div className="flex justify-between items-start mb-4">
             <div className="w-12 h-12 rounded flex items-center justify-center" style={{ background: '#d8e2ff' }}>
-              <svg className="w-6 h-6" style={{ color: '#00113a' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-6 h-6" style={{ color: 'var(--primary-val)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeWidth={2} />
                 <line x1="16" y1="2" x2="16" y2="6" strokeWidth={2} />
                 <line x1="8" y1="2" x2="8" y2="6" strokeWidth={2} />
@@ -186,7 +186,7 @@ export default async function DashboardPage() {
             </span>
           </div>
           <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>Turnos de hoy</p>
-          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: '#00113a' }}>
+          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: 'var(--primary-val)' }}>
             {todayAppointments?.length ?? 0}
           </h3>
         </div>
@@ -204,7 +204,7 @@ export default async function DashboardPage() {
             </span>
           </div>
           <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>Turnos este mes</p>
-          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: '#00113a' }}>
+          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: 'var(--primary-val)' }}>
             {monthAppointments ?? 0}
           </h3>
         </div>
@@ -225,7 +225,7 @@ export default async function DashboardPage() {
             </span>
           </div>
           <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant, #3d4a5c)' }}>Pacientes totales</p>
-          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: '#00113a' }}>
+          <h3 className="text-4xl font-extrabold tracking-tighter mt-1" style={{ color: 'var(--primary-val)' }}>
             {(totalPatients ?? 0).toLocaleString('es-AR')}
           </h3>
         </div>
@@ -237,7 +237,7 @@ export default async function DashboardPage() {
         {/* Appointments list — col-span-8 */}
         <div className="col-span-8 space-y-4">
           <div className="flex items-center justify-between">
-            <h4 className="text-xl font-bold tracking-tight" style={{ color: '#00113a' }}>
+            <h4 className="text-xl font-bold tracking-tight" style={{ color: 'var(--primary-val)' }}>
               Próximos Pacientes
             </h4>
             <Link
@@ -288,11 +288,11 @@ export default async function DashboardPage() {
                     >
                       <span
                         className="text-lg font-extrabold"
-                        style={{ color: isPast ? '#3d4a5c' : '#00113a' }}
+                        style={{ color: isPast ? 'var(--on-surface-variant)' : 'var(--primary-val)' }}
                       >
                         {timeStr}
                       </span>
-                      <span className="text-[10px] uppercase font-bold" style={{ color: '#3d4a5c' }}>
+                      <span className="text-[10px] uppercase font-bold" style={{ color: 'var(--on-surface-variant)' }}>
                         {period}
                       </span>
                     </div>
@@ -303,7 +303,7 @@ export default async function DashboardPage() {
                         {patientName}
                       </h5>
                       {subtitle && (
-                        <p className="text-xs truncate mt-0.5" style={{ color: '#3d4a5c' }}>
+                        <p className="text-xs truncate mt-0.5" style={{ color: 'var(--on-surface-variant)' }}>
                           {subtitle}
                         </p>
                       )}
@@ -315,11 +315,11 @@ export default async function DashboardPage() {
                       <Link href={`/agenda/${appt.id}`}>
                         <button
                           className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
-                          style={{ background: '#eaecef' }}
+                          style={{ background: 'var(--surface-container)' }}
                           onMouseEnter={e => (e.currentTarget.style.background = '#d8e2ff')}
-                          onMouseLeave={e => (e.currentTarget.style.background = '#eaecef')}
+                          onMouseLeave={e => (e.currentTarget.style.background = 'var(--surface-container)')}
                         >
-                          <ArrowRight className="w-4 h-4" style={{ color: '#00113a' }} />
+                          <ArrowRight className="w-4 h-4" style={{ color: 'var(--primary-val)' }} />
                         </button>
                       </Link>
                     </div>
@@ -336,7 +336,7 @@ export default async function DashboardPage() {
           {/* Capacity card — navy bg */}
           <div
             className="rounded p-8 overflow-hidden relative shadow-xl"
-            style={{ background: '#00113a', color: 'white' }}
+            style={{ background: 'var(--primary-val)', color: 'white' }}
           >
             <div className="relative z-10">
               <h4 className="text-lg font-bold mb-6">Capacidad Semanal</h4>
@@ -375,7 +375,7 @@ export default async function DashboardPage() {
 
           {/* Availability next 4 days */}
           <div className="card-ambient rounded p-6">
-            <h4 className="text-sm font-bold mb-5" style={{ color: '#00113a' }}>
+            <h4 className="text-sm font-bold mb-5" style={{ color: 'var(--primary-val)' }}>
               Disponibilidad Próximos 4 Días
             </h4>
             <div className="flex justify-between items-end h-28 gap-3">
@@ -392,7 +392,7 @@ export default async function DashboardPage() {
           >
             <p
               className="text-xs font-bold uppercase tracking-widest mb-4"
-              style={{ color: '#00113a' }}
+              style={{ color: 'var(--primary-val)' }}
             >
               Acciones Rápidas
             </p>
