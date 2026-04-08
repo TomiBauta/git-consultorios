@@ -1,13 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Stethoscope, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
 
 export default function LoginPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const supabase = createClient()
 
   const [email,       setEmail]       = useState('')
@@ -19,7 +18,8 @@ export default function LoginPage() {
   const [timedOut,    setTimedOut]    = useState(false)
 
   useEffect(() => {
-    if (searchParams.get('timeout') === '1') setTimedOut(true)
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('timeout') === '1') setTimedOut(true)
   }, [])
 
   async function handleSubmit(e: React.FormEvent) {
